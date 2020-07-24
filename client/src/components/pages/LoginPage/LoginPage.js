@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser, authCheck } from '../../../_actions/user_action';
+import { NavLink } from 'react-router-dom';
 import palette from '../../../utils/palette';
 
 const LoginPage = ({ history }) => {
@@ -57,44 +58,71 @@ const LoginPage = ({ history }) => {
     dispatch(authCheck());
   };
 
+  // 비밀번호 표기 / 숨기기
+  const onShowPassword = (e) => {
+    const password_input = e.target.previousElementSibling.previousElementSibling;
+    if (password_input.type === 'password') {
+      password_input.type = 'text';
+      e.target.innerText = '숨기기';
+    } else {
+      password_input.type = 'password';
+      e.target.innerText = '비밀번호 표시';
+    }
+  };
+
+  const onCheckHandler = (e) => {
+    const loing_btn = document.querySelector('.login_btn');
+    if (id.length >= 1 && password.length >= 7) {
+      loing_btn.disabled = false;
+    } else {
+      loing_btn.disabled = true;
+    }
+  };
+
   return (
     <LoginContainer>
-      <div class='login_form_box'>
-        <h1 class='title'>Instagram</h1>
-        <form class='login_form'>
-          <div class='input_box'>
-            <input type='text' required />
-            <div class='placeholder'>전화번호, 사용자 이름 또는 이메일</div>
+      <div className='login_form_box'>
+        <h1 className='title'>Instagram</h1>
+        <form className='login_form' onSubmit={onSumbitHandler}>
+          <div className='input_box'>
+            <input
+              type='text'
+              value={id}
+              onChange={onIdHandler}
+              onKeyUp={onCheckHandler}
+              required
+            />
+            <div className='placeholder'>전화번호, 사용자 이름 또는 이메일</div>
           </div>
-
-          <div class='input_box'>
-            <input type='password' required />
-            <div class='placeholder'>비밀번호</div>
-            <div class='show_password'>비밀번호 표시</div>
+          <div className='input_box'>
+            <input
+              type='password'
+              value={password}
+              onChange={onPasswordHandler}
+              onKeyUp={onCheckHandler}
+              required
+            />
+            <div className='placeholder'>비밀번호</div>
+            <div className='show_password' onClick={onShowPassword}>
+              비밀번호 표시
+            </div>
           </div>
-
-          <button class='login_btn' disabled>
+          <button className='login_btn' type='submit' disabled>
             로그인
           </button>
-
-          <div class='line_box'>
-            <span class='line'></span>
-            <span class='text'>또는</span>
-            <span class='line'></span>
+          <div className='line_box'>
+            <span className='line'></span>
+            <span className='text'>또는</span>
+            <span className='line'></span>
           </div>
-
-          <a href='#' class='fb_link'>
-            <i class='icon fab fa-facebook-square'></i>
-            <span class='link'>Facebook으로 로그인</span>
-          </a>
-
-          <a href='#' class='link'>
+          {error ? <ErrorMessage>{error}</ErrorMessage> : null}
+          <NavLink to='#' className='link'>
             비밀번호를 잊으셨나요?
-          </a>
+          </NavLink>
         </form>
-        <div class='btm'>
+        <div className='btm'>
           <span>계정이 없으신가요?</span>
-          <a href='#'>가입하기</a>
+          <NavLink to='/register'>가입하기</NavLink>
         </div>
       </div>
     </LoginContainer>
@@ -102,6 +130,12 @@ const LoginPage = ({ history }) => {
 };
 
 export default withRouter(LoginPage);
+
+const ErrorMessage = styled.div`
+  color: red;
+  margin: 10px 0;
+  font-weight: 600;
+`;
 
 const LoginContainer = styled.div`
   min-height: 100vh;
@@ -308,7 +342,7 @@ const LoginContainer = styled.div`
 
 //   return (
 //     <LoginContainer>
-//       <form className='loginForm' onSubmit={onSumbitHandler}>
+//       <form classNameName='loginForm' onSubmit={onSumbitHandler}>
 //         <label>Id</label>
 //         <input type='id' value={id} onChange={onIdHandler} />
 //         <label>Password</label>

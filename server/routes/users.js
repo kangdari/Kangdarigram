@@ -33,7 +33,9 @@ router.post('/login', async (req, res) => {
   user.comparePassword(req.body.password, (err, isMatch) => {
     // 비밀번호가 틀린 경우
     if (!isMatch)
-      return res.status(401).json({ loginSuccess: false, message: '비밀번호가 틀렸습니다.' });
+      return res
+        .status(401)
+        .json({ loginSuccess: false, message: '잘못된 비밀번호입니다. 다시 확인하세요.' });
     // 비밀번호가 맞은 경우 토큰 생성
     user.createToken((err, user) => {
       if (err) return res.status(400).send(err);
