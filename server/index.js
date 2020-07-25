@@ -23,10 +23,11 @@ mongoose
 app.get('/', (req, res) => res.send('hello'));
 
 // static 파일이 있는 upload 폴더는 내부적으로 /upload라는 가상 경로로 접근
-// app.use('/uploads', express.static('uploads'));
+app.use('/upload', express.static('upload'));
 
 // 라우트 적용
 app.use('/api/users', require('./routes/users'));
+app.use('/api/post/', require('./routes/post'));
 
 if (process.env.NODE_ENV === 'production') {
   // Set static folder
