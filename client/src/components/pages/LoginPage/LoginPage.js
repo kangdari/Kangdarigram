@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { withRouter } from 'react-router-dom';
+import { withRouter, NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser, authCheck } from '../../../_actions/user_action';
-import { NavLink } from 'react-router-dom';
 import palette from '../../../utils/palette';
 
 const LoginPage = ({ history }) => {

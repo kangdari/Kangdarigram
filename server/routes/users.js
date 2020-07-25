@@ -10,7 +10,7 @@ router.post('/register', async (req, res) => {
   // id 중복 체크
   const exists = await User.findById(req.body.id);
   if (exists) {
-    return res.status(409).json({ registerSuccess: false, message: '아이디 중복' });
+    return res.status(409).json({ registerSuccess: false, message: '이미 존재하는 아이디입니다.' });
   }
 
   user.save((err, userInfo) => {
