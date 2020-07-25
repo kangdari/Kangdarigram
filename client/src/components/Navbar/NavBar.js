@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import palette from '../../utils/palette';
 import RightMenu from './Section/RightMenu';
@@ -10,9 +10,9 @@ const NavBar = () => {
   return (
     <NavBarBlock>
       <div className='navbar'>
-        <NavLink to='/' className='logo'>
-          KangdariGram
-        </NavLink>
+        <Link to='/' className='logo'>
+          Kangdarigram
+        </Link>
         <SearchBox />
         <RightMenu />
       </div>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { withRouter, NavLink } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser, authCheck } from '../../../_actions/user_action';
 import palette from '../../../utils/palette';
@@ -113,13 +113,13 @@ const LoginPage = ({ history }) => {
             <span className='line'></span>
           </div>
           {error ? <ErrorMessage>{error}</ErrorMessage> : null}
-          <NavLink to='#' className='link'>
+          <Link to='#' className='link'>
             비밀번호를 잊으셨나요?
-          </NavLink>
+          </Link>
         </form>
         <div className='btm'>
           <span>계정이 없으신가요?</span>
-          <NavLink to='/register'>가입하기</NavLink>
+          <Link to='/register'>가입하기</Link>
         </div>
       </div>
     </LoginContainer>

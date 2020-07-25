@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { withRouter, NavLink } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { registerUser } from '../../../_actions/user_action';
@@ -135,7 +135,7 @@ const RegisterPage = ({ history }) => {
 
       <div className='login_box'>
         <span>계정이 있으신가요?</span>
-        <NavLink to='/login'>로그인</NavLink>
+        <Link to='/login'>로그인</Link>
       </div>
     </ReisgerContainer>
   );

@@ -7,17 +7,13 @@ const buttonStyle = css`
   border: none;
   outline: none;
   text-decoration: none;
-  color: black;
-  font-size: 1.2rem;
+  color: ${palette.blue[3]};
+  font-size: 14px;
   font-weight: 800;
-  padding: 0.25rem 1rem;
+  padding: 5px 9px;
   border-radius: 4px;
   cursor: pointer;
   background: white;
-
-  &:hover {
-    color: ${palette.gray[5]};
-  }
 
   ${(props) =>
     props.fullWidth &&
@@ -26,12 +22,13 @@ const buttonStyle = css`
     `}
 
   ${(props) =>
-    props.cyan &&
+    props.blue &&
     css`
-      background: ${palette.cyan[5]};
-      &:hover: {
-        background: ${palette.cyan[4]};
-      }
+      background: ${palette.blue[5]};
+      color: #fff;
+      /* &:hover: {
+        background: ${palette.blue[4]};
+      } */
     `}
 `;
 
@@ -47,7 +44,7 @@ const StyledButton = styled.button`
 // 존재하지 않으면 button 컴포넌트
 const Button = (props) => {
   return props.to ? (
-    <StyledLink {...props} cyan={props.cyan ? 1 : 0} />
+    <StyledLink {...props} blue={props.blue ? 1 : 0} />
   ) : (
     <StyledButton {...props} />
   );
