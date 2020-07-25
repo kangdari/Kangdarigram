@@ -5,6 +5,7 @@ import NavBar from './components/Navbar/NavBar';
 import HomePage from './components/pages/HomePage/HomePage';
 import LoginPage from './components/pages/LoginPage/LoginPage';
 import RegisterPage from './components/pages/RegisterPage/RegisterPage';
+import WirtePostPage from './components/pages/WritePostPage/WirtePostPage';
 
 import Auth from './hoc/auth';
 
@@ -14,9 +15,10 @@ function App() {
       <GlobalStyle />
       <NavBar />
       <Switch>
-        <Route path='/' component={Auth(HomePage, null)} exact />
-        <Route path='/login' component={Auth(LoginPage, false)} exact />
-        <Route path='/register' component={Auth(RegisterPage, false)} exact />
+        <Route path='/' component={Auth(HomePage, true)} exact />
+        <Route path='/login' component={Auth(LoginPage, false)} />
+        <Route path='/register' component={Auth(RegisterPage, false)} />
+        <Route path='/write' component={Auth(WirtePostPage, true)} />
       </Switch>
     </>
   );

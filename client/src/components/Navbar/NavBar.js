@@ -43,7 +43,7 @@ const NavBarBlock = styled.header`
       text-transform: uppercase;
       font-size: 20px;
       font-weight: 600;
-      width: 250px;
+      /* width: 150px; */
     }
   }
 `;

@@ -44,7 +44,7 @@ const RightMenu = () => {
         <Link className='link_icon' to='/'>
           <FontAwesomeIcon icon={faHome} color='white' />
         </Link>
-        <Link className='link_icon' to=''>
+        <Link className='link_icon' to='/write'>
           <FontAwesomeIcon icon={faCommentDots} color='white' />
         </Link>
         <Link className='link_icon' to=''>
