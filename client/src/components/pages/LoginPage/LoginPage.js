@@ -17,6 +17,8 @@ const LoginPage = ({ history }) => {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loginBtn, setLoginBtn] = useState(true); // 로그인 버튼 활성화 설정
+  const [showPassword, setShowPassword] = useState(false); // 비밀번호 숨기기 / 보여주기
 
   // 로그인 오류 처리
   useEffect(() => {
@@ -59,30 +61,26 @@ const LoginPage = ({ history }) => {
   };
 
   // 비밀번호 표기 / 숨기기
-  const onShowPassword = (e) => {
-    const password_input = e.target.previousElementSibling.previousElementSibling;
-    if (password_input.type === 'password') {
-      password_input.type = 'text';
-      e.target.innerText = '숨기기';
+  const onShowPassword = () => {
+    if (showPassword) {
+      setShowPassword(false);
     } else {
-      password_input.type = 'password';
-      e.target.innerText = '비밀번호 표시';
+      setShowPassword(true);
     }
   };
 
-  const onCheckHandler = (e) => {
-    const loing_btn = document.querySelector('.login_btn');
+  const onCheckHandler = () => {
     if (id.length >= 1 && password.length >= 7) {
-      loing_btn.disabled = false;
+      setLoginBtn(false);
     } else {
-      loing_btn.disabled = true;
+      setLoginBtn(true);
     }
   };
 
   return (
     <LoginContainer>
       <div className='login_form_box'>
-        <h1 className='title'>Instagram</h1>
+        <h1 className='title'>Kangdarigram</h1>
         <form className='login_form' onSubmit={onSumbitHandler}>
           <div className='input_box'>
             <input
@@ -92,11 +90,11 @@ const LoginPage = ({ history }) => {
               onKeyUp={onCheckHandler}
               required
             />
-            <div className='placeholder'>전화번호, 사용자 이름 또는 이메일</div>
+            <div className='placeholder'>아이디</div>
           </div>
           <div className='input_box'>
             <input
-              type='password'
+              type={showPassword ? 'text' : 'password'}
               value={password}
               onChange={onPasswordHandler}
               onKeyUp={onCheckHandler}
@@ -104,10 +102,10 @@ const LoginPage = ({ history }) => {
             />
             <div className='placeholder'>비밀번호</div>
             <div className='show_password' onClick={onShowPassword}>
-              비밀번호 표시
+              {showPassword ? '숨기기' : '비밀번호 표시'}
             </div>
           </div>
-          <button className='login_btn' type='submit' disabled>
+          <button className='login_btn' type='submit' disabled={loginBtn}>
             로그인
           </button>
           <div className='line_box'>
