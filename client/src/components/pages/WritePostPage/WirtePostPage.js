@@ -35,7 +35,7 @@ const WirtePostPage = ({ user, history }) => {
     // 서버에 post 업로드 요청
     uploadPost(body).then((res) => {
       if (res.data.uploadSuccess) {
-        history.push('/');
+        history.push(`/${user.userData.id}`);
       } else {
         alert('포스트 업로드 실패');
       }

@@ -4,7 +4,6 @@ import ProfileInfo from './Section/ProfileInfo';
 import ProfileLink from './Section/ProfileLink';
 import ProfilePost from './Section/ProfilePost';
 
-import axios from 'axios';
 import { loadPost } from '../../../api/post';
 
 const ProfilePage = ({ user }) => {

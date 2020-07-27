@@ -4,11 +4,11 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faHome,
-  faCommentDots,
   faCompass,
   faHeart,
   faUserCircle,
   faBookmark,
+  faPen,
 } from '@fortawesome/free-solid-svg-icons';
 import { useSelector, useDispatch } from 'react-redux';
 import Button from '../../Common/Button';
@@ -45,7 +45,7 @@ const RightMenu = () => {
           <FontAwesomeIcon icon={faHome} color='white' />
         </Link>
         <Link className='link_icon' to='/write'>
-          <FontAwesomeIcon icon={faCommentDots} color='white' />
+          <FontAwesomeIcon icon={faPen} color='white' />
         </Link>
         <Link className='link_icon' to=''>
           <FontAwesomeIcon icon={faCompass} color='white' />
@@ -57,12 +57,18 @@ const RightMenu = () => {
           <FontAwesomeIcon icon={faUserCircle} color='white' onClick={onShow} />
           {show ? (
             <div className='profile_modal'>
-              <div className='item'>
-                <Link to='#'>
+              <Link to={`/${userData.id}`}>
+                <div className='item'>
+                  <FontAwesomeIcon icon={faUserCircle} color='white' size='sm' />
+                  프로필
+                </div>
+              </Link>
+              <Link to={`/${userData.id}/saved`}>
+                <div className='item'>
                   <FontAwesomeIcon icon={faBookmark} color='white' />
                   저장됨
-                </Link>
-              </div>
+                </div>
+              </Link>
               <div className='item' onClick={onLogout}>
                 로그아웃
               </div>
@@ -98,13 +104,13 @@ const RightMenuBlock = styled.div`
       box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, 0.1);
 
       svg {
-        font-size: 14px;
+        font-size: 16px;
         margin: 0;
         margin-right: 10px;
       }
 
       .item {
-        padding: 8px 18px;
+        padding: 8px 15px;
         font-size: 14px;
       }
 

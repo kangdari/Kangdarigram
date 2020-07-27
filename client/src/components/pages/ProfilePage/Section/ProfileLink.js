@@ -1,23 +1,25 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import palette from '../../../../utils/palette';
 
 const ProfileLink = () => {
+  const { id } = useSelector((state) => state.user.userData);
   // kang => user id로 변경
 
   return (
     <ProfileLinkBlock>
-      <NavLink className='link' activeClassName='active' to='/kang' exact>
+      <NavLink className='link' activeClassName='active' to={`/${id}`} exact>
         게시물
       </NavLink>
-      <NavLink className='link' activeClassName='active' to='/kang/video'>
+      <NavLink className='link' activeClassName='active' to={`/${id}/video`}>
         동영상
       </NavLink>
-      <NavLink className='link' activeClassName='active' to='/kang/saved'>
+      <NavLink className='link' activeClassName='active' to={`/${id}/saved`}>
         저장됨
       </NavLink>
-      <NavLink className='link' activeClassName='active' to='/kang/tagged'>
+      <NavLink className='link' activeClassName='active' to={`/${id}/tagged`}>
         태그됨
       </NavLink>
     </ProfileLinkBlock>
