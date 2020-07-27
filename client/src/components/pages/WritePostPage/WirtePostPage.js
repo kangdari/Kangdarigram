@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import FileUplaod from '../../Common/FileUplaod';
@@ -6,13 +6,35 @@ import TagBox from './Sections/TagBox';
 import Button from '../../Common/Button';
 
 const WirtePostPage = () => {
+  const [contents, setContents] = useState('');
+  const [images, setImages] = useState('');
+  const [tags, setTags] = useState([]);
+
+  const onChangeHandler = (e) => setContents(e.currentTarget.value);
+
+  const updateImages = (images) => setImages(images);
+
+  const upadateTags = (tags) => setTags(tags);
+
+  const onSubmitHandler = (e) => {
+    e.preventDefault();
+    const body = {
+      contents,
+      images,
+      tags,
+    };
+
+    console.log(body);
+    // 서버 요청
+  };
+
   return (
     <WirtePostPageBlock>
       <h1 className='title'>POST 작성</h1>
-      <form>
-        <FileUplaod />
-        <TextArea placeholder='내용 입력...' />
-        <TagBox />
+      <form onSubmit={onSubmitHandler}>
+        <FileUplaod updateImages={updateImages} />
+        <TextArea value={contents} onChange={onChangeHandler} placeholder='내용 입력...' />
+        <TagBox upadateTags={upadateTags} />
         <Button type='submit' blue>
           작성
         </Button>

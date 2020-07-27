@@ -4,7 +4,7 @@ import TagList from './TagList';
 import palett from '../../../../utils/palette';
 import Button from '../../../Common/Button';
 
-const TagBox = () => {
+const TagBox = ({ upadateTags }) => {
   const [input, setInput] = useState('');
   const [tags, setTags] = useState([]);
 
@@ -12,6 +12,7 @@ const TagBox = () => {
     if (tags.includes(tag)) return; // 중복 tag 검사
     const nextTags = [...tags, tag];
     setTags(nextTags); // tags 업데이트
+    upadateTags(nextTags); // WirtePostPage에 상태 전달
   };
 
   // 태그 제거
