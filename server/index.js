@@ -27,7 +27,7 @@ app.use('/upload', express.static('upload'));
 
 // 라우트 적용
 app.use('/api/users', require('./routes/users'));
-app.use('/api/post/', require('./routes/post'));
+app.use('/api/post', require('./routes/post'));
 
 if (process.env.NODE_ENV === 'production') {
   // Set static folder

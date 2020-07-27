@@ -4,8 +4,9 @@ import styled from 'styled-components';
 import FileUplaod from '../../Common/FileUplaod';
 import TagBox from './Sections/TagBox';
 import Button from '../../Common/Button';
+import { uploadPost } from '../../../api/post';
 
-const WirtePostPage = () => {
+const WirtePostPage = ({ user, history }) => {
   const [contents, setContents] = useState('');
   const [images, setImages] = useState('');
   const [tags, setTags] = useState([]);
@@ -18,14 +19,27 @@ const WirtePostPage = () => {
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
+
+    // 예외 처리
+    if (!images) {
+      return alert('이미지를 올려주세요.');
+    }
+
     const body = {
+      writer: user.userData._id,
       contents,
       images,
       tags,
     };
 
-    console.log(body);
-    // 서버 요청
+    // 서버에 post 업로드 요청
+    uploadPost(body).then((res) => {
+      if (res.data.uploadSuccess) {
+        history.push('/');
+      } else {
+        alert('포스트 업로드 실패');
+      }
+    });
   };
 
   return (

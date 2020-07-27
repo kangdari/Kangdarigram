@@ -3,9 +3,7 @@ const Schema = mongoose.Schema;
 
 const postSchema = mongoose.Schema(
   {
-    // 작성 유저
     writer: {
-      // User 모델의 모든 정보를 불러옴
       type: Schema.Types.ObjectId,
       ref: 'User',
     },
@@ -15,7 +13,7 @@ const postSchema = mongoose.Schema(
       maxlength: 80,
     },
     // 파일
-    files: {
+    images: {
       type: Array,
       default: [],
     },
@@ -23,11 +21,6 @@ const postSchema = mongoose.Schema(
     tags: {
       type: Array,
       default: [],
-    },
-    // 작성 날짜
-    publishedDate: {
-      type: Date,
-      default: Date.now(),
     },
   },
   { timestamps: true }

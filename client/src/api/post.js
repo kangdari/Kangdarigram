@@ -1,4 +1,10 @@
 import axios from 'axios';
 
-// post 작성
-export const uploadPost = (formData, config) => axios.post('/api/post/upload', formData, config);
+const POST_SERVER = '/api/post';
+
+// 이미지 업로드
+export const uploadImage = (formData, config) =>
+  axios.post(`${POST_SERVER}/image`, formData, config);
+
+// 포스트 작성
+export const uploadPost = (data) => axios.post(`${POST_SERVER}/upload`, data);

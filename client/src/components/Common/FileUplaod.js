@@ -4,7 +4,7 @@ import Dropzone from 'react-dropzone';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 // import axios from 'axios';
-import { uploadPost } from '../../api/post';
+import { uploadImage } from '../../api/post';
 
 const FileUplaod = ({ updateImages }) => {
   const [images, setImages] = useState([]);
@@ -17,7 +17,7 @@ const FileUplaod = ({ updateImages }) => {
     formData.append('file', files[0]);
 
     // 서버 요청
-    uploadPost(formData, config).then((res) => {
+    uploadImage(formData, config).then((res) => {
       // post 등록 성공 시
       if (res.data.uploadSuccess) {
         setImages([...images, res.data.filePath]);
