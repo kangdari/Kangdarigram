@@ -29,16 +29,19 @@ const ProfileLink = () => {
 const ProfileLinkBlock = styled.div`
   display: flex;
   align-items: center;
-  height: 55px;
   justify-content: center;
   color: ${palette.gray[6]};
   border-top: 1px solid ${palette.gray[3]};
 
   .link {
+    height: 55px;
+    display: flex;
+    align-items: center;
     margin-right: 60px;
   }
 
   .active {
+    border-top: 1px solid #000;
     color: #000;
     font-weight: 600;
   }
