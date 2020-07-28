@@ -5,7 +5,7 @@ import { faHeart, faComment } from "@fortawesome/free-solid-svg-icons";
 
 const Post = ({ image, onClickPost, index }) => {
   return (
-    <div className="post">
+    <div className="post" onClick={() => onClickPost(index)}>
       <img src={`http://localhost:5050/${image}`} alt="img" />
 
       <div className="post_hover">

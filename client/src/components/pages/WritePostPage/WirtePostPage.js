@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
+import React, { useState } from "react";
+import styled from "styled-components";
 
-import FileUplaod from '../../Common/FileUplaod';
-import TagBox from './Sections/TagBox';
-import Button from '../../Common/Button';
-import { uploadPost } from '../../../api/post';
+import FileUplaod from "./Sections/FileUplaod";
+import TagBox from "./Sections/TagBox";
+import Button from "../../Common/Button";
+import { uploadPost } from "../../../api/post";
 
 const WirtePostPage = ({ user, history }) => {
-  const [contents, setContents] = useState('');
-  const [images, setImages] = useState('');
+  const [contents, setContents] = useState("");
+  const [images, setImages] = useState("");
   const [tags, setTags] = useState([]);
 
   const onChangeHandler = (e) => setContents(e.currentTarget.value);
@@ -22,7 +22,7 @@ const WirtePostPage = ({ user, history }) => {
 
     // 예외 처리
     if (!images) {
-      return alert('이미지를 올려주세요.');
+      return alert("이미지를 올려주세요.");
     }
 
     const body = {
@@ -37,22 +37,26 @@ const WirtePostPage = ({ user, history }) => {
       if (res.data.uploadSuccess) {
         history.push(`/${user.userData.id}`);
       } else {
-        alert('포스트 업로드 실패');
+        alert("포스트 업로드 실패");
       }
     });
   };
 
   return (
     <WirtePostPageBlock>
-      <h1 className='title'>POST 작성</h1>
+      <h1 className="title">POST 작성</h1>
       <form onSubmit={onSubmitHandler}>
         <FileUplaod updateImages={updateImages} />
-        <TextArea value={contents} onChange={onChangeHandler} placeholder='내용 입력...' />
+        <TextArea
+          value={contents}
+          onChange={onChangeHandler}
+          placeholder="내용 입력..."
+        />
         <TagBox upadateTags={upadateTags} />
-        <Button type='submit' blue>
+        <Button type="submit" blue>
           작성
         </Button>
-        <Button to='/' blue>
+        <Button to="/" blue>
           취소
         </Button>
       </form>

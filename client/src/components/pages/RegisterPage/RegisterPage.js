@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { withRouter, Link } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import { withRouter, Link } from "react-router-dom";
 
-import { useDispatch, useSelector } from 'react-redux';
-import { registerUser } from '../../../_actions/user_action';
-import palette from '../../../utils/palette';
+import { useDispatch, useSelector } from "react-redux";
+import { registerUser } from "../../../_actions/user_action";
+import palette from "../../../utils/palette";
 
 const RegisterPage = ({ history }) => {
   const dispatch = useDispatch();
-  const [id, setId] = useState('');
-  const [name, setName] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [id, setId] = useState("");
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [registerBtn, setRegisterBtn] = useState(true); // 가입 버튼 활성화 설정
   const [showPassword, setShowPassword] = useState(false); // 비밀번호 숨기기 / 보여주기
 
@@ -24,7 +24,7 @@ const RegisterPage = ({ history }) => {
   // 회원가입 성공 시 login 이동
   useEffect(() => {
     if (register.registerSuccess) {
-      history.push('/login');
+      history.push("/login");
     }
   }, [register.registerSuccess, history]);
 
@@ -53,12 +53,12 @@ const RegisterPage = ({ history }) => {
   const onSumbitHandler = (e) => {
     e.preventDefault();
 
-    if ([password, confirmPassword, id].includes('')) {
-      setError('빈칸을 입력하세요');
+    if ([password, confirmPassword, id].includes("")) {
+      setError("빈칸을 입력하세요");
       return;
     }
     if (password !== confirmPassword) {
-      setError('비밀번호가 서로 다릅니다');
+      setError("비밀번호가 서로 다릅니다");
       return;
     }
 
@@ -71,7 +71,12 @@ const RegisterPage = ({ history }) => {
   };
 
   const onCheckHandler = () => {
-    if (id.length >= 1 && password.length >= 7 && name.length >= 1 && confirmPassword.length >= 1) {
+    if (
+      id.length >= 1 &&
+      password.length >= 7 &&
+      name.length >= 1 &&
+      confirmPassword.length >= 1
+    ) {
       setRegisterBtn(false);
     } else {
       setRegisterBtn(true);
@@ -80,62 +85,70 @@ const RegisterPage = ({ history }) => {
 
   return (
     <ReisgerContainer>
-      <div className='register_form_box'>
-        <h1 className='title'>Instagram</h1>
-        <form className='register_form' onSubmit={onSumbitHandler}>
-          <span className='message'>친구들의 사진과 동영상을 보려면 가입하세요.</span>
+      <div className="register_form_box">
+        <h1 className="title">Instagram</h1>
+        <form className="register_form" onSubmit={onSumbitHandler}>
+          <span className="message">
+            친구들의 사진과 동영상을 보려면 가입하세요.
+          </span>
 
-          <div className='input_box'>
-            <input type='text' value={id} onChange={IdHandler} onKeyUp={onCheckHandler} required />
-            <div className='placeholder'>아이디</div>
+          <div className="input_box">
+            <input
+              type="text"
+              value={id}
+              onChange={IdHandler}
+              onKeyUp={onCheckHandler}
+              required
+            />
+            <div className="placeholder">아이디</div>
           </div>
 
-          <div className='input_box'>
+          <div className="input_box">
             <input
-              type='text'
+              type="text"
               value={name}
               onChange={NameHandler}
               onKeyUp={onCheckHandler}
               required
             />
-            <div className='placeholder'>사용자 이름</div>
+            <div className="placeholder">사용자 이름</div>
           </div>
 
-          <div className='input_box'>
+          <div className="input_box">
             <input
-              type={showPassword ? 'text' : 'password'}
+              type={showPassword ? "text" : "password"}
               value={password}
               onChange={PasswordHandler}
               onKeyUp={onCheckHandler}
               required
             />
-            <div className='placeholder'>비밀번호(7글자 이상)</div>
-            <div className='show_password' onClick={onShowPassword}>
-              {showPassword ? '숨기기' : '비밀번호 표시'}
+            <div className="placeholder">비밀번호(7글자 이상)</div>
+            <div className="show_password" onClick={onShowPassword}>
+              {showPassword ? "숨기기" : "비밀번호 표시"}
             </div>
           </div>
 
-          <div className='input_box'>
+          <div className="input_box">
             <input
-              type='password'
+              type="password"
               value={confirmPassword}
               onChange={ConfirmPasswordHandler}
               onKeyUp={onCheckHandler}
               required
             />
-            <div className='placeholder'>비밀번호 확인</div>
+            <div className="placeholder">비밀번호 확인</div>
           </div>
 
-          <button className='register_btn' type='submit' disabled={registerBtn}>
+          <button className="register_btn" type="submit" disabled={registerBtn}>
             가입
           </button>
           {error ? <ErrorMessage>{error}</ErrorMessage> : null}
         </form>
       </div>
 
-      <div className='login_box'>
+      <div className="login_box">
         <span>계정이 있으신가요?</span>
-        <Link to='/login'>로그인</Link>
+        <Link to="/login">로그인</Link>
       </div>
     </ReisgerContainer>
   );

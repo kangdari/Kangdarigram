@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import Dropzone from 'react-dropzone';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import React, { useState } from "react";
+import styled from "styled-components";
+import Dropzone from "react-dropzone";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 // import axios from 'axios';
-import { uploadImage } from '../../api/post';
+import { uploadImage } from "../../../../api/post";
 
 const FileUplaod = ({ updateImages }) => {
   const [images, setImages] = useState([]);
@@ -12,9 +12,9 @@ const FileUplaod = ({ updateImages }) => {
   const onDropHandler = (files) => {
     const formData = new FormData();
     const config = {
-      headers: { 'Content-Type': 'multipart/form-data' },
+      headers: { "Content-Type": "multipart/form-data" },
     };
-    formData.append('file', files[0]);
+    formData.append("file", files[0]);
 
     // 서버 요청
     uploadImage(formData, config).then((res) => {
@@ -23,7 +23,7 @@ const FileUplaod = ({ updateImages }) => {
         setImages([...images, res.data.filePath]);
         updateImages([...images, res.data.filePath]); // WirtePostPage에 상태 전달
       } else {
-        alert('업로드 실패');
+        alert("업로드 실패");
       }
     });
   };
@@ -39,7 +39,7 @@ const FileUplaod = ({ updateImages }) => {
       <Dropzone onDrop={onDropHandler}>
         {({ getRootProps, getInputProps }) => (
           <section>
-            <div className='drop_box' {...getRootProps()}>
+            <div className="drop_box" {...getRootProps()}>
               <input {...getInputProps()} />
               <FontAwesomeIcon icon={faPlus} />
             </div>
@@ -52,7 +52,7 @@ const FileUplaod = ({ updateImages }) => {
           <img
             key={index}
             src={`http://localhost:5050/${image}`}
-            alt='img'
+            alt="img"
             onClick={() => onDeleteHandler(image)}
           />
         ))}
