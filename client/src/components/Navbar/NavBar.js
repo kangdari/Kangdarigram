@@ -1,16 +1,16 @@
-import React from 'react';
-import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import React from "react";
+import styled from "styled-components";
+import { Link } from "react-router-dom";
 
-import palette from '../../utils/palette';
-import RightMenu from './Section/RightMenu';
-import SearchBox from './Section/SearchBox';
+import palette from "../../utils/palette";
+import RightMenu from "./Section/RightMenu";
+import SearchBox from "./Section/SearchBox";
 
 const NavBar = () => {
   return (
     <NavBarBlock>
-      <div className='navbar'>
-        <Link to='/' className='logo'>
+      <div className="navbar">
+        <Link to="/" className="logo">
           Kangdarigram
         </Link>
         <SearchBox />
@@ -28,6 +28,7 @@ const NavBarBlock = styled.header`
   height: 54px;
   border-bottom: 1px solid ${palette.gray[2]};
   background: #fff;
+  z-index: 10;
 
   .navbar {
     width: 100%;
