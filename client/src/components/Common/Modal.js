@@ -33,11 +33,8 @@ const Modal = ({ visible, closable, maskClosable, onCloseModal, children }) => {
         onClick={maskClosable && onMaskClick}
         tabIndex="-1"
       >
-        <ModalInner className="modal_inner">
-          {closable ? (
-            <CloseBtn className="close_btn" onClick={onClose} />
-          ) : null}
-        </ModalInner>
+        {children}
+        {/* <ModalInner className="modal_inner"></ModalInner> */}
       </ModalBlock>
     </Portal>
   );
@@ -65,19 +62,9 @@ const ModalBlock = styled.div`
   z-index: 1000;
   overflow: auto;
   outline: 0;
-`;
-
-const ModalInner = styled.div`
-  position: relative;
-  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.5);
-  background-color: #fff;
-  border-radius: 10px;
-  width: 360px;
-  max-width: 480px;
-  top: 50%;
-  transform: translateY(-50%);
-  margin: 0 auto;
-  padding: 40px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const CloseBtn = styled.button`

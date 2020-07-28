@@ -4,6 +4,7 @@ import ProfileInfo from "./Section/ProfileInfo";
 import ProfileLink from "./Section/ProfileLink";
 import ProfilePost from "./Section/ProfilePost";
 import Modal from "../../Common/Modal";
+import PostDetail from "../../PostDetail/PostDetail";
 
 import { loadPost } from "../../../api/post";
 
@@ -47,7 +48,9 @@ const ProfilePage = ({ user }) => {
           onCloseModal={onCloseModal}
           closable={true} // 모달 종료 버튼 클릭 시 끄기 옵션
           maskClosable={true} // 모달 배경 클릭 시 끄기 옵션
-        />
+        >
+          <PostDetail />
+        </Modal>
       ) : null}
     </ProfilePageBlock>
   );
