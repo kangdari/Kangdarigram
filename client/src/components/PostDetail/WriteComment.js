@@ -35,7 +35,7 @@ const WriteComment = () => {
 const WriteCommentBlock = styled.div`
   margin-top: 8px;
   padding: 0 16px;
-  border-top: 1px solid ${palette.gray[4]};
+  border-top: 1px solid ${palette.gray[3]};
   form {
     display: flex;
     height: 50px;
@@ -65,6 +65,10 @@ const WriteCommentBlock = styled.div`
   .btn:disabled {
     color: ${palette.blue[2]};
     pointer-events: none;
+  }
+
+  @media screen and (max-width: 736px) {
+    border: none;
   }
 `;
 

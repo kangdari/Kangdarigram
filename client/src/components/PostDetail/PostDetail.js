@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
+import palette from "../../utils/palette";
 
 import Comments from "./Comments";
 import Btn from "./Btn";
@@ -45,11 +46,20 @@ const PostDetailBlock = styled.div`
   width: 100%;
   margin: auto;
   background: #fff;
+
+  @media screen and (max-width: 736px) {
+    width: 100%;
+  }
 `;
 
 const Post = styled.article`
   position: relative;
   width: 100%;
+
+  @media screen and (max-width: 736px) {
+    width: 258px;
+    margin: 0 auto;
+  }
 `;
 
 const PostImageBox = styled.div`
@@ -62,6 +72,13 @@ const PostImageBox = styled.div`
 
   img {
     width: 100%;
+  }
+
+  @media screen and (max-width: 736px) {
+    display: block;
+    margin-right: 0;
+    background: transparent;
+    min-height: inherit;
   }
 `;
 
@@ -88,6 +105,11 @@ const PostHeader = styled.header`
     margin-left: 1rem;
     font-weight: 600;
   }
+  @media screen and (max-width: 736px) {
+    position: relative;
+    width: 100%;
+    border: none;
+  }
 `;
 
 const PostContents = styled.div`
@@ -95,9 +117,12 @@ const PostContents = styled.div`
   position: absolute;
   top: 72px;
   right: 0;
-  border-left: 1px solid lightgrey;
-  /* display: flex;
-  flex-direction: column; */
+  border-left: 1px solid ${palette.gray[3]};
+  @media screen and (max-width: 736px) {
+    position: static;
+    width: 100%;
+    border: none;
+  }
 `;
 
 export default PostDetail;
