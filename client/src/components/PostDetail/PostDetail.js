@@ -10,7 +10,8 @@ import Time from "./Time";
 import Like from "./Like";
 import WriteComment from "./WriteComment";
 
-const PostDetail = () => {
+const PostDetail = ({ post }) => {
+  const { contents, images, tags, _id } = post;
   return (
     <PostDetailBlock>
       <Post>
@@ -22,15 +23,12 @@ const PostDetail = () => {
           <div className="name">ksh4820</div>
         </PostHeader>
         <PostImageBox>
-          <img
-            alt="img"
-            src={`http://localhost:5050/upload/1595821373047_Austr_1.jpg`}
-          />
+          <img alt="img" src={`http://localhost:5050/${images[0]}`} />
         </PostImageBox>
         <PostContents>
           {/* 댓글 보기 창  mobile에선 사라짐*/}
-          <Comments />
-          <Btn />
+          <Comments contents={contents} tags={tags} />
+          <Btn postId={_id} />
           <Like />
           <Time />
           {/* 댓글 쓰기 */}

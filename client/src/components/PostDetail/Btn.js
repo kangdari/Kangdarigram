@@ -1,24 +1,16 @@
 import React from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faHeart,
-  faComment,
-  faBookmark,
-} from "@fortawesome/free-solid-svg-icons";
+import { faHeart, faComment } from "@fortawesome/free-solid-svg-icons";
 
-const Btn = () => {
+import Save from "../Common/Save";
+
+const Btn = ({ postId }) => {
   return (
     <BtnBlock>
-      <span className="btn">
-        <FontAwesomeIcon icon={faHeart} />
-      </span>
-      <span className="btn">
-        <FontAwesomeIcon icon={faComment} />
-      </span>
-      <span className="btn save">
-        <FontAwesomeIcon icon={faBookmark} />
-      </span>
+      <FontAwesomeIcon className="btn" icon={faHeart} />
+      <FontAwesomeIcon className="btn" icon={faComment} />
+      <Save postId={postId} />
     </BtnBlock>
   );
 };
@@ -27,20 +19,16 @@ const BtnBlock = styled.section`
   display: flex;
   padding: 0 8px;
   margin-top: 4px;
+
   .btn {
     margin: 8px;
     cursor: pointer;
-  }
-
-  .save {
-    margin-left: auto;
   }
 
   svg {
     font-size: 24px;
     stroke: black;
     stroke-width: 35;
-    color: #fff;
   }
 `;
 
