@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 import ProfileInfo from "./Section/ProfileInfo";
 import ProfileLink from "./Section/ProfileLink";
@@ -6,25 +7,33 @@ import ProfilePost from "./Section/ProfilePost";
 import Modal from "../../Common/Modal";
 import PostDetail from "../../PostDetail/PostDetail";
 
-import { loadPost } from "../../../api/post";
+import { loadPost, loadSavedPost } from "../../../api/post";
 
-const ProfilePage = ({ user }) => {
+const ProfilePage = ({ location }) => {
   const [posts, setPosts] = useState([]); // 유저가 작성한 post 정보
   const [clickedPost, setClickedPost] = useState(""); // 클릭한 포스트의 index
   const [visible, setVisible] = useState(false); // Modal 렌더링 여부
+  const { _id, id } = useSelector((state) => state.user.userData);
 
   // 서버에서 유저가 쓴 게시글에 대한 정보를 긁어옴
   useEffect(() => {
     const body = {
-      _id: user.userData._id,
+      _id,
     };
-
-    loadPost(body).then((res) => {
-      if (res.data.success) {
-        setPosts(res.data.postInfo);
-      }
-    });
-  }, [user.userData]);
+    if (location.pathname === `/${id}`) {
+      loadPost(body).then((res) => {
+        if (res.data.success) {
+          setPosts(res.data.postInfo);
+        }
+      });
+    } else if (location.pathname === `/${id}/saved`) {
+      loadSavedPost(body).then((res) => {
+        if (res.data.success) {
+          setPosts(res.data.savedPostInfo);
+        }
+      });
+    }
+  }, [id, _id, location.pathname]);
 
   // 모달 on, clickedPost update
   const onClickPost = (index) => {
@@ -39,7 +48,7 @@ const ProfilePage = ({ user }) => {
 
   return (
     <ProfilePageBlock>
-      <ProfileInfo posts={posts} />
+      <ProfileInfo />
       <ProfileLink />
       <ProfilePost posts={posts} onClickPost={onClickPost} />
       {visible ? (

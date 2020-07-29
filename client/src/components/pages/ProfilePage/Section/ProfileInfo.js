@@ -1,40 +1,51 @@
-import React from 'react';
-import styled from 'styled-components';
-import { useSelector } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import { useSelector } from "react-redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 
-const ProfileInfo = ({ posts }) => {
-  const { id, name } = useSelector((state) => state.user.userData);
+import { loadPost } from "../../../../api/post";
+
+const ProfileInfo = () => {
+  const [posts, setPosts] = useState([]); // 유저가 작성한 post 정보
+  const { _id, id, name } = useSelector((state) => state.user.userData);
+
+  useEffect(() => {
+    loadPost({ _id }).then((res) => {
+      if (res.data.success) {
+        setPosts(res.data.postInfo);
+      }
+    });
+  }, [_id]);
 
   return (
     <ProfileInfoBlock>
-      <div className='profile_img'>
-        <div className='img_box'>
-          <FontAwesomeIcon className='img' icon={faUserCircle} />
+      <div className="profile_img">
+        <div className="img_box">
+          <FontAwesomeIcon className="img" icon={faUserCircle} />
         </div>
       </div>
 
-      <div className='profile_info'>
-        <div className='info_header'>
-          <h1 className='id'>{id}</h1>
-          <button className='profile_btn'>프로필 편집</button>
+      <div className="profile_info">
+        <div className="info_header">
+          <h1 className="id">{id}</h1>
+          <button className="profile_btn">프로필 편집</button>
         </div>
-        <ul className='profile_list'>
+        <ul className="profile_list">
           <li>
-            게시물 <span className='count'>{posts.length}</span>
+            게시물 <span className="count">{posts.length}</span>
           </li>
           <li>
-            팔로우 <span className='count'>10</span>
+            팔로우 <span className="count">10</span>
           </li>
           <li>
-            팔로워 <span className='count'>5</span>
+            팔로워 <span className="count">5</span>
           </li>
         </ul>
 
-        <div className='profile_contents'>
-          <p className='name'>{name}</p>
-          <p className='contents'>내용</p>
+        <div className="profile_contents">
+          <p className="name">{name}</p>
+          <p className="contents">내용</p>
         </div>
       </div>
     </ProfileInfoBlock>

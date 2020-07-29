@@ -1,6 +1,6 @@
-import axios from 'axios';
+import axios from "axios";
 
-const POST_SERVER = '/api/post';
+const POST_SERVER = "/api/post";
 
 // 이미지 업로드
 export const uploadImage = (formData, config) =>
@@ -9,5 +9,9 @@ export const uploadImage = (formData, config) =>
 // 포스트 작성
 export const uploadPost = (data) => axios.post(`${POST_SERVER}/upload`, data);
 
-// 포스트 조회
+// 자신이 작성한 포스트 조회
 export const loadPost = (body) => axios.post(`${POST_SERVER}/posts`, body);
+
+// 저장한 포스트 조회
+export const loadSavedPost = (body) =>
+  axios.post(`${POST_SERVER}/loadSavedPosts`, body);

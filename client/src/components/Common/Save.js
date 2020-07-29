@@ -61,6 +61,7 @@ const StyledIcon = styled(FontAwesomeIcon)`
   /* save state에 따라 색상 변화 */
   color: ${(props) => (props.saved ? "black" : "white")};
   margin: 8px 8px 8px auto;
+  cursor: pointer;
 `;
 
 export default Save;
