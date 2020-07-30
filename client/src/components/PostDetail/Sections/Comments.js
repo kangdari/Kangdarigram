@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import palette from "../../utils/palette";
+import palette from "../../../utils/palette";
 
-const Comments = () => {
-  return <CommentsBlock>Comments</CommentsBlock>;
+const Comments = ({ contents, tags }) => {
+  return <CommentsBlock>{contents}</CommentsBlock>;
 };
 
 const CommentsBlock = styled.div`

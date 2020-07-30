@@ -1,18 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import palette from "../../utils/palette";
 
-import Comments from "./Comments";
-import Btn from "./Btn";
-import Time from "./Time";
-import Like from "./Like";
-import WriteComment from "./WriteComment";
+import Comments from "./Sections/Comments";
+import Btn from "./Sections/Btn";
+import Time from "./Sections/Time";
+import Like from "./Sections/Like";
+import WriteComment from "./Sections/WriteComment";
 import ImageSlider from "../Common/ImageSlider";
 
 const PostDetail = ({ post, id }) => {
+  const user_Id = useSelector((state) => state.user.userData._id);
   const { contents, images, tags, _id } = post;
+  const [comments, setComments] = useState([]); // 댓글 목록
+
+  // comments 상태 업데이트
+  const refreshComments = (updateComments) => {
+    setComments(comments.concat(updateComments));
+  };
+
+  console.log(comments);
+
   return (
     <PostDetailBlock>
       <Post>
@@ -31,7 +42,11 @@ const PostDetail = ({ post, id }) => {
           <Like />
           <Time />
           {/* 댓글 쓰기 */}
-          <WriteComment />
+          <WriteComment
+            refreshComments={refreshComments}
+            userId={user_Id}
+            postId={_id}
+          />
         </PostContents>
       </Post>
     </PostDetailBlock>

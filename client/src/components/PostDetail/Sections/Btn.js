@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faComment } from "@fortawesome/free-solid-svg-icons";
 
-import Save from "../Common/Save";
+import Save from "../../Common/Save";
 
 const Btn = ({ postId }) => {
   return (

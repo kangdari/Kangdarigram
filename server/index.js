@@ -29,6 +29,7 @@ app.use("/upload", express.static("upload"));
 app.use("/api/users", require("./routes/users"));
 app.use("/api/post", require("./routes/post"));
 app.use("/api/save", require("./routes/save"));
+app.use("/api/comment", require("./routes/comment"));
 
 if (process.env.NODE_ENV === "production") {
   // Set static folder
