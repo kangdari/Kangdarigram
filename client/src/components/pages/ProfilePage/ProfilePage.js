@@ -58,7 +58,7 @@ const ProfilePage = ({ location }) => {
           closable={true} // 모달 종료 버튼 클릭 시 끄기 옵션
           maskClosable={true} // 모달 배경 클릭 시 끄기 옵션
         >
-          <PostDetail post={posts[clickedPost]} />
+          <PostDetail id={id} post={posts[clickedPost]} />
         </Modal>
       ) : null}
     </ProfilePageBlock>

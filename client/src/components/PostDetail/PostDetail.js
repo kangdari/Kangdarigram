@@ -9,8 +9,9 @@ import Btn from "./Btn";
 import Time from "./Time";
 import Like from "./Like";
 import WriteComment from "./WriteComment";
+import ImageSlider from "../Common/ImageSlider";
 
-const PostDetail = ({ post }) => {
+const PostDetail = ({ post, id }) => {
   const { contents, images, tags, _id } = post;
   return (
     <PostDetailBlock>
@@ -20,11 +21,9 @@ const PostDetail = ({ post }) => {
             <FontAwesomeIcon icon={faUserCircle} />
           </div>
           {/* userid */}
-          <div className="name">ksh4820</div>
+          <div className="name">{id}</div>
         </PostHeader>
-        <PostImageBox>
-          <img alt="img" src={`http://localhost:5050/${images[0]}`} />
-        </PostImageBox>
+        <ImageSlider images={images} />
         <PostContents>
           {/* 댓글 보기 창  mobile에선 사라짐*/}
           <Comments contents={contents} tags={tags} />
@@ -57,26 +56,6 @@ const Post = styled.article`
   @media screen and (max-width: 736px) {
     width: 258px;
     margin: 0 auto;
-  }
-`;
-
-const PostImageBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin-right: 335px;
-  min-height: 450px;
-  background: #000;
-
-  img {
-    width: 100%;
-  }
-
-  @media screen and (max-width: 736px) {
-    display: block;
-    margin-right: 0;
-    background: transparent;
-    min-height: inherit;
   }
 `;
 
