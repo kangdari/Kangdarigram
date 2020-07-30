@@ -1,25 +1,42 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faComment } from "@fortawesome/free-solid-svg-icons";
 
-const Post = ({ image, onClickPost, index }) => {
+import { getComment } from "../../../../api/comment";
+
+const PostHover = ({ postId }) => {
+  const [commentCount, setCommentCount] = useState(0); // comment 개수
+  useEffect(() => {
+    getComment({ postId }).then(({ data }) => {
+      setCommentCount(data.comment.length);
+    });
+
+    // 좋아요 개수 찾기
+  }, [postId]);
+
+  return (
+    <div className="post_hover">
+      <div className="items">
+        <div className="item">
+          <FontAwesomeIcon icon={faHeart} />
+          <span>1</span>
+        </div>
+        <div className="item">
+          <FontAwesomeIcon icon={faComment} />
+          {/* comment */}
+          <span>{commentCount}</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const Post = ({ postId, image, onClickPost, index }) => {
   return (
     <div className="post" onClick={() => onClickPost(index)}>
       <img src={`http://localhost:5050/${image}`} alt="img" />
-
-      <div className="post_hover">
-        <div className="items">
-          <div className="item">
-            <FontAwesomeIcon icon={faHeart} />
-            <span>1</span>
-          </div>
-          <div className="item">
-            <FontAwesomeIcon icon={faComment} />
-            <span>30</span>
-          </div>
-        </div>
-      </div>
+      <PostHover postId={postId} />
     </div>
   );
 };
@@ -31,6 +48,7 @@ const ProfilePost = ({ posts, onClickPost }) => {
       {posts.map((post, index) => (
         <Post
           key={post._id}
+          postId={post._id}
           image={post.images[0]}
           onClickPost={onClickPost}
           index={index}
