@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,17 +12,28 @@ import Like from "./Sections/Like";
 import WriteComment from "./Sections/WriteComment";
 import ImageSlider from "../Common/ImageSlider";
 
+import { getComment } from "../../api/comment";
+
 const PostDetail = ({ post, id }) => {
   const user_Id = useSelector((state) => state.user.userData._id);
   const { contents, images, tags, _id } = post;
-  const [comments, setComments] = useState([]); // 댓글 목록
+  const [comment, setComment] = useState([]); // 댓글 목록
 
   // comments 상태 업데이트
-  const refreshComments = (updateComments) => {
-    setComments(comments.concat(updateComments));
+  const refreshComments = (updateComment) => {
+    setComment(comment.concat(updateComment));
   };
 
-  console.log(comments);
+  useEffect(() => {
+    getComment({ postId: _id }).then(({ data }) => {
+      if (data.success) {
+        console.log("comment 불러오기 성공");
+        setComment(data.comment);
+      } else {
+        alert("comment 불러오기 실패");
+      }
+    });
+  }, [_id]);
 
   return (
     <PostDetailBlock>
