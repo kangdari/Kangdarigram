@@ -1,10 +1,14 @@
 import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart, faComment } from "@fortawesome/free-solid-svg-icons";
+import {
+  faHeart,
+  faComment,
+  faImages,
+} from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 
-import { getComment } from "../../../../api/comment";
+// import { getComment } from "../../../../api/comment";
 
 const PostHover = ({ commentCount }) => {
   return (
@@ -24,7 +28,7 @@ const PostHover = ({ commentCount }) => {
   );
 };
 
-const Post = ({ postId, image, onClickPost, index }) => {
+const Post = ({ postId, images, onClickPost, index }) => {
   const [commentCount, setCommentCount] = useState(0); // comment 개수
 
   const getComment = useCallback(() => {
@@ -44,8 +48,9 @@ const Post = ({ postId, image, onClickPost, index }) => {
 
   return (
     <div className="post" onClick={() => onClickPost(index)}>
-      <img src={`http://localhost:5050/${image}`} alt="img" />
+      <img src={`http://localhost:5050/${images[0]}`} alt="img" />
       <PostHover commentCount={commentCount} postId={postId} />
+      {images.length > 1 && <StyledIcon icon={faImages} />}
     </div>
   );
 };
@@ -58,7 +63,7 @@ const ProfilePost = ({ posts, onClickPost }) => {
         <Post
           key={post._id}
           postId={post._id}
-          image={post.images[0]}
+          images={post.images}
           onClickPost={onClickPost}
           index={index}
         />
@@ -66,6 +71,14 @@ const ProfilePost = ({ posts, onClickPost }) => {
     </ProfilePostBlock>
   );
 };
+
+const StyledIcon = styled(FontAwesomeIcon)`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  color: white;
+`;
 
 const ProfilePostBlock = styled.div`
   display: flex;
