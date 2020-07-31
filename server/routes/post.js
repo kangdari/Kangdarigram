@@ -43,27 +43,31 @@ router.post("/upload", (req, res) => {
 // user _id로 검색 => user가 작성한 post 조회
 router.post("/posts", (req, res) => {
   const { _id } = req.body;
-  Post.find({ writer: _id }).exec((err, postInfo) => {
-    if (err) return res.status(400).json({ success: false, err });
+  Post.find({ writer: _id })
+    .populate("writer")
+    .exec((err, postInfo) => {
+      if (err) return res.status(400).json({ success: false, err });
 
-    return res.status(200).json({ success: true, postInfo });
-  });
+      return res.status(200).json({ success: true, postInfo });
+    });
 });
 
 // user가 저장한 post 조회
 router.post("/loadSavedPosts", (req, res) => {
   const { _id } = req.body;
   // 유저의 id를 가지고 Save 모델에서 검색
-  Save.find({ userId: _id }).exec((err, savedInfo) => {
-    if (err) return res.status(400).json({ success: false, err });
-    // 저장된 post id 배열
-    const savedPost = savedInfo.map((post) => post.postId);
-    // Post 모델에서 저장된 post만 검색
-    Post.find({ _id: { $in: savedPost } }).exec((err, savedPostInfo) => {
+  Save.find({ userId: _id })
+    .populate("writer")
+    .exec((err, savedInfo) => {
       if (err) return res.status(400).json({ success: false, err });
-      return res.status(200).json({ success: true, savedPostInfo });
+      // 저장된 post id 배열
+      const savedPost = savedInfo.map((post) => post.postId);
+      // Post 모델에서 저장된 post만 검색
+      Post.find({ _id: { $in: savedPost } }).exec((err, savedPostInfo) => {
+        if (err) return res.status(400).json({ success: false, err });
+        return res.status(200).json({ success: true, savedPostInfo });
+      });
     });
-  });
 });
 
 module.exports = router;

@@ -14,12 +14,11 @@ import ImageSlider from "../Common/ImageSlider";
 
 import { getComment } from "../../api/comment";
 
-const PostDetail = ({ post, id }) => {
+const PostDetail = ({ post }) => {
   const user_Id = useSelector((state) => state.user.userData._id);
-  const { contents, images, tags, _id } = post;
+  const { contents, images, tags, _id, writer } = post;
   const [comment, setComment] = useState([]); // 댓글 목록
 
-  // comments 상태 업데이트
   const refreshComments = (updateComment) => {
     setComment(comment.concat(updateComment));
   };
@@ -43,12 +42,18 @@ const PostDetail = ({ post, id }) => {
             <FontAwesomeIcon icon={faUserCircle} />
           </div>
           {/* userid */}
-          <div className="name">{id}</div>
+          <div className="name">{writer.id}</div>
         </PostHeader>
         <ImageSlider images={images} />
         <PostContents>
           {/* 댓글 보기 창  mobile에선 사라짐*/}
-          <Comments contents={contents} tags={tags} />
+          <Comments
+            comment={comment}
+            postContents={contents}
+            tags={tags}
+            writer={writer}
+          />
+
           <Btn postId={_id} />
           <Like />
           <Time />
@@ -98,9 +103,7 @@ const PostHeader = styled.header`
   align-items: center;
 
   .icon {
-    width: 32px;
-    height: 32px;
-    font-size: 32px;
+    font-size: 35px;
     color: lightgrey;
   }
 
@@ -116,10 +119,13 @@ const PostHeader = styled.header`
 `;
 
 const PostContents = styled.div`
+  display: flex;
+  flex-direction: column;
   width: 335px;
   position: absolute;
   top: 72px;
   right: 0;
+  bottom: 0;
   border-left: 1px solid ${palette.gray[3]};
   @media screen and (max-width: 736px) {
     position: static;

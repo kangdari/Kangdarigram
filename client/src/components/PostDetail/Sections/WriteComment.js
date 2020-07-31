@@ -16,16 +16,7 @@ const WriteComment = ({ refreshComments, userId, postId }) => {
     input.length >= 1 ? setBtn(false) : setBtn(true);
   };
 
-  const onCheckEnter = (e) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      // onSubmitHandler
-      setInput("");
-    }
-  };
-
-  const onSubmitHandler = (e) => {
-    e.preventDefault();
-
+  const onSaveComment = () => {
     const commentBody = {
       contents: input,
       writer: userId,
@@ -42,6 +33,20 @@ const WriteComment = ({ refreshComments, userId, postId }) => {
     });
   };
 
+  const onCheckEnter = (e) => {
+    if (e.keyCode === 13 && e.shiftKey === false) {
+      if (e.currentTarget.value.length > 0) {
+        e.preventDefault();
+        onSaveComment();
+      }
+    }
+  };
+
+  const onSubmitHandler = (e) => {
+    e.preventDefault();
+    onSaveComment();
+  };
+
   return (
     <WriteCommentBlock>
       <form onSubmit={onSubmitHandler}>
@@ -49,8 +54,8 @@ const WriteComment = ({ refreshComments, userId, postId }) => {
           value={input}
           onChange={onChangeHandler}
           onKeyUp={onCheckHandler}
-          onKeyPress={onCheckEnter}
-          className="text"
+          onKeyDown={onCheckEnter}
+          className="textarea"
           placeholder="댓글 달기..."
         ></textarea>
         <button className="btn" type="submit" disabled={btn}>
@@ -71,7 +76,7 @@ const WriteCommentBlock = styled.div`
     align-items: center;
   }
 
-  .text {
+  .textarea {
     overflow-y: auto;
     flex: 1;
     font-size: 14px;

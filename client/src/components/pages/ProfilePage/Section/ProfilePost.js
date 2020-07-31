@@ -5,16 +5,7 @@ import { faHeart, faComment } from "@fortawesome/free-solid-svg-icons";
 
 import { getComment } from "../../../../api/comment";
 
-const PostHover = ({ postId }) => {
-  const [commentCount, setCommentCount] = useState(0); // comment 개수
-  useEffect(() => {
-    getComment({ postId }).then(({ data }) => {
-      setCommentCount(data.comment.length);
-    });
-
-    // 좋아요 개수 찾기
-  }, [postId]);
-
+const PostHover = ({ commentCount }) => {
   return (
     <div className="post_hover">
       <div className="items">
@@ -33,10 +24,18 @@ const PostHover = ({ postId }) => {
 };
 
 const Post = ({ postId, image, onClickPost, index }) => {
+  const [commentCount, setCommentCount] = useState(0); // comment 개수
+  useEffect(() => {
+    getComment({ postId }).then(({ data }) => {
+      setCommentCount(data.comment.length);
+    });
+    // 좋아요 개수 찾기
+  }, [postId]);
+
   return (
     <div className="post" onClick={() => onClickPost(index)}>
       <img src={`http://localhost:5050/${image}`} alt="img" />
-      <PostHover postId={postId} />
+      <PostHover commentCount={commentCount} postId={postId} />
     </div>
   );
 };
