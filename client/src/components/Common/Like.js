@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
+import axios from "axios";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
@@ -16,16 +17,17 @@ const Like = ({ postId, commentId }) => {
     commentId: commentId,
   };
 
-  useEffect(() => {
-    getLike(variable).then(({ data }) => {
-      console.log(data);
-      if (data.success) {
-        setLiked(data.liked);
-      } else {
-        alert("save 정보 읽어오기 실패");
+  const getLike = useCallback(() => {
+    axios.post("/api/like/getLike", variable).then((res) => {
+      if (res.data.success && res.data.liked) {
+        setLiked(res.data.liked);
       }
     });
   }, [variable]);
+
+  useEffect(() => {
+    getLike();
+  }, [getLike]);
 
   const onSaveLike = () => {
     if (!liked) {

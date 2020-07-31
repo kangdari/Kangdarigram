@@ -20,7 +20,7 @@ const Btn = ({ postId }) => {
 const BtnBlock = styled.section`
   display: flex;
   align-items: center;
-  padding: 0 8px;
+  padding: 0 16px;
   margin-top: 4px;
 
   .btn {

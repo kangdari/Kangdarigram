@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faComment } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
 
 import { getComment } from "../../../../api/comment";
 
@@ -25,12 +26,21 @@ const PostHover = ({ commentCount }) => {
 
 const Post = ({ postId, image, onClickPost, index }) => {
   const [commentCount, setCommentCount] = useState(0); // comment 개수
-  useEffect(() => {
-    getComment({ postId }).then(({ data }) => {
+
+  const getComment = useCallback(() => {
+    axios.post("/api/comment/getComment", { postId }).then(({ data }) => {
       setCommentCount(data.comment.length);
     });
-    // 좋아요 개수 찾기
   }, [postId]);
+
+  useEffect(() => {
+    getComment();
+    // getComment({ postId }).then(({ data }) => {
+    //   setCommentCount(data.comment.length);
+    // });
+    // 좋아요 개수 찾기
+  }, [getComment]);
+  // }, [postId]);
 
   return (
     <div className="post" onClick={() => onClickPost(index)}>
