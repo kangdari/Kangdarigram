@@ -9,14 +9,15 @@ import {
 import axios from "axios";
 
 // import { getComment } from "../../../../api/comment";
+import { getTotalLikeCount } from "../../../../api/like";
 
-const PostHover = ({ commentCount }) => {
+const PostHover = ({ likeCount, commentCount }) => {
   return (
     <div className="post_hover">
       <div className="items">
         <div className="item">
           <FontAwesomeIcon icon={faHeart} />
-          <span>1</span>
+          <span>{likeCount}</span>
         </div>
         <div className="item">
           <FontAwesomeIcon icon={faComment} />
@@ -30,6 +31,7 @@ const PostHover = ({ commentCount }) => {
 
 const Post = ({ postId, images, onClickPost, index }) => {
   const [commentCount, setCommentCount] = useState(0); // comment 개수
+  const [likeCount, setLikeCount] = useState(0); // 좋아요 개수
 
   const getComment = useCallback(() => {
     axios.post("/api/comment/getComment", { postId }).then(({ data }) => {
@@ -43,13 +45,24 @@ const Post = ({ postId, images, onClickPost, index }) => {
     //   setCommentCount(data.comment.length);
     // });
     // 좋아요 개수 찾기
-  }, [getComment]);
+    getTotalLikeCount({ postId }).then(({ data }) => {
+      if (data.success) {
+        setLikeCount(data.likeCount);
+      } else {
+        alert("get likeCount failed");
+      }
+    });
+  }, [getComment, postId]);
   // }, [postId]);
 
   return (
     <div className="post" onClick={() => onClickPost(index)}>
       <img src={`http://localhost:5050/${images[0]}`} alt="img" />
-      <PostHover commentCount={commentCount} postId={postId} />
+      <PostHover
+        likeCount={likeCount}
+        commentCount={commentCount}
+        postId={postId}
+      />
       {images.length > 1 && <StyledIcon icon={faImages} />}
     </div>
   );

@@ -8,3 +8,6 @@ export const unSaveLike = (data) =>
   axios.post(`${LIKE_SERVER}/unSaveLike`, data);
 
 export const getLike = (data) => axios.post(`${LIKE_SERVER}/getLike`, data);
+
+export const getTotalLikeCount = (data) =>
+  axios.post(`${LIKE_SERVER}/getLikecount`, data);
