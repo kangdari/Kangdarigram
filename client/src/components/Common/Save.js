@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBookmark } from "@fortawesome/free-solid-svg-icons";
 
 import { save, unSave, checkSave } from "../../api/save";
+import palette from "../../utils/palette";
 
 const Save = ({ postId }) => {
   const [saved, setSaved] = useState(false); // 저장 상태
@@ -59,7 +60,7 @@ const Save = ({ postId }) => {
 
 const StyledIcon = styled(FontAwesomeIcon)`
   /* save state에 따라 색상 변화 */
-  color: ${(props) => (props.saved ? "black" : "white")};
+  color: ${(props) => (props.saved ? "black" : palette.gray[5])};
   margin: 8px 8px 8px auto;
   cursor: pointer;
 `;

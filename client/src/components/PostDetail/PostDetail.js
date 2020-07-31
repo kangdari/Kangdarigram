@@ -8,7 +8,7 @@ import palette from "../../utils/palette";
 import Comments from "./Sections/Comments";
 import Btn from "./Sections/Btn";
 import Time from "./Sections/Time";
-import Like from "./Sections/Like";
+import LikeCount from "./Sections/LikeCount";
 import WriteComment from "./Sections/WriteComment";
 import ImageSlider from "../Common/ImageSlider";
 
@@ -52,10 +52,11 @@ const PostDetail = ({ post }) => {
             postContents={contents}
             tags={tags}
             writer={writer}
+            postId={_id}
           />
 
           <Btn postId={_id} />
-          <Like />
+          <LikeCount postId={_id} />
           <Time />
           {/* 댓글 쓰기 */}
           <WriteComment

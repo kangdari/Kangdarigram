@@ -5,8 +5,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 
-const Comment = ({ comment }) => {
-  const { contents, writer } = comment;
+import Like from "../../Common/Like";
+
+const Comment = ({ comment, postId }) => {
+  const { contents, writer, _id } = comment;
 
   const onFocus = () => {
     document.querySelector(".textarea").focus();
@@ -28,6 +30,10 @@ const Comment = ({ comment }) => {
                 댓글 달기
               </button>
             </div>
+            {/* 좋아요 */}
+            <div className="likeBtn">
+              <Like postId={postId} commentId={_id} />
+            </div>
           </div>
         </div>
       </li>
@@ -41,7 +47,7 @@ const Tag = ({ tag }) => {
   return <TagLink to={`/explore/tag/${tag}`}>#{tag}</TagLink>;
 };
 
-const Comments = ({ comment, postContents, tags, writer }) => {
+const Comments = ({ comment, postContents, tags, writer, postId }) => {
   return (
     <CommentsBlock>
       <CommentItem>
@@ -61,7 +67,7 @@ const Comments = ({ comment, postContents, tags, writer }) => {
         </li>
       </CommentItem>
       {comment.map((_comment) => (
-        <Comment key={_comment._id} comment={_comment} />
+        <Comment key={_comment._id} comment={_comment} postId={postId} />
       ))}
     </CommentsBlock>
   );
@@ -77,25 +83,38 @@ const CommentItem = styled.ul`
     display: flex;
   }
 
-  .user_name {
-    display: inline-flex;
-    font-weight: 500;
-    padding-right: 5px;
+  .info {
+    position: relative;
+    width: 100%;
+    padding-right: 20px;
+
+    .user_name {
+      display: inline-flex;
+      font-weight: 500;
+      padding-right: 5px;
+    }
+
+    .info_btns {
+      font-size: 12px;
+      color: ${palette.gray[5]};
+      margin-top: 8px;
+    }
+
+    .btn {
+      font-size: 12px;
+      color: ${palette.gray[5]};
+      border: none;
+      outline: none;
+      background: transparent;
+      cursor: pointer;
+      margin-left: 6px;
+    }
   }
 
-  .info_btns {
-    font-size: 12px;
-    color: ${palette.gray[5]};
-  }
-
-  .btn {
-    font-size: 12px;
-    color: ${palette.gray[5]};
-    border: none;
-    outline: none;
-    background: transparent;
-    cursor: pointer;
-    margin-left: 6px;
+  .likeBtn {
+    position: absolute;
+    top: 0;
+    right: 0;
   }
 `;
 
