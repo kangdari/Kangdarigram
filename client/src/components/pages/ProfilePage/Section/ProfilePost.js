@@ -7,6 +7,8 @@ import {
   faImages,
 } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { getLikeCount } from "../../../../_actions/like_action";
 
 // import { getComment } from "../../../../api/comment";
 import { getTotalLikeCount } from "../../../../api/like";
@@ -30,6 +32,9 @@ const PostHover = ({ likeCount, commentCount }) => {
 };
 
 const Post = ({ postId, images, onClickPost, index }) => {
+  const dispatch = useDispatch();
+  // const likeCount = useSelector((state) => state.posts.posts[index].likeCount);
+
   const [commentCount, setCommentCount] = useState(0); // comment 개수
   const [likeCount, setLikeCount] = useState(0); // 좋아요 개수
 
@@ -40,29 +45,40 @@ const Post = ({ postId, images, onClickPost, index }) => {
   }, [postId]);
 
   useEffect(() => {
-    getComment();
-    // getComment({ postId }).then(({ data }) => {
-    //   setCommentCount(data.comment.length);
+    dispatch(getLikeCount({ postId }));
+    // getComment();
+    // getTotalLikeCount({ postId }).then(({ data }) => {
+    //   if (data.success) {
+    //     setLikeCount(data.likeCount);
+    //   } else {
+    //     alert("get likeCount failed");
+    //   }
     // });
-    // 좋아요 개수 찾기
-    getTotalLikeCount({ postId }).then(({ data }) => {
-      if (data.success) {
-        setLikeCount(data.likeCount);
-      } else {
-        alert("get likeCount failed");
-      }
-    });
-  }, [getComment, postId]);
+  }, [getComment, postId, dispatch]);
   // }, [postId]);
 
   return (
     <div className="post" onClick={() => onClickPost(index)}>
       <img src={`http://localhost:5050/${images[0]}`} alt="img" />
-      <PostHover
+      {/* <PostHover
         likeCount={likeCount}
         commentCount={commentCount}
         postId={postId}
-      />
+      /> */}
+      <div className="post_hover">
+        <div className="items">
+          <div className="item">
+            <FontAwesomeIcon icon={faHeart} />
+            <span>{likeCount}</span>
+          </div>
+          <div className="item">
+            <FontAwesomeIcon icon={faComment} />
+            {/* comment */}
+            <span>{commentCount}</span>
+          </div>
+        </div>
+      </div>
+
       {images.length > 1 && <StyledIcon icon={faImages} />}
     </div>
   );

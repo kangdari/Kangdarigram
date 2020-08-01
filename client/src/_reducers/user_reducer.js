@@ -1,19 +1,19 @@
-import { handleActions } from 'redux-actions';
+import { handleActions } from "redux-actions";
 import {
   // LOGIN_USER,
   LOGIN_USER_SUCCESS,
-  LOGIN_USER_FAILUER,
+  LOGIN_USER_FAILURE,
   REGISTER_USER_SUCCESS,
-  REGISTER_USER_FAILUER,
+  REGISTER_USER_FAILURE,
   LOGOUT,
   AUTH_CHECK,
-} from '../_actions/types';
+} from "../_actions/types";
 
 const initialState = {
-  userError: '', // 에러
-  login: '',
-  register: '',
-  userData: '',
+  userError: "", // 에러
+  login: "",
+  register: "",
+  userData: "",
 };
 
 const user = handleActions(
@@ -21,34 +21,34 @@ const user = handleActions(
     [LOGIN_USER_SUCCESS]: (state, action) => ({
       ...state,
       login: action.payload,
-      userError: '',
+      userError: "",
     }),
-    [LOGIN_USER_FAILUER]: (state, action) => ({
+    [LOGIN_USER_FAILURE]: (state, action) => ({
       ...state,
-      login: '',
+      login: "",
       userError: action.payload,
     }),
     [REGISTER_USER_SUCCESS]: (state, { payload }) => ({
       ...state,
       register: payload,
-      userError: '',
+      userError: "",
     }),
-    [REGISTER_USER_FAILUER]: (state, action) => ({
+    [REGISTER_USER_FAILURE]: (state, action) => ({
       ...state,
-      register: '',
+      register: "",
       userError: action.payload,
     }),
     [LOGOUT]: (state) => ({
       ...state,
-      login: '',
-      userData: '',
+      login: "",
+      userData: "",
     }),
     [AUTH_CHECK]: (state, action) => ({
       ...state,
       userData: action.payload,
     }),
   },
-  initialState
+  initialState,
 );
 
 export default user;

@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { useSelector } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import ProfileInfo from "./Section/ProfileInfo";
 import ProfileLink from "./Section/ProfileLink";
@@ -7,57 +7,24 @@ import ProfilePost from "./Section/ProfilePost";
 import Modal from "../../Common/Modal";
 import PostDetail from "../../PostDetail/PostDetail";
 
-import axios from "axios";
-
-// import { loadPost, loadSavedPost } from "../../../api/post";
+import { getPostList, getSavedPostList } from "../../../_actions/post_action";
 
 const ProfilePage = ({ location }) => {
-  const [posts, setPosts] = useState([]); // 유저가 작성한 post 정보
+  const dispatch = useDispatch();
+  const { posts, savedPosts } = useSelector((state) => state.posts);
+
   const [clickedPost, setClickedPost] = useState(""); // 클릭한 포스트의 index
   const [visible, setVisible] = useState(false); // Modal 렌더링 여부
   const { _id, id } = useSelector((state) => state.user.userData);
 
-  const loadPost = useCallback(() => {
-    axios.post("/api/post/posts", { _id }).then((res) => {
-      if (res.data.success) {
-        setPosts(res.data.postInfo);
-      }
-    });
-  }, [_id]);
-
-  const loadSavedPost = useCallback(() => {
-    axios.post("/api/post/loadSavedPosts", { _id }).then((res) => {
-      if (res.data.success) {
-        setPosts(res.data.savedPostInfo);
-      }
-    });
-  }, [_id]);
-
   // 서버에서 유저가 쓴 게시글에 대한 정보를 긁어옴
   useEffect(() => {
     if (location.pathname === `/${id}`) {
-      loadPost();
+      dispatch(getPostList({ _id }));
     } else if (location.pathname === `/${id}/saved`) {
-      loadSavedPost();
+      dispatch(getSavedPostList({ _id }));
     }
-    // const body = {
-    //   _id,
-    // };
-    // if (location.pathname === `/${id}`) {
-    //   loadPost(body).then((res) => {
-    //     if (res.data.success) {
-    //       setPosts(res.data.postInfo);
-    //     }
-    //   });
-    // } else if (location.pathname === `/${id}/saved`) {
-    //   loadSavedPost(body).then((res) => {
-    //     if (res.data.success) {
-    //       setPosts(res.data.savedPostInfo);
-    //     }
-    //   });
-    // }
-    // }, [id, _id, location.pathname]);
-  }, [loadPost, loadSavedPost, id, location.pathname]);
+  }, [id, location.pathname, _id, dispatch]);
 
   // 모달 on, clickedPost update
   const onClickPost = (index) => {
@@ -74,7 +41,11 @@ const ProfilePage = ({ location }) => {
     <ProfilePageBlock>
       <ProfileInfo />
       <ProfileLink />
-      <ProfilePost posts={posts} onClickPost={onClickPost} />
+
+      <ProfilePost
+        posts={location.pathname === `/${id}/saved` ? savedPosts : posts}
+        onClickPost={onClickPost}
+      />
       {visible ? (
         <Modal
           visible={visible}

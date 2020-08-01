@@ -1,22 +1,12 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
 import { useSelector } from "react-redux";
+import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 
-import { loadPost } from "../../../../api/post";
-
 const ProfileInfo = () => {
-  const [posts, setPosts] = useState([]); // 유저가 작성한 post 정보
-  const { _id, id, name } = useSelector((state) => state.user.userData);
-
-  useEffect(() => {
-    loadPost({ _id }).then((res) => {
-      if (res.data.success) {
-        setPosts(res.data.postInfo);
-      }
-    });
-  }, [_id]);
+  const { id, name } = useSelector((state) => state.user.userData);
+  const { posts } = useSelector((state) => state.posts);
 
   return (
     <ProfileInfoBlock>

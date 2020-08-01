@@ -8,9 +8,10 @@ router.post("/getLikeCount", (req, res) => {
 
   Like.find({ postId }).exec((err, likeInfo) => {
     if (err) return res.status(400).json({ success: false, err });
-    // console.log(likeInfo.length);
 
-    return res.status(200).json({ success: true, likeCount: likeInfo.length });
+    return res
+      .status(200)
+      .json({ success: true, likeCount: likeInfo.length, postId });
   });
 });
 

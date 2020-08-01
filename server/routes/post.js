@@ -43,7 +43,9 @@ router.post("/upload", (req, res) => {
 // user _id로 검색 => user가 작성한 post 조회
 router.post("/posts", (req, res) => {
   const { _id } = req.body;
-  Post.find({ writer: _id })
+
+  Post.find()
+    // Post.find({ writer: _id })
     .populate("writer")
     .exec((err, postInfo) => {
       if (err) return res.status(400).json({ success: false, err });
