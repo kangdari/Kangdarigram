@@ -26,7 +26,6 @@ const PostDetail = ({ post }) => {
   useEffect(() => {
     getComment({ postId: _id }).then(({ data }) => {
       if (data.success) {
-        console.log("comment 불러오기 성공");
         setComment(data.comment);
       } else {
         alert("comment 불러오기 실패");

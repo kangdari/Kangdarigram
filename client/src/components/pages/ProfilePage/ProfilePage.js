@@ -10,6 +10,7 @@ import PostDetail from "../../PostDetail/PostDetail";
 import { getPostList, getSavedPostList } from "../../../_actions/post_action";
 
 const ProfilePage = ({ location }) => {
+  const [loading, setLoading] = useState("false");
   const dispatch = useDispatch();
   const { posts, savedPosts } = useSelector((state) => state.posts);
 
@@ -17,12 +18,25 @@ const ProfilePage = ({ location }) => {
   const [visible, setVisible] = useState(false); // Modal 렌더링 여부
   const { _id, id } = useSelector((state) => state.user.userData);
 
-  // 서버에서 유저가 쓴 게시글에 대한 정보를 긁어옴
   useEffect(() => {
+    // 비동기 처리와 로딩 상태를 추가하여 전체 Post를 로드 한 뒤에
+    // 다음 작업들이 이루어지도록 작성
+    const getPosts = async () => {
+      setLoading(true);
+      await dispatch(getPostList({ _id }));
+      setLoading(false);
+    };
+
+    const getSavedPosts = async () => {
+      setLoading(true);
+      await dispatch(getSavedPostList({ _id }));
+      setLoading(false);
+    };
+
     if (location.pathname === `/${id}`) {
-      dispatch(getPostList({ _id }));
+      getPosts();
     } else if (location.pathname === `/${id}/saved`) {
-      dispatch(getSavedPostList({ _id }));
+      getSavedPosts();
     }
   }, [id, location.pathname, _id, dispatch]);
 
@@ -45,6 +59,7 @@ const ProfilePage = ({ location }) => {
       <ProfilePost
         posts={location.pathname === `/${id}/saved` ? savedPosts : posts}
         onClickPost={onClickPost}
+        loading={loading}
       />
       {visible ? (
         <Modal

@@ -11,32 +11,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { getLikeCount } from "../../../../_actions/like_action";
 
 // import { getComment } from "../../../../api/comment";
-import { getTotalLikeCount } from "../../../../api/like";
 
-const PostHover = ({ likeCount, commentCount }) => {
-  return (
-    <div className="post_hover">
-      <div className="items">
-        <div className="item">
-          <FontAwesomeIcon icon={faHeart} />
-          <span>{likeCount}</span>
-        </div>
-        <div className="item">
-          <FontAwesomeIcon icon={faComment} />
-          {/* comment */}
-          <span>{commentCount}</span>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const Post = ({ postId, images, onClickPost, index }) => {
+const Post = ({ postId, images, onClickPost, index, loading }) => {
   const dispatch = useDispatch();
-  // const likeCount = useSelector((state) => state.posts.posts[index].likeCount);
+
+  const likeCount = useSelector(
+    (state) => state.posts.posts.find((post) => post._id === postId).like,
+  );
 
   const [commentCount, setCommentCount] = useState(0); // comment 개수
-  const [likeCount, setLikeCount] = useState(0); // 좋아요 개수
 
   const getComment = useCallback(() => {
     axios.post("/api/comment/getComment", { postId }).then(({ data }) => {
@@ -45,31 +28,18 @@ const Post = ({ postId, images, onClickPost, index }) => {
   }, [postId]);
 
   useEffect(() => {
-    dispatch(getLikeCount({ postId }));
-    // getComment();
-    // getTotalLikeCount({ postId }).then(({ data }) => {
-    //   if (data.success) {
-    //     setLikeCount(data.likeCount);
-    //   } else {
-    //     alert("get likeCount failed");
-    //   }
-    // });
-  }, [getComment, postId, dispatch]);
-  // }, [postId]);
+    // post 불러오기가 끝나야 실행
+    if (!loading) dispatch(getLikeCount({ postId }));
+  }, [dispatch, postId, loading]);
 
   return (
     <div className="post" onClick={() => onClickPost(index)}>
       <img src={`http://localhost:5050/${images[0]}`} alt="img" />
-      {/* <PostHover
-        likeCount={likeCount}
-        commentCount={commentCount}
-        postId={postId}
-      /> */}
       <div className="post_hover">
         <div className="items">
           <div className="item">
             <FontAwesomeIcon icon={faHeart} />
-            <span>{likeCount}</span>
+            <span>{likeCount && likeCount.length}</span>
           </div>
           <div className="item">
             <FontAwesomeIcon icon={faComment} />
@@ -85,7 +55,7 @@ const Post = ({ postId, images, onClickPost, index }) => {
 };
 
 // 클릭 이벤트를 부모에서 주고 클릭한 post의 index 값을 인지 값으로 전달
-const ProfilePost = ({ posts, onClickPost }) => {
+const ProfilePost = ({ posts, onClickPost, loading }) => {
   return (
     <ProfilePostBlock>
       {posts.map((post, index) => (
@@ -95,6 +65,7 @@ const ProfilePost = ({ posts, onClickPost }) => {
           images={post.images}
           onClickPost={onClickPost}
           index={index}
+          loading={loading}
         />
       ))}
     </ProfilePostBlock>

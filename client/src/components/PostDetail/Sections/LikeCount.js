@@ -1,11 +1,16 @@
 import React from "react";
 import styled from "styled-components";
+import { useSelector } from "react-redux";
 
-const Like = () => {
+const LikeCount = ({ postId }) => {
+  const likeCount = useSelector(
+    (state) => state.posts.posts.find((post) => post._id === postId).like,
+  );
+
   return (
     <LikeBlock>
       <button className="like_btn">
-        좋아요 <span>100</span>
+        좋아요 <span>{likeCount && likeCount.length}</span>
       </button>
     </LikeBlock>
   );
@@ -23,4 +28,4 @@ const LikeBlock = styled.section`
   }
 `;
 
-export default Like;
+export default LikeCount;

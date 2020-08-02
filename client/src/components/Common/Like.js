@@ -1,24 +1,26 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import axios from "axios";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import { saveLike, unSaveLike, getLike } from "../../api/like";
 import palette from "../../utils/palette";
+import { like, unLike } from "../../_actions/like_action";
 
 const Like = ({ postId, commentId }) => {
+  const dispatch = useDispatch();
   const [liked, setLiked] = useState(false);
   const { _id } = useSelector((state) => state.user.userData);
+
   const variable = {
     userId: _id,
     postId: postId,
     commentId: commentId,
   };
 
-  const getLike = useCallback(() => {
-    axios.post("/api/like/getLike", variable).then((res) => {
+  const getLikeState = useCallback(() => {
+    axios.post("/api/like/get-like-state", variable).then((res) => {
       if (res.data.success && res.data.liked) {
         setLiked(res.data.liked);
       }
@@ -26,26 +28,16 @@ const Like = ({ postId, commentId }) => {
   }, [variable]);
 
   useEffect(() => {
-    getLike();
-  }, [getLike]);
+    getLikeState();
+  }, [getLikeState]);
 
-  const onSaveLike = () => {
+  const onSaveLike = async () => {
     if (!liked) {
-      saveLike(variable).then(({ data }) => {
-        if (data.success) {
-          setLiked(true);
-        } else {
-          alert("like 실패");
-        }
-      });
+      await dispatch(like(variable));
+      setLiked(true);
     } else {
-      unSaveLike(variable).then(({ data }) => {
-        if (data.success) {
-          setLiked(false);
-        } else {
-          alert("unlike 실패");
-        }
-      });
+      await dispatch(unLike(variable));
+      setLiked(false);
     }
   };
 

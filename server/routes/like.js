@@ -3,20 +3,17 @@ const router = express.Router();
 const Like = require("../model/Like");
 
 // 좋아요 개수 체크
-router.post("/getLikeCount", (req, res) => {
+router.post("/get-like-count", (req, res) => {
   const { postId } = req.body;
 
   Like.find({ postId }).exec((err, likeInfo) => {
     if (err) return res.status(400).json({ success: false, err });
-
-    return res
-      .status(200)
-      .json({ success: true, likeCount: likeInfo.length, postId });
+    return res.status(200).json({ success: true, like: likeInfo, postId });
   });
 });
 
 // 좋아요 확인
-router.post("/getLike", (req, res) => {
+router.post("/get-like-state", (req, res) => {
   const { userId, postId, commentId } = req.body;
   let variable = {};
   if (commentId) {
@@ -35,7 +32,7 @@ router.post("/getLike", (req, res) => {
 });
 
 // 좋아요 저장
-router.post("/saveLike", (req, res) => {
+router.post("/like", (req, res) => {
   const { userId, postId, commentId } = req.body;
   let variable = {};
   if (commentId) {
@@ -48,13 +45,12 @@ router.post("/saveLike", (req, res) => {
 
   like.save((err, likeInfo) => {
     if (err) return res.status(400).json({ success: false, err });
-
     return res.status(200).json({ success: true, likeInfo });
   });
 });
 
 // 좋아요 취소
-router.post("/unSaveLike", (req, res) => {
+router.post("/unlike", (req, res) => {
   const { userId, postId, commentId } = req.body;
   let variable = {};
   if (commentId) {
@@ -65,7 +61,6 @@ router.post("/unSaveLike", (req, res) => {
 
   Like.findOneAndDelete(variable).exec((err, likeInfo) => {
     if (err) return res.status(400).json({ success: false, err });
-
     return res.status(200).json({ success: true, likeInfo });
   });
 });
