@@ -12,12 +12,13 @@ import { getLikeCount } from "../../../../_actions/like_action";
 
 // import { getComment } from "../../../../api/comment";
 
-const Post = ({ postId, images, onClickPost, index, loading }) => {
+const Post = ({ postId, images, onClickPost, index }) => {
   const dispatch = useDispatch();
 
   const likeCount = useSelector(
     (state) => state.posts.posts.find((post) => post._id === postId).like,
   );
+  const { loading } = useSelector((state) => state.loading);
 
   const [commentCount, setCommentCount] = useState(0); // comment 개수
 
@@ -55,7 +56,7 @@ const Post = ({ postId, images, onClickPost, index, loading }) => {
 };
 
 // 클릭 이벤트를 부모에서 주고 클릭한 post의 index 값을 인지 값으로 전달
-const ProfilePost = ({ posts, onClickPost, loading }) => {
+const ProfilePost = ({ posts, onClickPost }) => {
   return (
     <ProfilePostBlock>
       {posts.map((post, index) => (
@@ -65,7 +66,6 @@ const ProfilePost = ({ posts, onClickPost, loading }) => {
           images={post.images}
           onClickPost={onClickPost}
           index={index}
-          loading={loading}
         />
       ))}
     </ProfilePostBlock>

@@ -6,7 +6,10 @@ import {
   GET_SAVED_POST_LIST_SUCCESS,
 } from "./types";
 
+import { startLoading, finishLoading } from "./loading_action";
+
 export const getPostList = (data) => async (dispatch) => {
+  dispatch(startLoading("GET_POST_LIST"));
   try {
     const result = await axios.post("/api/post/posts", data);
     dispatch({
@@ -19,9 +22,11 @@ export const getPostList = (data) => async (dispatch) => {
       payload: err,
     });
   }
+  dispatch(finishLoading("GET_POST_LIST"));
 };
 
 export const getSavedPostList = (data) => async (dispatch) => {
+  dispatch(startLoading("GET_SAVED_POST_LIST"));
   try {
     const result = await axios.post("/api/post/loadSavedPosts", data);
     dispatch({
@@ -34,4 +39,5 @@ export const getSavedPostList = (data) => async (dispatch) => {
       payload: err,
     });
   }
+  dispatch(finishLoading("GET_SAVED_POST_LIST"));
 };

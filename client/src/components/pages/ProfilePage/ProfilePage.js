@@ -10,7 +10,6 @@ import PostDetail from "../../PostDetail/PostDetail";
 import { getPostList, getSavedPostList } from "../../../_actions/post_action";
 
 const ProfilePage = ({ location }) => {
-  const [loading, setLoading] = useState("false");
   const dispatch = useDispatch();
   const { posts, savedPosts } = useSelector((state) => state.posts);
 
@@ -21,16 +20,12 @@ const ProfilePage = ({ location }) => {
   useEffect(() => {
     // 비동기 처리와 로딩 상태를 추가하여 전체 Post를 로드 한 뒤에
     // 다음 작업들이 이루어지도록 작성
-    const getPosts = async () => {
-      setLoading(true);
-      await dispatch(getPostList({ _id }));
-      setLoading(false);
+    const getPosts = () => {
+      dispatch(getPostList({ _id }));
     };
 
-    const getSavedPosts = async () => {
-      setLoading(true);
-      await dispatch(getSavedPostList({ _id }));
-      setLoading(false);
+    const getSavedPosts = () => {
+      dispatch(getSavedPostList({ _id }));
     };
 
     if (location.pathname === `/${id}`) {
@@ -59,7 +54,6 @@ const ProfilePage = ({ location }) => {
       <ProfilePost
         posts={location.pathname === `/${id}/saved` ? savedPosts : posts}
         onClickPost={onClickPost}
-        loading={loading}
       />
       {visible ? (
         <Modal

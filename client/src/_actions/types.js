@@ -25,3 +25,7 @@ export const LIKE_FAILURE = "LIKE_FAILURE";
 // 좋아요 취소
 export const UNLIKE_SUCCESS = "UNLIKE_SUCCESS";
 export const UNLIKE_FAILURE = "UNLIKE_FAILURE";
+
+//
+export const START_LOADING = "START_LOADING";
+export const FINISH_LOADING = "FINISH_LOADING";
