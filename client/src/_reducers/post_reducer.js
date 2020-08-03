@@ -136,6 +136,7 @@ const posts = handleActions(
       ...state,
       error: action.payload,
     }),
+    // 댓글 삭제
     [DELETE_COMMENT_SUCCESS]: (state, action) => ({
       ...state,
       posts: state.posts.map((post) => {

@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Comment = require("../model/Comment");
+const Like = require("../model/Like");
 
 router.post("/save-comment", (req, res) => {
   const { writer, contents, postId, responseTo } = req.body;
@@ -33,12 +34,17 @@ router.post("/load-comment", (req, res) => {
 });
 
 router.delete("/delete-comment", (req, res) => {
-  const { data } = req.body;
+  const { data } = req.body; // data._id: comment._id
+
+  // 댓글과 그 댓글의 좋아요 삭제
   Comment.findOneAndDelete({ _id: data._id }).exec((err, comment) => {
     if (err) return res.status(400).json({ success: false, err });
-    return res
-      .status(200)
-      .json({ success: true, commentId: comment._id, postId: data.postId });
+    Like.findOneAndDelete({ commentId: data._id }).exec((err) => {
+      if (err) return res.status(400).json({ success: false, err });
+      return res
+        .status(200)
+        .json({ success: true, commentId: comment._id, postId: data.postId });
+    });
   });
 });
 
