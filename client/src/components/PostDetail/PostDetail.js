@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,26 +12,14 @@ import LikeCount from "./Sections/LikeCount";
 import WriteComment from "./Sections/WriteComment";
 import ImageSlider from "../Common/ImageSlider";
 
-import { getComment } from "../../api/comment";
-
 const PostDetail = ({ post }) => {
   const user_Id = useSelector((state) => state.user.userData._id);
+
+  const comment = useSelector(
+    (state) =>
+      state.posts.posts.find((postItem) => postItem._id === post._id).comment,
+  );
   const { contents, images, tags, _id, writer } = post;
-  const [comment, setComment] = useState([]); // 댓글 목록
-
-  const refreshComments = (updateComment) => {
-    setComment(comment.concat(updateComment));
-  };
-
-  useEffect(() => {
-    getComment({ postId: _id }).then(({ data }) => {
-      if (data.success) {
-        setComment(data.comment);
-      } else {
-        alert("comment 불러오기 실패");
-      }
-    });
-  }, [_id]);
 
   return (
     <PostDetailBlock>
@@ -47,7 +35,7 @@ const PostDetail = ({ post }) => {
         <PostContents>
           {/* 댓글 보기 창  mobile에선 사라짐*/}
           <Comments
-            comment={comment}
+            comment={comment && comment}
             postContents={contents}
             tags={tags}
             writer={writer}
@@ -58,11 +46,7 @@ const PostDetail = ({ post }) => {
           <LikeCount postId={_id} />
           <Time />
           {/* 댓글 쓰기 */}
-          <WriteComment
-            refreshComments={refreshComments}
-            userId={user_Id}
-            postId={_id}
-          />
+          <WriteComment userId={user_Id} postId={_id} />
         </PostContents>
       </Post>
     </PostDetailBlock>

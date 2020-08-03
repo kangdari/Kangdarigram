@@ -10,6 +10,10 @@ import {
   LIKE_FAILURE,
   UNLIKE_FAILURE,
   UNLIKE_SUCCESS,
+  SAVE_COMMENT_FAILURE,
+  SAVE_COMMENT_SUCCESS,
+  LOAD_COMMENT_FAILURE,
+  LOAD_COMMENT_SUCCESS,
 } from "../_actions/types";
 
 const initialState = {
@@ -98,6 +102,51 @@ const posts = handleActions(
     [UNLIKE_FAILURE]: (state, { payload }) => ({
       ...state,
       error: payload,
+    }),
+    [SAVE_COMMENT_SUCCESS]: (state, action) => ({
+      ...state,
+      posts: state.posts.map((post) => {
+        if (post._id === action.payload.commentInfo[0].postId) {
+          return Object.assign({}, post, {
+            comment: [...post.comment, action.payload.commentInfo[0]],
+          });
+        }
+        return post;
+      }),
+    }),
+
+    // 좋아요
+    [LIKE_SUCCESS]: (state, action) => ({
+      ...state,
+      // 좋아요를 누른 포스트를 찾아 likeInfo를 store에 저장
+      posts: state.posts.map((post) => {
+        if (post._id === action.payload.likeInfo.postId) {
+          return Object.assign({}, post, {
+            // 기존 like 배열과 합치기
+            like: [...post.like, action.payload.likeInfo],
+          });
+        }
+        return post;
+      }),
+    }),
+
+    [SAVE_COMMENT_FAILURE]: (state, action) => ({
+      ...state,
+      error: action.payload,
+    }),
+    [LOAD_COMMENT_SUCCESS]: (state, action) => ({
+      ...state,
+      posts: state.posts.map((post) => {
+        // 해당 포스터의 댓글만 찾기
+        if (post._id === action.payload.postId) {
+          return { ...post, ...{ comment: action.payload.comment } };
+        }
+        return post;
+      }),
+    }),
+    [LOAD_COMMENT_FAILURE]: (state, action) => ({
+      ...state,
+      error: action.payload,
     }),
   },
   initialState,

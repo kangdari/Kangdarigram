@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -6,32 +6,29 @@ import {
   faComment,
   faImages,
 } from "@fortawesome/free-solid-svg-icons";
-import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { getLikeCount } from "../../../../_actions/like_action";
-
-// import { getComment } from "../../../../api/comment";
+import { loadComment } from "../../../../_actions/comment_action";
 
 const Post = ({ postId, images, onClickPost, index }) => {
   const dispatch = useDispatch();
-
   const likeCount = useSelector(
     (state) => state.posts.posts.find((post) => post._id === postId).like,
   );
+  const comment = useSelector(
+    (state) => state.posts.posts.find((post) => post._id === postId).comment,
+  );
+
   const { loading } = useSelector((state) => state.loading);
-
-  const [commentCount, setCommentCount] = useState(0); // comment 개수
-
-  const getComment = useCallback(() => {
-    axios.post("/api/comment/getComment", { postId }).then(({ data }) => {
-      setCommentCount(data.comment.length);
-    });
-  }, [postId]);
 
   useEffect(() => {
     // post 불러오기가 끝나야 실행
     if (!loading) dispatch(getLikeCount({ postId }));
   }, [dispatch, postId, loading]);
+
+  useEffect(() => {
+    if (!loading) dispatch(loadComment({ postId }));
+  }, [dispatch, loading, postId]);
 
   return (
     <div className="post" onClick={() => onClickPost(index)}>
@@ -45,11 +42,10 @@ const Post = ({ postId, images, onClickPost, index }) => {
           <div className="item">
             <FontAwesomeIcon icon={faComment} />
             {/* comment */}
-            <span>{commentCount}</span>
+            <span>{comment && comment.length}</span>
           </div>
         </div>
       </div>
-
       {images.length > 1 && <StyledIcon icon={faImages} />}
     </div>
   );

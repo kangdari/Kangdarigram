@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Comment = require("../model/Comment");
 
-router.post("/saveComment", (req, res) => {
+router.post("/save-comment", (req, res) => {
   const { writer, contents, postId, responseTo } = req.body;
 
   const comment = new Comment({ writer, contents, postId, responseTo });
@@ -14,13 +14,12 @@ router.post("/saveComment", (req, res) => {
       .populate("writer")
       .exec((err, commentInfo) => {
         if (err) return res.status(400).json({ success: false, err });
-
-        return res.status(200).json({ success: true, commentInfo });
+        return res.status(200).json({ success: true, commentInfo, postId });
       });
   });
 });
 
-router.post("/getComment", (req, res) => {
+router.post("/load-comment", (req, res) => {
   const { postId } = req.body;
 
   Comment.find({ postId })
@@ -28,7 +27,7 @@ router.post("/getComment", (req, res) => {
     .exec((err, comment) => {
       if (err) return res.status(400).json({ success: false, err });
 
-      return res.status(200).json({ success: true, comment });
+      return res.status(200).json({ success: true, comment, postId });
     });
 });
 

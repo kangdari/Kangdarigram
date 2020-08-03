@@ -25,7 +25,13 @@ export const LIKE_FAILURE = "LIKE_FAILURE";
 // 좋아요 취소
 export const UNLIKE_SUCCESS = "UNLIKE_SUCCESS";
 export const UNLIKE_FAILURE = "UNLIKE_FAILURE";
-
-//
+// 로딩
 export const START_LOADING = "START_LOADING";
 export const FINISH_LOADING = "FINISH_LOADING";
+// 댓글 작성
+export const SAVE_COMMENT_SUCCESS = "SAVE_COMMENT_SUCCESS";
+export const SAVE_COMMENT_FAILURE = "SAVE_COMMENT_FAILURE";
+// 댓글 조회
+export const LOAD_COMMENT_SUCCESS = "LOAD_COMMENT_SUCCESS";
+export const LOAD_COMMENT_FAILURE = "LOAD_COMMENT_FAILURE";
+// 댓글 삭제

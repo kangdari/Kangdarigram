@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import palette from "../../../utils/palette";
 
-import { saveComment } from "../../../api/comment";
+import { saveComment } from "../../../_actions/comment_action";
 
-const WriteComment = ({ refreshComments, userId, postId }) => {
+const WriteComment = ({ userId, postId }) => {
+  const dispatch = useDispatch();
   const [input, setInput] = useState("");
   const [btn, setBtn] = useState(true); // 버튼 활성화 여부
 
@@ -23,14 +25,8 @@ const WriteComment = ({ refreshComments, userId, postId }) => {
       postId,
     };
 
-    saveComment(commentBody).then((res) => {
-      if (res.data.success) {
-        refreshComments(res.data.commentInfo);
-        setInput("");
-      } else {
-        alert("댓글 달기 실패");
-      }
-    });
+    dispatch(saveComment(commentBody));
+    setInput("");
   };
 
   const onCheckEnter = (e) => {
