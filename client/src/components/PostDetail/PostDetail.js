@@ -14,11 +14,11 @@ import ImageSlider from "../Common/ImageSlider";
 
 const PostDetail = ({ post }) => {
   const user_Id = useSelector((state) => state.user.userData._id);
-
   const comment = useSelector(
     (state) =>
       state.posts.posts.find((postItem) => postItem._id === post._id).comment,
   );
+
   const { contents, images, tags, _id, writer } = post;
 
   return (
@@ -35,7 +35,7 @@ const PostDetail = ({ post }) => {
         <PostContents>
           {/* 댓글 보기 창  mobile에선 사라짐*/}
           <Comments
-            comment={comment && comment}
+            comment={comment}
             postContents={contents}
             tags={tags}
             writer={writer}

@@ -39,7 +39,7 @@ const Comment = ({ comment, postId, onOpenModal }) => {
           </div>
         </div>
         <HoverBox className="hover_box">
-          <button onClick={onOpenModal}>
+          <button onClick={() => onOpenModal(comment)}>
             <FontAwesomeIcon
               aria-label="댓글 옵션"
               className="btn"
@@ -71,16 +71,19 @@ const Tag = ({ tag }) => {
 
 const Comments = ({ comment, postContents, tags, writer, postId }) => {
   const [visible, setVisible] = useState(false); // Modal 렌더링 여부
+  const [clickedComment, setClickedComment] = useState();
 
   // 모달 off
   const onCloseModal = useCallback(() => {
     setVisible(false);
-  });
+  }, []);
 
-  // 모달 on, clickedPost update
-  const onOpenModal = useCallback(() => {
+  // 모달 on, 선택한 코멘트 id
+  const onOpenModal = useCallback((comment) => {
     setVisible(true);
-  });
+    setClickedComment(comment);
+  }, []);
+
   return (
     <CommentsBlock>
       <CommentItem>
@@ -116,7 +119,11 @@ const Comments = ({ comment, postContents, tags, writer, postId }) => {
           type={"comment_option_modal"}
         >
           {/* 모달 안에 넣을 박 스 내용 컴포넌트 제작 */}
-          <CommentModal writerId={writer._id} onCloseModal={onCloseModal} />
+          <CommentModal
+            postId={postId}
+            comment={clickedComment}
+            onCloseModal={onCloseModal}
+          />
         </Modal>
       ) : null}
     </CommentsBlock>

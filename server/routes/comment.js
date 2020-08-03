@@ -32,4 +32,14 @@ router.post("/load-comment", (req, res) => {
     });
 });
 
+router.delete("/delete-comment", (req, res) => {
+  const { data } = req.body;
+  Comment.findOneAndDelete({ _id: data._id }).exec((err, comment) => {
+    if (err) return res.status(400).json({ success: false, err });
+    return res
+      .status(200)
+      .json({ success: true, commentId: comment._id, postId: data.postId });
+  });
+});
+
 module.exports = router;

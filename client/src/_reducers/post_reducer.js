@@ -14,6 +14,8 @@ import {
   SAVE_COMMENT_SUCCESS,
   LOAD_COMMENT_FAILURE,
   LOAD_COMMENT_SUCCESS,
+  DELETE_COMMENT_SUCCESS,
+  DELETE_COMMENT_FAILURE,
 } from "../_actions/types";
 
 const initialState = {
@@ -115,25 +117,11 @@ const posts = handleActions(
       }),
     }),
 
-    // 좋아요
-    [LIKE_SUCCESS]: (state, action) => ({
-      ...state,
-      // 좋아요를 누른 포스트를 찾아 likeInfo를 store에 저장
-      posts: state.posts.map((post) => {
-        if (post._id === action.payload.likeInfo.postId) {
-          return Object.assign({}, post, {
-            // 기존 like 배열과 합치기
-            like: [...post.like, action.payload.likeInfo],
-          });
-        }
-        return post;
-      }),
-    }),
-
     [SAVE_COMMENT_FAILURE]: (state, action) => ({
       ...state,
       error: action.payload,
     }),
+    // 좋아요 조회
     [LOAD_COMMENT_SUCCESS]: (state, action) => ({
       ...state,
       posts: state.posts.map((post) => {
@@ -145,6 +133,22 @@ const posts = handleActions(
       }),
     }),
     [LOAD_COMMENT_FAILURE]: (state, action) => ({
+      ...state,
+      error: action.payload,
+    }),
+    [DELETE_COMMENT_SUCCESS]: (state, action) => ({
+      ...state,
+      posts: state.posts.map((post) => {
+        if (post._id === action.payload.postId) {
+          const filteredComment = post.comment.filter(
+            (comment) => comment._id !== action.payload.commentId,
+          );
+          return { ...post, comment: [...filteredComment] };
+        }
+        return post;
+      }),
+    }),
+    [DELETE_COMMENT_FAILURE]: (state, action) => ({
       ...state,
       error: action.payload,
     }),

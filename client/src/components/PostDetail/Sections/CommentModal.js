@@ -1,15 +1,27 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
+import { deleteComment } from "../../../_actions/comment_action";
 
-const CommentModal = ({ writerId, onCloseModal }) => {
+const CommentModal = ({ postId, comment, onCloseModal }) => {
+  const dispatch = useDispatch();
   const userId = useSelector((state) => state.user.userData._id);
+
+  const onDeleteComment = () => {
+    const { _id } = comment;
+    dispatch(deleteComment({ _id, postId }));
+  };
+
   return (
     <CommentModalBlock>
       {/* 신고 기능 없음 */}
       <CommentButton red>신고</CommentButton>
       {/* 댓글 작성자와 현재 사용자가 같을 때만 렌더링 */}
-      {userId === writerId && <CommentButton red>삭제</CommentButton>}
+      {userId === comment.writer._id && (
+        <CommentButton red onClick={onDeleteComment}>
+          삭제
+        </CommentButton>
+      )}
       <CommentButton onClick={onCloseModal}>취소</CommentButton>
     </CommentModalBlock>
   );
