@@ -108,7 +108,7 @@ const posts = handleActions(
       posts: state.posts.map((post) => {
         if (post._id === action.payload.commentInfo[0].postId) {
           return Object.assign({}, post, {
-            comment: [...post.comment, action.payload.commentInfo[0]],
+            comment: [action.payload.commentInfo[0], ...post.comment],
           });
         }
         return post;

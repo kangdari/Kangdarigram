@@ -1,7 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faComment } from "@fortawesome/free-solid-svg-icons";
 
 import Save from "../../Common/Save";
 import Like from "../../Common/Like";
@@ -12,7 +10,6 @@ const Btn = ({ postId }) => {
     <BtnBlock>
       <Like postId={postId} />
       <Comment />
-      {/* <FontAwesomeIcon className="btn" icon={faComment} /> */}
       <Save postId={postId} />
     </BtnBlock>
   );

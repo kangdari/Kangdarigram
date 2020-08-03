@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
 import styled from "styled-components";
 import palette from "../../../utils/palette";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
+import { faUserCircle, faEllipsisH } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 
 import Like from "../../Common/Like";
+import Modal from "../../Common/Modal";
+import CommentModal from "./CommentModal";
 
-const Comment = ({ comment, postId }) => {
+const Comment = ({ comment, postId, onOpenModal }) => {
   const { contents, writer, _id } = comment;
 
   const onFocus = () => {
@@ -17,7 +19,7 @@ const Comment = ({ comment, postId }) => {
 
   return (
     <CommentItem>
-      <li>
+      <li className="comment_box">
         <div className="user">
           <StyledIcon icon={faUserCircle} />
           <div className="info">
@@ -36,10 +38,30 @@ const Comment = ({ comment, postId }) => {
             </div>
           </div>
         </div>
+        <HoverBox className="hover_box">
+          <button onClick={onOpenModal}>
+            <FontAwesomeIcon
+              aria-label="댓글 옵션"
+              className="btn"
+              icon={faEllipsisH}
+            />
+          </button>
+        </HoverBox>
       </li>
     </CommentItem>
   );
 };
+
+const HoverBox = styled.div`
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 30px;
+
+  .btn {
+    color: ${palette.gray[5]};
+  }
+`;
 
 // Tag 클릭시 /expolore/tag/{이름}으로 이동하고
 // 해당 페이지에서 검색 수행하여 결과물 렌더링 ???
@@ -48,6 +70,17 @@ const Tag = ({ tag }) => {
 };
 
 const Comments = ({ comment, postContents, tags, writer, postId }) => {
+  const [visible, setVisible] = useState(false); // Modal 렌더링 여부
+
+  // 모달 off
+  const onCloseModal = useCallback(() => {
+    setVisible(false);
+  });
+
+  // 모달 on, clickedPost update
+  const onOpenModal = useCallback(() => {
+    setVisible(true);
+  });
   return (
     <CommentsBlock>
       <CommentItem>
@@ -67,8 +100,25 @@ const Comments = ({ comment, postContents, tags, writer, postId }) => {
         </li>
       </CommentItem>
       {comment.map((_comment) => (
-        <Comment key={_comment._id} comment={_comment} postId={postId} />
+        <Comment
+          key={_comment._id}
+          comment={_comment}
+          postId={postId}
+          onOpenModal={onOpenModal}
+        />
       ))}
+      {visible ? (
+        <Modal
+          visible={visible}
+          onCloseModal={onCloseModal}
+          closable={true} // 모달 종료 버튼 클릭 시 끄기 옵션
+          maskClosable={true} // 모달 배경 클릭 시 끄기 옵션
+          type={"comment_option_modal"}
+        >
+          {/* 모달 안에 넣을 박 스 내용 컴포넌트 제작 */}
+          <CommentModal writerId={writer._id} onCloseModal={onCloseModal} />
+        </Modal>
+      ) : null}
     </CommentsBlock>
   );
 };
@@ -79,6 +129,14 @@ const CommentItem = styled.ul`
   overflow-x: hidden;
   word-break: break-all;
 
+  .comment_box {
+    position: relative;
+  }
+
+  .comment_box:hover .hover_box {
+    display: block;
+  }
+
   .user {
     display: flex;
   }
@@ -86,7 +144,7 @@ const CommentItem = styled.ul`
   .info {
     position: relative;
     width: 100%;
-    padding-right: 20px;
+    padding-right: 35px;
 
     .user_name {
       display: inline-flex;

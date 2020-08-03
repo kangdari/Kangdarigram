@@ -2,7 +2,14 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import Portal from "./Portal";
 
-const Modal = ({ visible, closable, maskClosable, onCloseModal, children }) => {
+const Modal = ({
+  visible,
+  closable,
+  maskClosable,
+  onCloseModal,
+  type,
+  children,
+}) => {
   useEffect(() => {
     if (visible) {
       document.body.style.cssText = `overflow: hidden`;
@@ -26,17 +33,19 @@ const Modal = ({ visible, closable, maskClosable, onCloseModal, children }) => {
 
   return (
     <Portal elementId="modal-root">
-      <ModalOverlay visible={visible}></ModalOverlay>
-      <ModalBlock
-        className="modal_block"
-        visible={visible}
-        onClick={maskClosable && onMaskClick}
-        tabIndex="-1"
-      >
-        {children}
-        {/* <ModalInner className="modal_inner"></ModalInner> */}
-      </ModalBlock>
-      {closable ? <CloseBtn className="close_btn" onClick={onClose} /> : null}
+      <div className={type}>
+        <ModalOverlay type={type} visible={visible}></ModalOverlay>
+        <ModalBlock
+          type={type}
+          className="modal_block"
+          visible={visible}
+          onClick={maskClosable && onMaskClick}
+          tabIndex="-1"
+        >
+          {children}
+        </ModalBlock>
+        {closable ? <CloseBtn className="close_btn" onClick={onClose} /> : null}
+      </div>
     </Portal>
   );
 };
@@ -49,7 +58,8 @@ const ModalOverlay = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 999;
+  z-index: 100;
+  z-index: ${({ type }) => (type === "post_modal" ? 100 : 200)};
   background: rgba(0, 0, 0, 0.5);
 `;
 // 모달
@@ -60,7 +70,7 @@ const ModalBlock = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 1000;
+  z-index: ${({ type }) => (type === "post_modal" ? 101 : 201)};
   overflow: auto;
   outline: 0;
   display: flex;
@@ -82,7 +92,7 @@ const CloseBtn = styled.button`
   outline: none;
   background: transparent;
   color: #fff;
-  z-index: 1000;
+  z-index: 101;
   transform: rotate(45deg);
 
   &:before,

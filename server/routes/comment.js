@@ -23,6 +23,7 @@ router.post("/load-comment", (req, res) => {
   const { postId } = req.body;
 
   Comment.find({ postId })
+    .sort({ createdAt: -1 }) // 내림차순 정렬
     .populate("writer")
     .exec((err, comment) => {
       if (err) return res.status(400).json({ success: false, err });
