@@ -2,6 +2,16 @@ const express = require("express");
 const router = express.Router();
 const Like = require("../model/Like");
 
+// 댓글 좋아요 개수 체크
+router.post("/get-comment-like-count", (req, res) => {
+  const { commentId } = req.body;
+
+  Like.find({ commentId }).exec((err, likeInfo) => {
+    if (err) return res.status(400).json({ success: false, err });
+    return res.status(200).json({ success: true, like: likeInfo, commentId });
+  });
+});
+
 // 좋아요 개수 체크
 router.post("/get-like-count", (req, res) => {
   const { postId } = req.body;

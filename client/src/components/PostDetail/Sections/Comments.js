@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import styled from "styled-components";
 import palette from "../../../utils/palette";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,13 +9,22 @@ import Like from "../../Common/Like";
 import Modal from "../../Common/Modal";
 import CommentModal from "./CommentModal";
 
+import axios from "axios";
+
 const Comment = ({ comment, postId, onOpenModal }) => {
   const { contents, writer, _id } = comment;
+  const [likeCount, setLikeCount] = useState([]);
 
   const onFocus = () => {
     document.querySelector(".textarea").focus();
     // userToId 전달???
   };
+
+  useEffect(() => {
+    axios
+      .post("/api/like/get-comment-like-count", { commentId: _id })
+      .then((res) => setLikeCount(res.data.like.length));
+  }, [_id]);
 
   return (
     <CommentItem>
@@ -27,7 +36,9 @@ const Comment = ({ comment, postId, onOpenModal }) => {
             <span>{contents}</span>
             <div className="info_btns">
               <span>1분</span>
-              <button className="btn">좋아요</button>
+              {likeCount ? (
+                <button className="btn"> 좋아요 {likeCount}개</button>
+              ) : null}
               <button className="btn" onClick={onFocus}>
                 댓글 달기
               </button>

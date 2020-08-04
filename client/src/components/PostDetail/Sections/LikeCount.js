@@ -10,7 +10,7 @@ const LikeCount = ({ postId }) => {
   return (
     <LikeBlock>
       <button className="like_btn">
-        좋아요 <span>{likeCount && likeCount.length}</span>
+        좋아요 <span>{likeCount && likeCount.length} 개</span>
       </button>
     </LikeBlock>
   );

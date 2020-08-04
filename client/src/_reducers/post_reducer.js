@@ -44,7 +44,6 @@ const posts = handleActions(
       ...state,
       error: action.payload,
     }),
-
     // 각 포스트의 좋아요 개수 조회
     [GET_LIKE_COUNT_SUCCESS]: (state, action) => ({
       ...state,
@@ -68,6 +67,8 @@ const posts = handleActions(
       ...state,
       // 좋아요를 누른 포스트를 찾아 likeInfo를 store에 저장
       posts: state.posts.map((post) => {
+        // postId가 있으면 post 좋아요
+        // commentId가 있으면 comment 좋아요
         if (post._id === action.payload.likeInfo.postId) {
           return Object.assign({}, post, {
             // 기존 like 배열과 합치기

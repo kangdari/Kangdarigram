@@ -8,6 +8,7 @@ import Modal from "../../Common/Modal";
 import PostDetail from "../../PostDetail/PostDetail";
 
 import { getPostList, getSavedPostList } from "../../../_actions/post_action";
+import { getCommentLikeCount } from "../../../_actions/like_action";
 
 const ProfilePage = ({ location }) => {
   const dispatch = useDispatch();
