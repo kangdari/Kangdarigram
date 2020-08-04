@@ -26,10 +26,6 @@ const PostDetail = ({ post, savedPost }) => {
     }
   });
 
-  // const comment = useSelector((state) =>
-  //   console.log(state.posts.posts.find((postItem) => console.log(postItem))),
-  // );
-
   const { contents, images, tags, _id, writer } = post;
 
   return (

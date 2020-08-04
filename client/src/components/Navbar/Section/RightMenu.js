@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { useState } from "react";
+import styled from "styled-components";
+import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHome,
   faCompass,
@@ -9,11 +9,11 @@ import {
   faUserCircle,
   faBookmark,
   faPen,
-} from '@fortawesome/free-solid-svg-icons';
-import { useSelector, useDispatch } from 'react-redux';
-import Button from '../../Common/Button';
-import palette from '../../../utils/palette';
-import { logout } from '../../../_actions/user_action';
+} from "@fortawesome/free-solid-svg-icons";
+import { useSelector, useDispatch } from "react-redux";
+import Button from "../../Common/Button";
+import palette from "../../../utils/palette";
+import { logout } from "../../../_actions/user_action";
 
 const RightMenu = () => {
   const dispatch = useDispatch();
@@ -32,46 +32,50 @@ const RightMenu = () => {
   if (!userData.isAuth) {
     return (
       <div>
-        <Button to='/login' blue>
+        <Button to="/login" blue>
           로그인
         </Button>
-        <Button to='/register'>회원가입</Button>
+        <Button to="/register">회원가입</Button>
       </div>
     );
   } else {
     return (
       <RightMenuBlock>
-        <Link className='link_icon' to='/'>
-          <FontAwesomeIcon icon={faHome} color='white' />
+        <Link className="link_icon" to="/">
+          <FontAwesomeIcon icon={faHome} color="white" />
         </Link>
-        <Link className='link_icon' to='/write'>
-          <FontAwesomeIcon icon={faPen} color='white' />
+        <Link className="link_icon" to="/write">
+          <FontAwesomeIcon icon={faPen} color="white" />
         </Link>
-        <Link className='link_icon' to=''>
-          <FontAwesomeIcon icon={faCompass} color='white' />
+        <Link className="link_icon" to="">
+          <FontAwesomeIcon icon={faCompass} color="white" />
         </Link>
-        <Link className='link_icon' to=''>
-          <FontAwesomeIcon icon={faHeart} color='white' />
+        <Link className="link_icon" to="">
+          <FontAwesomeIcon icon={faHeart} color="white" />
         </Link>
-        <div className='profile'>
-          <FontAwesomeIcon icon={faUserCircle} color='white' onClick={onShow} />
+        <div className="profile">
+          <FontAwesomeIcon icon={faUserCircle} color="white" onClick={onShow} />
           {show ? (
-            <div className='profile_modal'>
-              <Link to={`/${userData.id}`}>
-                <div className='item'>
-                  <FontAwesomeIcon icon={faUserCircle} color='white' size='sm' />
+            <div className="profile_modal">
+              <Link to={`/${userData.id}`} onClick={onShow}>
+                <div className="item">
+                  <FontAwesomeIcon
+                    icon={faUserCircle}
+                    color="white"
+                    size="sm"
+                  />
                   프로필
                 </div>
               </Link>
-              <Link to={`/${userData.id}/saved`}>
-                <div className='item'>
-                  <FontAwesomeIcon icon={faBookmark} color='white' />
+              <Link to={`/${userData.id}/saved`} onClick={onShow}>
+                <div className="item">
+                  <FontAwesomeIcon icon={faBookmark} color="white" />
                   저장됨
                 </div>
               </Link>
-              <div className='item' onClick={onLogout}>
-                로그아웃
-              </div>
+              <Link to="/" onClick={onLogout}>
+                <div className="item">로그아웃</div>
+              </Link>
             </div>
           ) : null}
         </div>
@@ -110,6 +114,7 @@ const RightMenuBlock = styled.div`
       }
 
       .item {
+        width: 100%;
         padding: 8px 15px;
         font-size: 14px;
       }

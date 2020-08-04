@@ -28,7 +28,6 @@ const LikeCount = ({ postId, savedPost }) => {
       // 프로필 사진
     }));
     setLikeUserList(userList);
-    console.log(userList);
     setVisible(true);
   }, [likeInfo]);
 
