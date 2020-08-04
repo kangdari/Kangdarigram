@@ -6,24 +6,7 @@ import {
   LIKE_FAILURE,
   UNLIKE_SUCCESS,
   UNLIKE_FAILURE,
-  GET_COMMENT_LIKE_COUNT_FAILURE,
-  GET_COMMENT_LIKE_COUNT_SUCCESS,
 } from "./types";
-
-export const getCommentLikeCount = (data) => async (dispatch) => {
-  try {
-    const result = await axios.post("/api/like/get-comment-like-count", data);
-    dispatch({
-      type: GET_COMMENT_LIKE_COUNT_SUCCESS,
-      payload: result.data,
-    });
-  } catch (err) {
-    dispatch({
-      type: GET_COMMENT_LIKE_COUNT_FAILURE,
-      payload: err,
-    });
-  }
-};
 
 // post 좋아요 개수 체크
 export const getLikeCount = (data) => async (dispatch) => {
