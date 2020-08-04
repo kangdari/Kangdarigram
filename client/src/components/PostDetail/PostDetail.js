@@ -12,12 +12,23 @@ import LikeCount from "./Sections/LikeCount";
 import WriteComment from "./Sections/WriteComment";
 import ImageSlider from "../Common/ImageSlider";
 
-const PostDetail = ({ post }) => {
+const PostDetail = ({ post, savedPost }) => {
   const user_Id = useSelector((state) => state.user.userData._id);
-  const comment = useSelector(
-    (state) =>
-      state.posts.posts.find((postItem) => postItem._id === post._id).comment,
-  );
+  const comment = useSelector((state) => {
+    // posts
+    if (savedPost) {
+      return state.posts.savedPosts.find(
+        (postItem) => postItem._id === post._id,
+      ).comment;
+    } else {
+      return state.posts.posts.find((postItem) => postItem._id === post._id)
+        .comment;
+    }
+  });
+
+  // const comment = useSelector((state) =>
+  //   console.log(state.posts.posts.find((postItem) => console.log(postItem))),
+  // );
 
   const { contents, images, tags, _id, writer } = post;
 
@@ -43,7 +54,7 @@ const PostDetail = ({ post }) => {
           />
 
           <Btn postId={_id} />
-          <LikeCount postId={_id} />
+          <LikeCount postId={_id} savedPost={savedPost} />
           <Time />
           {/* 댓글 쓰기 */}
           <WriteComment userId={user_Id} postId={_id} />

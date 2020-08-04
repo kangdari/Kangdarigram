@@ -1,12 +1,18 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
+import { loadPost } from "../../../../api/post";
 
-const ProfileInfo = () => {
-  const { id, name } = useSelector((state) => state.user.userData);
-  const { posts } = useSelector((state) => state.posts);
+const ProfileInfo = ({ user }) => {
+  // 현재 조회 프로필의 유저
+  const { id, name, _id } = user;
+  // const { posts } = useSelector((state) => state.posts);
+  const [postCount, setPostCount] = useState(0);
+
+  useEffect(() => {
+    loadPost({ _id }).then((res) => setPostCount(res.data.postInfo.length));
+  }, [_id]);
 
   return (
     <ProfileInfoBlock>
@@ -23,14 +29,14 @@ const ProfileInfo = () => {
         </div>
         <ul className="profile_list">
           <li>
-            게시물 <span className="count">{posts.length}</span>
+            게시물 <span className="count">{postCount}</span>
           </li>
-          <li>
+          {/* <li>
             팔로우 <span className="count">10</span>
           </li>
           <li>
             팔로워 <span className="count">5</span>
-          </li>
+          </li> */}
         </ul>
 
         <div className="profile_contents">

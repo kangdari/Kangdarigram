@@ -1,16 +1,18 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { User } = require('../model/Users');
-const { auth } = require('../middleware/auth');
+const { User } = require("../model/Users");
+const { auth } = require("../middleware/auth");
 
 // 회원 가입
-router.post('/register', async (req, res) => {
+router.post("/register", async (req, res) => {
   // 클라이언트에서 회원 정보를 전달 받음.
   const user = new User(req.body);
   // id 중복 체크
   const exists = await User.findById(req.body.id);
   if (exists) {
-    return res.status(409).json({ registerSuccess: false, message: '이미 존재하는 아이디입니다.' });
+    return res
+      .status(409)
+      .json({ registerSuccess: false, message: "이미 존재하는 아이디입니다." });
   }
 
   user.save((err, userInfo) => {
@@ -22,25 +24,28 @@ router.post('/register', async (req, res) => {
   });
 });
 
-router.post('/login', async (req, res) => {
+router.post("/login", async (req, res) => {
   // 요청된 id 체크
   const user = await User.findOne({ id: req.body.id });
 
   if (!user) {
-    return res.status(401).json({ loginSuccess: false, message: '아이디가 존재하지 않습니다.' });
+    return res
+      .status(401)
+      .json({ loginSuccess: false, message: "아이디가 존재하지 않습니다." });
   }
   // 비밀번호 체크
   user.comparePassword(req.body.password, (err, isMatch) => {
     // 비밀번호가 틀린 경우
     if (!isMatch)
-      return res
-        .status(401)
-        .json({ loginSuccess: false, message: '잘못된 비밀번호입니다. 다시 확인하세요.' });
+      return res.status(401).json({
+        loginSuccess: false,
+        message: "잘못된 비밀번호입니다. 다시 확인하세요.",
+      });
     // 비밀번호가 맞은 경우 토큰 생성
     user.createToken((err, user) => {
       if (err) return res.status(400).send(err);
       // 토큰 저장 => 쿠키
-      res.cookie('auth', user.token).status(200).json({
+      res.cookie("auth", user.token).status(200).json({
         loginSuccess: true,
         userId: user._id,
       });
@@ -48,7 +53,7 @@ router.post('/login', async (req, res) => {
   });
 });
 
-router.get('/auth', auth, (req, res) => {
+router.get("/auth", auth, (req, res) => {
   // console.log(req.user);
   // auth 미들웨어 수행 시 req에서 user 정보 조회 가능
   res.status(200).json({
@@ -62,12 +67,19 @@ router.get('/auth', auth, (req, res) => {
   });
 });
 
-router.get('/logout', auth, (req, res) => {
+router.get("/logout", auth, (req, res) => {
   // auth 미들웨어 수행 시 req에서 user 정보 조회 가능
   // user를 찾아 token 제거
-  User.findOneAndUpdate({ _id: req.user._id }, { token: '' }, (err, user) => {
+  User.findOneAndUpdate({ _id: req.user._id }, { token: "" }, (err, user) => {
     if (err) return res.json({ logoutSuccess: false, err });
     return res.status(200).json({ logoutSuccess: true });
+  });
+});
+
+router.post("/get-user-id", auth, (req, res) => {
+  User.find({ id: req.body.userId }).exec((err, userInfo) => {
+    if (err) return res.json({ success: false, err });
+    return res.status(200).json({ success: true, userInfo });
   });
 });
 

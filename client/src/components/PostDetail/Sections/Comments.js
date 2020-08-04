@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import styled from "styled-components";
 import palette from "../../../utils/palette";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,77 +8,6 @@ import { Link } from "react-router-dom";
 import Modal from "../../Common/Modal";
 import CommentModal from "./CommentModal";
 import Comment from "./Comment";
-
-// const Comment = ({ comment, postId, onOpenModal }) => {
-//   const { contents, writer, _id } = comment;
-//   const [likeInfo, setLikeInfo] = useState([]);
-
-//   const onFocus = () => {
-//     document.querySelector(".textarea").focus();
-//     // userToId 전달???
-//   };
-
-//   useEffect(() => {
-//     axios
-//       .post("/api/like/get-comment-like", { commentId: _id })
-//       .then((res) => setLikeInfo(res.data.like));
-//   }, [_id]);
-
-//   // 좋아요를 누른 유저 리스트
-//   const onShowLike = () => {
-//     const userList = likeInfo.map((like) => like.userId.id);
-//     console.log(userList);
-//   };
-
-//   return (
-//     <CommentItem>
-//       <li className="comment_box">
-//         <div className="user">
-//           <StyledIcon icon={faUserCircle} />
-//           <div className="info">
-//             <h3 className="user_name">{writer.id}</h3>
-//             <span>{contents}</span>
-//             <div className="info_btns">
-//               <span>1분</span>
-//               {likeInfo.length !== 0 ? (
-//                 <button className="btn" onClick={onShowLike}>
-//                   좋아요 {likeInfo.length}개
-//                 </button>
-//               ) : null}
-//               <button className="btn" onClick={onFocus}>
-//                 댓글 달기
-//               </button>
-//             </div>
-//             {/* 좋아요 */}
-//             <div className="likeBtn">
-//               <Like postId={postId} commentId={_id} />
-//             </div>
-//           </div>
-//         </div>
-//         <HoverBox className="hover_box">
-//           <button onClick={() => onOpenModal(comment)}>
-//             <FontAwesomeIcon
-//               aria-label="댓글 옵션"
-//               className="btn"
-//               icon={faEllipsisH}
-//             />
-//           </button>
-//         </HoverBox>
-//       </li>
-//     </CommentItem>
-//   );
-// };
-
-// const HoverBox = styled.div`
-//   display: none;
-//   position: absolute;
-//   top: 0;
-//   right: 30px;
-
-//   .btn {
-//     color: ${palette.gray[5]};
-//   }
-// `;
 
 // Tag 클릭시 /expolore/tag/{이름}으로 이동하고
 // 해당 페이지에서 검색 수행하여 결과물 렌더링 ???
@@ -111,9 +40,8 @@ const Comments = ({ comment, postContents, tags, writer, postId }) => {
               <h3>{writer.id}</h3>
               <span>{postContents}</span>
               <div>
-                {tags.map((tag, index) => (
-                  <Tag key={index} tag={tag} />
-                ))}
+                {tags.length > 0 &&
+                  tags.map((tag, index) => <Tag key={index} tag={tag} />)}
               </div>
             </div>
           </div>

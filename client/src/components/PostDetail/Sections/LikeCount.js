@@ -4,10 +4,14 @@ import { useSelector } from "react-redux";
 import Modal from "../../Common/Modal";
 import LikeUserModal from "./LikeUserModal";
 
-const LikeCount = ({ postId }) => {
-  const likeInfo = useSelector(
-    (state) => state.posts.posts.find((post) => post._id === postId).like,
-  );
+const LikeCount = ({ postId, savedPost }) => {
+  const likeInfo = useSelector((state) => {
+    if (savedPost) {
+      return state.posts.savedPosts.find((post) => post._id === postId).like;
+    } else {
+      return state.posts.posts.find((post) => post._id === postId).like;
+    }
+  });
   const [visible, setVisible] = useState(false); // Modal 렌더링
   const [likeUserList, setLikeUserList] = useState([]);
 

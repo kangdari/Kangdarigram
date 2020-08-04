@@ -4,20 +4,25 @@ import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import palette from "../../../../utils/palette";
 
-const ProfileLink = () => {
-  const { id } = useSelector((state) => state.user.userData);
+const ProfileLink = ({ user }) => {
+  const loginUserId = useSelector((state) => state.user.userData._id);
+  const { id, _id } = user;
 
   return (
     <ProfileLinkBlock>
       <NavLink className="link" activeClassName="active" to={`/${id}`} exact>
         게시물
       </NavLink>
-      <NavLink className="link" activeClassName="active" to={`/${id}/video`}>
-        동영상
-      </NavLink>
-      <NavLink className="link" activeClassName="active" to={`/${id}/saved`}>
-        저장됨
-      </NavLink>
+      {/* {loginUserId === _id && (
+        <NavLink className="link" activeClassName="active" to={`/${id}/video`}>
+          동영상
+        </NavLink>
+      )} */}
+      {loginUserId === _id && (
+        <NavLink className="link" activeClassName="active" to={`/${id}/saved`}>
+          저장됨
+        </NavLink>
+      )}
       <NavLink className="link" activeClassName="active" to={`/${id}/tagged`}>
         태그됨
       </NavLink>

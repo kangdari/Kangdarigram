@@ -44,12 +44,11 @@ router.post("/upload", (req, res) => {
 router.post("/posts", (req, res) => {
   const { _id } = req.body;
 
-  Post.find()
-    // Post.find({ writer: _id })
+  // Post.find()
+  Post.find({ writer: _id })
     .populate("writer")
     .exec((err, postInfo) => {
       if (err) return res.status(400).json({ success: false, err });
-
       return res.status(200).json({ success: true, postInfo });
     });
 });

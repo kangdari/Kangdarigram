@@ -55,6 +55,14 @@ const posts = handleActions(
         }
         return post;
       }),
+      savedPosts: state.savedPosts.map((post) => {
+        if (post._id === action.payload.postId) {
+          return Object.assign({}, post, {
+            like: action.payload.like,
+          });
+        }
+        return post;
+      }),
     }),
 
     [GET_LIKE_COUNT_FAILURE]: (state, action) => ({
@@ -67,6 +75,17 @@ const posts = handleActions(
       ...state,
       // 좋아요를 누른 포스트를 찾아 likeInfo를 store에 저장
       posts: state.posts.map((post) => {
+        // postId가 있으면 post 좋아요
+        // commentId가 있으면 comment 좋아요
+        if (post._id === action.payload.likeInfo.postId) {
+          return Object.assign({}, post, {
+            // 기존 like 배열과 합치기
+            like: [...post.like, action.payload.likeInfo],
+          });
+        }
+        return post;
+      }),
+      savedPosts: state.savedPosts.map((post) => {
         // postId가 있으면 post 좋아요
         // commentId가 있으면 comment 좋아요
         if (post._id === action.payload.likeInfo.postId) {
@@ -101,6 +120,15 @@ const posts = handleActions(
         }
         return post;
       }),
+      savedPosts: state.savedPosts.map((post) => {
+        if (post._id === payload.likeInfo.postId) {
+          const filteredLike = post.like.filter(
+            (like) => like._id !== payload.likeInfo._id,
+          );
+          return { ...post, like: [...filteredLike] };
+        }
+        return post;
+      }),
     }),
     [UNLIKE_FAILURE]: (state, { payload }) => ({
       ...state,
@@ -109,6 +137,14 @@ const posts = handleActions(
     [SAVE_COMMENT_SUCCESS]: (state, action) => ({
       ...state,
       posts: state.posts.map((post) => {
+        if (post._id === action.payload.commentInfo[0].postId) {
+          return Object.assign({}, post, {
+            comment: [action.payload.commentInfo[0], ...post.comment],
+          });
+        }
+        return post;
+      }),
+      savedPosts: state.savedPosts.map((post) => {
         if (post._id === action.payload.commentInfo[0].postId) {
           return Object.assign({}, post, {
             comment: [action.payload.commentInfo[0], ...post.comment],
@@ -132,6 +168,13 @@ const posts = handleActions(
         }
         return post;
       }),
+      savedPosts: state.savedPosts.map((post) => {
+        // 해당 포스터의 댓글만 찾기
+        if (post._id === action.payload.postId) {
+          return { ...post, ...{ comment: action.payload.comment } };
+        }
+        return post;
+      }),
     }),
     [LOAD_COMMENT_FAILURE]: (state, action) => ({
       ...state,
@@ -141,6 +184,15 @@ const posts = handleActions(
     [DELETE_COMMENT_SUCCESS]: (state, action) => ({
       ...state,
       posts: state.posts.map((post) => {
+        if (post._id === action.payload.postId) {
+          const filteredComment = post.comment.filter(
+            (comment) => comment._id !== action.payload.commentId,
+          );
+          return { ...post, comment: [...filteredComment] };
+        }
+        return post;
+      }),
+      savedPosts: state.savedPosts.map((post) => {
         if (post._id === action.payload.postId) {
           const filteredComment = post.comment.filter(
             (comment) => comment._id !== action.payload.commentId,

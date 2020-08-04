@@ -10,14 +10,24 @@ import { useDispatch, useSelector } from "react-redux";
 import { getLikeCount } from "../../../../_actions/like_action";
 import { loadComment } from "../../../../_actions/comment_action";
 
-const Post = ({ postId, images, onClickPost, index }) => {
+const Post = ({ postId, images, onClickPost, index, savedPost }) => {
   const dispatch = useDispatch();
-  const likeCount = useSelector(
-    (state) => state.posts.posts.find((post) => post._id === postId).like,
-  );
-  const comment = useSelector(
-    (state) => state.posts.posts.find((post) => post._id === postId).comment,
-  );
+  // 저장된 포스트의 경우
+  const likeCount = useSelector((state) => {
+    if (savedPost) {
+      return state.posts.savedPosts.find((post) => post._id === postId).like;
+    } else {
+      return state.posts.posts.find((post) => post._id === postId).like;
+    }
+  });
+
+  const comment = useSelector((state) => {
+    if (savedPost) {
+      return state.posts.savedPosts.find((post) => post._id === postId).comment;
+    } else {
+      return state.posts.posts.find((post) => post._id === postId).comment;
+    }
+  });
 
   const { loading } = useSelector((state) => state.loading);
 
@@ -52,7 +62,7 @@ const Post = ({ postId, images, onClickPost, index }) => {
 };
 
 // 클릭 이벤트를 부모에서 주고 클릭한 post의 index 값을 인지 값으로 전달
-const ProfilePost = ({ posts, onClickPost }) => {
+const ProfilePost = ({ posts, onClickPost, savedPost }) => {
   return (
     <ProfilePostBlock>
       {posts.map((post, index) => (
@@ -62,6 +72,7 @@ const ProfilePost = ({ posts, onClickPost }) => {
           images={post.images}
           onClickPost={onClickPost}
           index={index}
+          savedPost={savedPost}
         />
       ))}
     </ProfilePostBlock>
