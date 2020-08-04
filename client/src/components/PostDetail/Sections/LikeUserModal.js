@@ -41,12 +41,11 @@ const StyledIcon = styled(FontAwesomeIcon)`
 `;
 
 const LikeUserModal = ({ likeUserList }) => {
-  console.log(likeUserList);
   return (
     <LikeUserModalBlock>
       <h1 className="title">좋아요</h1>
       {likeUserList &&
-        likeUserList.map((user) => <User userInfo={user} key={user.id} />)}
+        likeUserList.map((user, index) => <User userInfo={user} key={index} />)}
     </LikeUserModalBlock>
   );
 };

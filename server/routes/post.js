@@ -3,6 +3,7 @@ const router = express.Router();
 const multer = require("multer");
 const Post = require("../model/Post");
 const Save = require("../model/Save");
+const { getTime } = require("../utils/getTime");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -49,7 +50,13 @@ router.post("/posts", (req, res) => {
     .populate("writer")
     .exec((err, postInfo) => {
       if (err) return res.status(400).json({ success: false, err });
-      return res.status(200).json({ success: true, postInfo });
+
+      const newPostInfo = postInfo.map((post) => {
+        const duration = getTime(post.createdAt);
+        return { ...post._doc, ...{ timeInterval: duration } };
+      });
+
+      return res.status(200).json({ success: true, postInfo: newPostInfo });
     });
 });
 
@@ -57,18 +64,26 @@ router.post("/posts", (req, res) => {
 router.post("/loadSavedPosts", (req, res) => {
   const { _id } = req.body;
   // 유저의 id를 가지고 Save 모델에서 검색
-  Save.find({ userId: _id })
-    .populate("writer")
-    .exec((err, savedInfo) => {
-      if (err) return res.status(400).json({ success: false, err });
-      // 저장된 post id 배열
-      const savedPost = savedInfo.map((post) => post.postId);
-      // Post 모델에서 저장된 post만 검색
-      Post.find({ _id: { $in: savedPost } }).exec((err, savedPostInfo) => {
+  Save.find({ userId: _id }).exec((err, savedInfo) => {
+    if (err) return res.status(400).json({ success: false, err });
+    // 저장된 post id 배열
+    const savedPost = savedInfo.map((post) => post.postId);
+    // Post 모델에서 저장된 post만 검색
+    Post.find({ _id: { $in: savedPost } })
+      .populate("writer")
+      .exec((err, savedPostInfo) => {
         if (err) return res.status(400).json({ success: false, err });
-        return res.status(200).json({ success: true, savedPostInfo });
+
+        const newSavedPostInfo = savedPostInfo.map((post) => {
+          const duration = getTime(post.createdAt);
+          return { ...post._doc, ...{ timeInterval: duration } };
+        });
+
+        return res
+          .status(200)
+          .json({ success: true, savedPostInfo: newSavedPostInfo });
       });
-    });
+  });
 });
 
 module.exports = router;

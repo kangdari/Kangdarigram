@@ -9,7 +9,7 @@ import Modal from "../../Common/Modal";
 import LikeUserModal from "./LikeUserModal";
 
 const Comment = ({ comment, postId, onOpenModal }) => {
-  const { contents, writer, _id } = comment;
+  const { contents, writer, _id, timeInterval } = comment;
   const [likeInfo, setLikeInfo] = useState([]);
   const [visible, setVisible] = useState(false); // Modal 렌더링 여부
   const [likeUserList, setLikeUserList] = useState([]);
@@ -33,7 +33,6 @@ const Comment = ({ comment, postId, onOpenModal }) => {
       // 프로필 사진
     }));
     setLikeUserList(userList);
-    console.log(userList);
     setVisible(true);
   }, [likeInfo]);
 
@@ -43,16 +42,11 @@ const Comment = ({ comment, postId, onOpenModal }) => {
   };
 
   useEffect(() => {
+    // 댓글 좋아요 개수 조회
     axios
       .post("/api/like/get-comment-like", { commentId: _id })
       .then((res) => setLikeInfo(res.data.like));
   }, [_id]);
-
-  // 좋아요를 누른 유저 리스트
-  // const onShowLike = () => {
-  //   const userList = likeInfo.map((like) => like.userId.id);
-  //   console.log(userList);
-  // };
 
   return (
     <CommentItem>
@@ -63,7 +57,10 @@ const Comment = ({ comment, postId, onOpenModal }) => {
             <h3 className="user_name">{writer.id}</h3>
             <span>{contents}</span>
             <div className="info_btns">
-              <span>1분</span>
+              <span>
+                {timeInterval.time}
+                {timeInterval.unit} 전
+              </span>
               {likeInfo.length !== 0 ? (
                 <button className="btn" onClick={onOpenLikeModal}>
                   좋아요 {likeInfo.length}개

@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Comment = require("../model/Comment");
 const Like = require("../model/Like");
+const { getTime } = require("../utils/getTime");
 
 router.post("/save-comment", (req, res) => {
   const { writer, contents, postId, responseTo } = req.body;
@@ -15,7 +16,15 @@ router.post("/save-comment", (req, res) => {
       .populate("writer")
       .exec((err, commentInfo) => {
         if (err) return res.status(400).json({ success: false, err });
-        return res.status(200).json({ success: true, commentInfo, postId });
+
+        const newComment = commentInfo.map((comment) => {
+          const duration = getTime(comment.createdAt);
+          return { ...comment._doc, ...{ timeInterval: duration } };
+        });
+
+        return res
+          .status(200)
+          .json({ success: true, commentInfo: newComment, postId });
       });
   });
 });
@@ -29,7 +38,15 @@ router.post("/load-comment", (req, res) => {
     .exec((err, comment) => {
       if (err) return res.status(400).json({ success: false, err });
 
-      return res.status(200).json({ success: true, comment, postId });
+      // 작성 시간과 현재 시간 차이 계산한 키값을 추가
+      const newComment = comment.map((comment) => {
+        const duration = getTime(comment.createdAt);
+        return { ...comment._doc, ...{ timeInterval: duration } };
+      });
+
+      return res
+        .status(200)
+        .json({ success: true, comment: newComment, postId });
     });
 });
 

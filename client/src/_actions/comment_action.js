@@ -33,7 +33,6 @@ export const loadComment = (data) => async (dispatch) => {
       payload: result.data,
     });
   } catch (err) {
-    console.log(err);
     dispatch({
       type: LOAD_COMMENT_FAILURE,
       playload: err,

@@ -26,7 +26,7 @@ const PostDetail = ({ post, savedPost }) => {
     }
   });
 
-  const { contents, images, tags, _id, writer } = post;
+  const { contents, images, tags, _id, writer, timeInterval } = post;
 
   return (
     <PostDetailBlock>
@@ -51,7 +51,7 @@ const PostDetail = ({ post, savedPost }) => {
 
           <Btn postId={_id} />
           <LikeCount postId={_id} savedPost={savedPost} />
-          <Time />
+          <Time timeInterval={timeInterval} />
           {/* 댓글 쓰기 */}
           <WriteComment userId={user_Id} postId={_id} />
         </PostContents>

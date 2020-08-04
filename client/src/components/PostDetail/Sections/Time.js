@@ -1,10 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 
-const Time = () => {
+const Time = ({ timeInterval }) => {
   return (
     <TimeBlock>
-      <span className="time">시간</span>
+      <span className="time">
+        {timeInterval.time}
+        {timeInterval.unit} 전
+      </span>
     </TimeBlock>
   );
 };
