@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import axios from "axios";
@@ -19,17 +19,18 @@ const Like = ({ postId, commentId }) => {
     commentId: commentId,
   };
 
-  const getLikeState = useCallback(() => {
+  useEffect(() => {
+    let mounted = true;
+    // 좋아요 상태 가져오기
     axios.post("/api/like/get-like-state", variable).then((res) => {
-      if (res.data.success && res.data.liked) {
+      if (res.data.success && res.data.liked && mounted) {
         setLiked(res.data.liked);
       }
     });
-  }, [variable]);
 
-  useEffect(() => {
-    getLikeState();
-  }, [getLikeState]);
+    // clean-up
+    return () => (mounted = false);
+  }, [variable]);
 
   const onSaveLike = async () => {
     if (!liked) {

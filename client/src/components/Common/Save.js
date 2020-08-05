@@ -16,14 +16,16 @@ const Save = ({ postId }) => {
   };
 
   useEffect(() => {
+    let mounted = true;
     // save 되었는지 확인
     checkSave(saveVariable).then((res) => {
-      if (res.data.success) {
+      if (res.data.success && mounted) {
         setSaved(res.data.saved);
-      } else {
-        alert("save 정보 읽어오기 실패");
       }
     });
+
+    // clear-up
+    return () => (mounted = false);
   }, [saveVariable]);
 
   const onSave = () => {

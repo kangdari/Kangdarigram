@@ -15,9 +15,14 @@ const Comment = ({ comment, postId, onOpenModal }) => {
   const [likeUserList, setLikeUserList] = useState([]);
 
   useEffect(() => {
-    axios
-      .post("/api/like/get-comment-like", { commentId: _id })
-      .then((res) => setLikeInfo(res.data.like));
+    let mounted = true;
+    axios.post("/api/like/get-comment-like", { commentId: _id }).then((res) => {
+      if (mounted) {
+        setLikeInfo(res.data.like);
+      }
+    });
+
+    return () => (mounted = false);
   }, [_id]);
 
   // 모달 off
@@ -40,13 +45,6 @@ const Comment = ({ comment, postId, onOpenModal }) => {
     document.querySelector(".textarea").focus();
     // userToId 전달???
   };
-
-  useEffect(() => {
-    // 댓글 좋아요 개수 조회
-    axios
-      .post("/api/like/get-comment-like", { commentId: _id })
-      .then((res) => setLikeInfo(res.data.like));
-  }, [_id]);
 
   return (
     <CommentItem>

@@ -11,8 +11,16 @@ const ProfileInfo = ({ user }) => {
   const [postCount, setPostCount] = useState(0);
 
   useEffect(() => {
-    loadPost({ _id }).then((res) => setPostCount(res.data.postInfo.length));
+    let mounted = true;
+    loadPost({ _id }).then((res) => {
+      if (mounted) setPostCount(res.data.postInfo.length);
+    });
+    return () => (mounted = false);
   }, [_id]);
+
+  // useEffect(() => {
+  //   loadPost({ _id }).then((res) => setPostCount(res.data.postInfo.length));
+  // }, [_id]);
 
   return (
     <ProfileInfoBlock>
