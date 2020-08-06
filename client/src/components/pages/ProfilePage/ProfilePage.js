@@ -9,7 +9,10 @@ import Modal from "../../Common/Modal";
 import PostDetail from "../../PostDetail/PostDetail";
 import Loading from "../../Common/Loading";
 
-import { getPostList, getSavedPostList } from "../../../_actions/post_action";
+import {
+  getProfilePostList,
+  getSavedPostList,
+} from "../../../_actions/post_action";
 import axios from "axios";
 
 const ProfilePage = ({ location, match }) => {
@@ -43,7 +46,7 @@ const ProfilePage = ({ location, match }) => {
     // 비동기 처리와 로딩 상태를 추가하여 전체 Post를 로드 한 뒤에
     // 다음 작업들이 이루어지도록 작성
     const getPosts = async () => {
-      dispatch(getPostList({ _id: currentUser._id }));
+      dispatch(getProfilePostList({ _id: currentUser._id }));
     };
 
     const getSavedPosts = async () => {

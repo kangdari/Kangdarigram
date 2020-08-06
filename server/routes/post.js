@@ -41,11 +41,10 @@ router.post("/upload", (req, res) => {
   });
 });
 
-// user _id로 검색 => user가 작성한 post 조회
-router.post("/posts", (req, res) => {
+// user profile의 post 조회
+router.post("/get-profile-post-list", (req, res) => {
   const { _id } = req.body;
 
-  // Post.find()
   Post.find({ writer: _id })
     .populate("writer")
     .exec((err, postInfo) => {

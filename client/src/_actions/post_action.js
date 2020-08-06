@@ -1,28 +1,28 @@
 import axios from "axios";
 import {
-  GET_POST_LIST_FAILURE,
-  GET_POST_LIST_SUCCESS,
+  GET_PROFILE_POST_LIST_SUCCESS,
+  GET_PROFILE_POST_LIST_FAILURE,
   GET_SAVED_POST_LIST_FAILURE,
   GET_SAVED_POST_LIST_SUCCESS,
 } from "./types";
 
 import { startLoading, finishLoading } from "./loading_action";
 
-export const getPostList = (data) => async (dispatch) => {
-  dispatch(startLoading("GET_POST_LIST"));
+export const getProfilePostList = (data) => async (dispatch) => {
+  dispatch(startLoading("GET_PROFILE_POST_LIST"));
   try {
-    const result = await axios.post("/api/post/posts", data);
+    const result = await axios.post("/api/post/get-profile-post-list", data);
     dispatch({
-      type: GET_POST_LIST_SUCCESS,
+      type: GET_PROFILE_POST_LIST_SUCCESS,
       payload: result.data.postInfo,
     });
   } catch (err) {
     dispatch({
-      type: GET_POST_LIST_FAILURE,
+      type: GET_PROFILE_POST_LIST_FAILURE,
       payload: err,
     });
   }
-  dispatch(finishLoading("GET_POST_LIST"));
+  dispatch(finishLoading("GET_PROFILE_POST_LIST"));
 };
 
 export const getSavedPostList = (data) => async (dispatch) => {

@@ -1,7 +1,7 @@
 import { handleActions } from "redux-actions";
 import {
-  GET_POST_LIST_SUCCESS,
-  GET_POST_LIST_FAILURE,
+  GET_PROFILE_POST_LIST_SUCCESS,
+  GET_PROFILE_POST_LIST_FAILURE,
   GET_SAVED_POST_LIST_FAILURE,
   GET_SAVED_POST_LIST_SUCCESS,
   GET_LIKE_COUNT_SUCCESS,
@@ -27,11 +27,11 @@ const initialState = {
 const posts = handleActions(
   {
     // 포스트 조회
-    [GET_POST_LIST_SUCCESS]: (state, action) => ({
+    [GET_PROFILE_POST_LIST_SUCCESS]: (state, action) => ({
       ...state,
       posts: action.payload,
     }),
-    [GET_POST_LIST_FAILURE]: (state, action) => ({
+    [GET_PROFILE_POST_LIST_FAILURE]: (state, action) => ({
       ...state,
       error: action.payload,
     }),

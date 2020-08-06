@@ -10,7 +10,8 @@ export const uploadImage = (formData, config) =>
 export const uploadPost = (data) => axios.post(`${POST_SERVER}/upload`, data);
 
 // 자신이 작성한 포스트 조회
-export const loadPost = (body) => axios.post(`${POST_SERVER}/posts`, body);
+export const loadPost = (body) =>
+  axios.post(`${POST_SERVER}/get-profile-post-list`, body);
 
 // 저장한 포스트 조회
 export const loadSavedPost = (body) =>

@@ -4,6 +4,7 @@ import UserList from "./Section/UserList";
 import PostList from "./Section/PostList";
 
 const HomePage = () => {
+  // 전체 포스트 불러오기
   useEffect(() => {}, []);
 
   return (
