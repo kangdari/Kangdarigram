@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { withRouter, Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { loginUser, authCheck } from '../../../_actions/user_action';
-import palette from '../../../utils/palette';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import { withRouter, Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser, authCheck } from "../../../_actions/user_action";
+import palette from "../../../utils/palette";
 
 const LoginPage = ({ history }) => {
   const dispatch = useDispatch();
@@ -13,9 +13,9 @@ const LoginPage = ({ history }) => {
     userData: state.user.userData,
   }));
 
-  const [id, setId] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [id, setId] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const [loginBtn, setLoginBtn] = useState(true); // 로그인 버튼 활성화 설정
   const [showPassword, setShowPassword] = useState(false); // 비밀번호 숨기기 / 보여주기
 
@@ -28,7 +28,7 @@ const LoginPage = ({ history }) => {
         // setError('id 또는 비밀번호가 틀렸습니다.');
         return;
       } else {
-        setError('로그인 오류');
+        setError("로그인 오류");
         return;
       }
     }
@@ -37,7 +37,7 @@ const LoginPage = ({ history }) => {
   // 로그인 성공 처리
   useEffect(() => {
     if (login.loginSuccess) {
-      history.push('/');
+      history.push("/");
     }
   }, [history, login.loginSuccess, userData.isAuth]);
 
@@ -51,8 +51,8 @@ const LoginPage = ({ history }) => {
 
   const onSumbitHandler = (e) => {
     e.preventDefault();
-    if ([id, password].includes('')) {
-      setError('빈 칸을 입력하세요.');
+    if ([id, password].includes("")) {
+      setError("빈 칸을 입력하세요.");
       return;
     }
     dispatch(loginUser({ id, password }));
@@ -78,48 +78,48 @@ const LoginPage = ({ history }) => {
 
   return (
     <LoginContainer>
-      <div className='login_form_box'>
-        <h1 className='title'>Kangdarigram</h1>
-        <form className='login_form' onSubmit={onSumbitHandler}>
-          <div className='input_box'>
+      <div className="login_form_box">
+        <h1 className="title">Kangdarigram</h1>
+        <form className="login_form" onSubmit={onSumbitHandler}>
+          <div className="input_box">
             <input
-              type='text'
+              type="text"
               value={id}
               onChange={onIdHandler}
               onKeyUp={onCheckHandler}
               required
             />
-            <div className='placeholder'>아이디</div>
+            <div className="placeholder">아이디</div>
           </div>
-          <div className='input_box'>
+          <div className="input_box">
             <input
-              type={showPassword ? 'text' : 'password'}
+              type={showPassword ? "text" : "password"}
               value={password}
               onChange={onPasswordHandler}
               onKeyUp={onCheckHandler}
               required
             />
-            <div className='placeholder'>비밀번호</div>
-            <div className='show_password' onClick={onShowPassword}>
-              {showPassword ? '숨기기' : '비밀번호 표시'}
+            <div className="placeholder">비밀번호</div>
+            <div className="show_password" onClick={onShowPassword}>
+              {showPassword ? "숨기기" : "비밀번호 표시"}
             </div>
           </div>
-          <button className='login_btn' type='submit' disabled={loginBtn}>
+          <button className="login_btn" type="submit" disabled={loginBtn}>
             로그인
           </button>
-          <div className='line_box'>
-            <span className='line'></span>
-            <span className='text'>또는</span>
-            <span className='line'></span>
+          <div className="line_box">
+            <span className="line"></span>
+            <span className="text">또는</span>
+            <span className="line"></span>
           </div>
           {error ? <ErrorMessage>{error}</ErrorMessage> : null}
-          <Link to='#' className='link'>
+          <Link to="#" className="link">
             비밀번호를 잊으셨나요?
           </Link>
         </form>
-        <div className='btm'>
+        <div className="btm">
           <span>계정이 없으신가요?</span>
-          <Link to='/register'>가입하기</Link>
+          <Link to="/register">가입하기</Link>
         </div>
       </div>
     </LoginContainer>
@@ -278,90 +278,3 @@ const LoginContainer = styled.div`
     font-weight: 600;
   }
 `;
-
-// import React, { useState, useEffect } from 'react';
-// import styled from 'styled-components';
-// import { withRouter } from 'react-router-dom';
-// import { useDispatch, useSelector } from 'react-redux';
-// import { loginUser, authCheck } from '../../../_actions/user_action';
-
-// const LoginPage = ({ history }) => {
-//   const dispatch = useDispatch();
-//   const { login, userError, userData } = useSelector((state) => ({
-//     login: state.user.login,
-//     userError: state.user.userError,
-//     userData: state.user.userData,
-//   }));
-
-//   const [id, setId] = useState('');
-//   const [password, setPassword] = useState('');
-//   const [error, setError] = useState('');
-
-//   // 로그인 오류 처리
-//   useEffect(() => {
-//     if (userError) {
-//       if (userError.response.status === 401) {
-//         // 서버 예외 처리 오류 message
-//         setError(userError.response.data.message);
-//         // setError('id 또는 비밀번호가 틀렸습니다.');
-//         return;
-//       } else {
-//         setError('로그인 오류');
-//         return;
-//       }
-//     }
-//   }, [userError]);
-
-//   // 로그인 성공 처리
-//   useEffect(() => {
-//     if (login.loginSuccess) {
-//       history.push('/');
-//     }
-//   }, [history, login.loginSuccess, userData.isAuth]);
-
-//   const onIdHandler = (e) => {
-//     setId(e.target.value);
-//   };
-
-//   const onPasswordHandler = (e) => {
-//     setPassword(e.target.value);
-//   };
-
-//   const onSumbitHandler = (e) => {
-//     e.preventDefault();
-//     if ([id, password].includes('')) {
-//       setError('빈 칸을 입력하세요.');
-//       return;
-//     }
-//     dispatch(loginUser({ id, password }));
-//     dispatch(authCheck());
-//   };
-
-//   return (
-//     <LoginContainer>
-//       <form classNameName='loginForm' onSubmit={onSumbitHandler}>
-//         <label>Id</label>
-//         <input type='id' value={id} onChange={onIdHandler} />
-//         <label>Password</label>
-//         <input type='password' value={password} onChange={onPasswordHandler} />
-//         {error ? <div>{error}</div> : ''}
-//         <button type='sumbit'>Login</button>
-//       </form>
-//     </LoginContainer>
-//   );
-// };
-
-// export default withRouter(LoginPage);
-
-// const LoginContainer = styled.div`
-//   width: 100%;
-//   height: 100vh;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-
-//   .loginForm {
-//     display: flex;
-//     flex-direction: column;
-//   }
-// `;

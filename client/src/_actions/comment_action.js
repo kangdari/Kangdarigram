@@ -12,7 +12,6 @@ import {
 export const saveComment = (data) => async (dispatch) => {
   try {
     const result = await axios.post("/api/comment/save-comment", data);
-
     dispatch({
       type: SAVE_COMMENT_SUCCESS,
       payload: result.data,

@@ -10,21 +10,23 @@ import { useDispatch, useSelector } from "react-redux";
 import { getLikeCount } from "../../../../_actions/like_action";
 import { loadComment } from "../../../../_actions/comment_action";
 
-const Post = ({ postId, images, onClickPost, index, savedPost }) => {
+const Post = ({ postId, images, onClickPost, index, type }) => {
   const dispatch = useDispatch();
   // 저장된 포스트의 경우
   const likeCount = useSelector((state) => {
-    if (savedPost) {
+    if (type === "saved_post") {
       return state.posts.savedPosts.find((post) => post._id === postId).like;
-    } else {
+    }
+    if (type === "profile_post") {
       return state.posts.posts.find((post) => post._id === postId).like;
     }
   });
 
   const comment = useSelector((state) => {
-    if (savedPost) {
+    if (type === "saved_post") {
       return state.posts.savedPosts.find((post) => post._id === postId).comment;
-    } else {
+    }
+    if (type === "profile_post") {
       return state.posts.posts.find((post) => post._id === postId).comment;
     }
   });
@@ -32,13 +34,15 @@ const Post = ({ postId, images, onClickPost, index, savedPost }) => {
   const { loading } = useSelector((state) => state.loading);
 
   useEffect(() => {
-    // post 불러오기가 끝나야 실행
-    if (!loading) dispatch(getLikeCount({ postId }));
-  }, [dispatch, postId, loading]);
-
-  useEffect(() => {
-    if (!loading) dispatch(loadComment({ postId }));
-  }, [dispatch, loading, postId]);
+    if (!loading && type === "saved_post") {
+      dispatch(getLikeCount({ postId, type }));
+      dispatch(loadComment({ postId, type }));
+    }
+    if (!loading && type === "profile_post") {
+      dispatch(getLikeCount({ postId, type }));
+      dispatch(loadComment({ postId, type }));
+    }
+  }, [dispatch, postId, loading, type]);
 
   return (
     <div className="post" onClick={() => onClickPost(index)}>
@@ -62,7 +66,7 @@ const Post = ({ postId, images, onClickPost, index, savedPost }) => {
 };
 
 // 클릭 이벤트를 부모에서 주고 클릭한 post의 index 값을 인지 값으로 전달
-const ProfilePost = ({ posts, onClickPost, savedPost }) => {
+const ProfilePost = ({ posts, onClickPost, type }) => {
   return (
     <ProfilePostBlock>
       {posts.map((post, index) => (
@@ -72,7 +76,7 @@ const ProfilePost = ({ posts, onClickPost, savedPost }) => {
           images={post.images}
           onClickPost={onClickPost}
           index={index}
-          savedPost={savedPost}
+          type={type}
         />
       ))}
     </ProfilePostBlock>

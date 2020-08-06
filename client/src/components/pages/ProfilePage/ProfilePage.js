@@ -29,17 +29,14 @@ const ProfilePage = ({ location, match }) => {
   useEffect(() => {
     const userId = match.params.userId;
     // 조회 중인 프로필의 유저 정보 가져오기
-    axios
-      .post("/api/users/get-user-id", { userId })
-      // .then((res) => setCurrentUser(res.data.userInfo[0]));
-      .then((res) => {
-        const userInfo = res.data.userInfo[0];
-        if (!userInfo) {
-          setError(true);
-        } else {
-          setCurrentUser(res.data.userInfo[0]);
-        }
-      });
+    axios.post("/api/users/get-user-id", { userId }).then((res) => {
+      const userInfo = res.data.userInfo[0];
+      if (!userInfo) {
+        setError(true);
+      } else {
+        setCurrentUser(res.data.userInfo[0]);
+      }
+    });
   }, [match.params.userId]);
 
   useEffect(() => {
@@ -101,7 +98,12 @@ const ProfilePage = ({ location, match }) => {
               : posts
           }
           onClickPost={onClickPost}
-          savedPost={location.pathname === `/${currentUser.id}/saved`}
+          // savedPost={location.pathname === `/${currentUser.id}/saved`}
+          type={
+            location.pathname === `/${currentUser.id}`
+              ? "profile_post"
+              : "saved_post"
+          }
         />
         {visible ? (
           <Modal
@@ -117,7 +119,11 @@ const ProfilePage = ({ location, match }) => {
                   ? savedPosts[clickedPost]
                   : posts[clickedPost]
               }
-              savedPost={location.pathname === `/${currentUser.id}/saved`}
+              type={
+                location.pathname === `/${currentUser.id}`
+                  ? "profile_post"
+                  : "saved_post"
+              }
             />
           </Modal>
         ) : null}

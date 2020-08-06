@@ -12,27 +12,34 @@ import LikeCount from "./Sections/LikeCount";
 import WriteComment from "./Sections/WriteComment";
 import ImageSlider from "../Common/ImageSlider";
 
-const PostDetail = ({ post, savedPost }) => {
+const PostDetail = ({ post, type }) => {
   const { contents, images, tags, _id, writer, timeInterval } = post;
   const user_Id = useSelector((state) => state.user.userData._id);
   const comment = useSelector((state) => {
     // posts
-    if (savedPost) {
+    if (type === "saved_post") {
       return state.posts.savedPosts.find(
         (postItem) => postItem._id === post._id,
       ).comment;
-    } else {
+    }
+    if (type === "profile_post") {
       return state.posts.posts.find((postItem) => postItem._id === post._id)
         .comment;
     }
-  });
-  const like = useSelector((state) => {
-    if (savedPost) {
-      return state.posts.savedPosts.find((post) => post._id === _id).like;
-    } else {
-      return state.posts.posts.find((post) => post._id === _id).like;
+    if (type === "home_post") {
+      return state.posts.home_post_list.find(
+        (postItem) => postItem._id === post._id,
+      ).comment;
     }
   });
+  // const like = useSelector((state) => {
+  //   if (type === "saved_post") {
+  //     return state.posts.savedPosts.find((post) => post._id === _id).like;
+  //   }
+  //   if (type === "profile_post") {
+  //     return state.posts.posts.find((post) => post._id === _id).like;
+  //   }
+  // });
 
   return (
     <PostDetailBlock>
@@ -56,10 +63,10 @@ const PostDetail = ({ post, savedPost }) => {
           />
 
           <Btn postId={_id} />
-          <LikeCount likeInfo={like} />
+          {/* <LikeCount likeInfo={like} /> */}
           <Time timeInterval={timeInterval} />
           {/* 댓글 쓰기 */}
-          <WriteComment userId={user_Id} postId={_id} />
+          <WriteComment userId={user_Id} postId={_id} type={type} />
         </PostContents>
       </Post>
     </PostDetailBlock>

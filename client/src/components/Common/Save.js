@@ -10,12 +10,13 @@ import palette from "../../utils/palette";
 const Save = ({ postId, _size }) => {
   const [saved, setSaved] = useState(false); // 저장 상태
   const { _id } = useSelector((state) => state.user.userData);
-  const saveVariable = {
-    postId: postId,
-    userId: _id,
-  };
 
   useEffect(() => {
+    const saveVariable = {
+      postId: postId,
+      userId: _id,
+    };
+
     let mounted = true;
     // save 되었는지 확인
     checkSave(saveVariable).then((res) => {
@@ -26,7 +27,7 @@ const Save = ({ postId, _size }) => {
 
     // clear-up
     return () => (mounted = false);
-  }, [saveVariable]);
+  }, [postId, _id]);
 
   const onSave = () => {
     const saveVariable = {

@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import axios from "axios";
 import PostItemHeader from "./PostItemHeader";
@@ -13,10 +14,14 @@ import LikeCount from "../../../PostDetail/Sections/LikeCount";
 import Time from "../../../PostDetail/Sections/Time";
 import WriteComment from "../../../PostDetail/Sections/WriteComment";
 
-const PostList = ({ post }) => {
-  const { images, writer, _id, timeInterval } = post;
+import { loadComment } from "../../../../_actions/comment_action";
+
+const PostList = ({ post, onClickPost }) => {
+  const dispatch = useDispatch();
+  const { images, writer, _id, timeInterval, comment } = post;
   const [likeInfo, setLikeInfo] = useState([]);
-  const [commentInfo, setCommentInfo] = useState([]);
+  const userId = useSelector((state) => state.user.userData._id); // 현재 사용자 _id
+  const { loading } = useSelector((state) => state.loading);
 
   const getLikeCount = useCallback(() => {
     axios
@@ -24,17 +29,21 @@ const PostList = ({ post }) => {
       .then((res) => setLikeInfo(res.data.like));
   }, [_id]);
 
-  const getComment = useCallback(() => {
-    // 최신 댓글 2개만 조회
-    axios
-      .post("/api/comment/load-comment", { postId: _id, limit: 2 })
-      .then((res) => setCommentInfo(res.data.comment));
-  }, [_id]);
+  useEffect(() => {
+    if (!loading) {
+      dispatch(loadComment({ postId: _id, limit: 2, type: "home_post" }));
+    }
+  }, [getLikeCount, _id, loading, dispatch]);
 
   useEffect(() => {
-    getLikeCount();
-    getComment();
-  }, [getLikeCount, getComment]);
+    let mounted = true;
+
+    axios.post("/api/like/get-like-count", { postId: _id }).then((res) => {
+      if (mounted) setLikeInfo(res.data.like);
+    });
+
+    return () => (mounted = false);
+  }, [_id]);
 
   return (
     <PostListBlock>
@@ -51,12 +60,13 @@ const PostList = ({ post }) => {
         {/* 좋아요 개수 */}
         <LikeCount likeInfo={likeInfo} />
         {/* 본문, 댓글 */}
-        <PostComment post={post} commentInfo={commentInfo} />
+        <PostComment post={post} comment={comment} onClickPost={onClickPost} />
         {/* 시간 */}
         {/* <Time timeInterval={timeInterval} /> */}
         <Time timeInterval={timeInterval} />
         {/* 댓글 작성 */}
-        <WriteComment />
+        {/* <WriteComment postId={_id} userId={userId} getComment={getComment} /> */}
+        <WriteComment postId={_id} userId={userId} type={"home_post"} />
       </PostItemContents>
       {/* </PostItem> */}
     </PostListBlock>

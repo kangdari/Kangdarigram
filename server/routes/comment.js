@@ -5,7 +5,7 @@ const Like = require("../model/Like");
 const { getTime } = require("../utils/getTime");
 
 router.post("/save-comment", (req, res) => {
-  const { writer, contents, postId, responseTo } = req.body;
+  const { writer, contents, postId, responseTo, type } = req.body;
 
   const comment = new Comment({ writer, contents, postId, responseTo });
 
@@ -24,17 +24,17 @@ router.post("/save-comment", (req, res) => {
 
         return res
           .status(200)
-          .json({ success: true, commentInfo: newComment, postId });
+          .json({ success: true, commentInfo: newComment, postId, type });
       });
   });
 });
 
 router.post("/load-comment", (req, res) => {
-  const { postId } = req.body;
+  const { postId, type } = req.body;
 
   Comment.find({ postId })
     .sort({ createdAt: -1 }) // 내림차순 정렬
-    .limit(req.body.limit ? 2 : 0)
+    // .limit(req.body.limit ? 2 : 0)
     .populate("writer")
     .exec((err, comment) => {
       if (err) return res.status(400).json({ success: false, err });
@@ -45,9 +45,12 @@ router.post("/load-comment", (req, res) => {
         return { ...comment._doc, ...{ timeInterval: duration } };
       });
 
-      return res
-        .status(200)
-        .json({ success: true, comment: newComment, postId });
+      return res.status(200).json({
+        success: true,
+        comment: newComment,
+        postId,
+        type,
+      });
     });
 });
 

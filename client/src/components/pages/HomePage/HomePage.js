@@ -1,19 +1,37 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import UserList from "./Section/UserList";
 import PostList from "./Section/PostList";
+import Modal from "../../Common/Modal";
+import PostDetail from "../../PostDetail/PostDetail";
 
 import { loadPostList } from "../../../_actions/post_action";
 
 const HomePage = () => {
   const dispatch = useDispatch();
   const { home_post_list } = useSelector((state) => state.posts);
+  const [visible, setVisible] = useState(false); // Modal 렌더링 여부
+  const [post, setPost] = useState([]); // 선택한 post
+
   // 전체 포스트 불러오기
   // limit, skip 옵션 필요
   useEffect(() => {
     dispatch(loadPostList());
   }, [dispatch]);
+
+  // 모달 on, clickedPost update
+  //usecallback?
+  const onClickPost = (postId) => {
+    const post = home_post_list.find((post) => post._id === postId);
+    setPost(post);
+    setVisible(true);
+  };
+
+  // 모달 off
+  const onCloseModal = () => {
+    setVisible(false);
+  };
 
   return (
     <HomePageContainer>
@@ -21,11 +39,23 @@ const HomePage = () => {
         <ContentsBlock>
           <UserList />
           {home_post_list.map((post) => (
-            <PostList key={post._id} post={post} />
+            <PostList key={post._id} post={post} onClickPost={onClickPost} />
           ))}
         </ContentsBlock>
         <AsideContainer>asdie</AsideContainer>
       </ContentContainer>
+      {/* post_modal */}
+      {visible ? (
+        <Modal
+          visible={visible}
+          onCloseModal={onCloseModal}
+          closable={true} // 모달 종료 버튼 클릭 시 끄기 옵션
+          maskClosable={true} // 모달 배경 클릭 시 끄기 옵션
+          type={"post_modal"}
+        >
+          <PostDetail post={post} type={"home_post"} />
+        </Modal>
+      ) : null}
     </HomePageContainer>
   );
 };

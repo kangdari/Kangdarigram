@@ -59,9 +59,10 @@ const posts = handleActions(
     [GET_LIKE_COUNT_SUCCESS]: (state, action) => ({
       ...state,
       posts: state.posts.map((post) => {
-        console.log("ggg");
+        const { type, postId } = action.payload;
+        // console.log(action.payload.type);
         // if ( flag && post._id === action.payload.postId) {
-        if (post._id === action.payload.postId) {
+        if (type === "profile_post" && post._id === postId) {
           return Object.assign({}, post, {
             like: action.payload.like,
           });
@@ -69,7 +70,8 @@ const posts = handleActions(
         return post;
       }),
       savedPosts: state.savedPosts.map((post) => {
-        if (post._id === action.payload.postId) {
+        const { type, postId } = action.payload;
+        if (type === "saved_post" && post._id === postId) {
           return Object.assign({}, post, {
             like: action.payload.like,
           });
@@ -91,6 +93,7 @@ const posts = handleActions(
         // postId가 있으면 post 좋아요
         // commentId가 있으면 comment 좋아요
         if (post._id === action.payload.likeInfo.postId) {
+          console.log("2");
           return Object.assign({}, post, {
             // 기존 like 배열과 합치기
             like: [...post.like, action.payload.likeInfo],
@@ -102,6 +105,7 @@ const posts = handleActions(
         // postId가 있으면 post 좋아요
         // commentId가 있으면 comment 좋아요
         if (post._id === action.payload.likeInfo.postId) {
+          console.log("3");
           return Object.assign({}, post, {
             // 기존 like 배열과 합치기
             like: [...post.like, action.payload.likeInfo],
@@ -150,7 +154,8 @@ const posts = handleActions(
     [SAVE_COMMENT_SUCCESS]: (state, action) => ({
       ...state,
       posts: state.posts.map((post) => {
-        if (post._id === action.payload.commentInfo[0].postId) {
+        const { type, commentInfo } = action.payload;
+        if (type === "profile_post" && post._id === commentInfo[0].postId) {
           return Object.assign({}, post, {
             comment: [action.payload.commentInfo[0], ...post.comment],
           });
@@ -158,7 +163,17 @@ const posts = handleActions(
         return post;
       }),
       savedPosts: state.savedPosts.map((post) => {
-        if (post._id === action.payload.commentInfo[0].postId) {
+        const { type, commentInfo } = action.payload;
+        if (type === "saved_post" && post._id === commentInfo[0].postId) {
+          return Object.assign({}, post, {
+            comment: [action.payload.commentInfo[0], ...post.comment],
+          });
+        }
+        return post;
+      }),
+      home_post_list: state.home_post_list.map((post) => {
+        const { type, commentInfo } = action.payload;
+        if (type === "home_post" && post._id === commentInfo[0].postId) {
           return Object.assign({}, post, {
             comment: [action.payload.commentInfo[0], ...post.comment],
           });
@@ -171,20 +186,29 @@ const posts = handleActions(
       ...state,
       error: action.payload,
     }),
-    // 좋아요 조회
+    // 댓글 조회
     [LOAD_COMMENT_SUCCESS]: (state, action) => ({
       ...state,
       posts: state.posts.map((post) => {
+        const { type, postId } = action.payload;
         // 해당 포스터의 댓글만 찾기
-        if (post._id === action.payload.postId) {
+        if (type === "profile_post" && post._id === postId) {
           return { ...post, ...{ comment: action.payload.comment } };
         }
         return post;
       }),
       savedPosts: state.savedPosts.map((post) => {
+        const { type, postId } = action.payload;
         // 해당 포스터의 댓글만 찾기
-        if (post._id === action.payload.postId) {
+        if (type === "saved_post" && post._id === postId) {
           return { ...post, ...{ comment: action.payload.comment } };
+        }
+        return post;
+      }),
+      home_post_list: state.home_post_list.map((post) => {
+        const { type, postId, comment } = action.payload;
+        if (type === "home_post" && post._id === postId) {
+          return { ...post, ...{ comment } };
         }
         return post;
       }),

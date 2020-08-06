@@ -22,7 +22,9 @@ router.post("/get-like-count", (req, res) => {
     .populate("userId")
     .exec((err, likeInfo) => {
       if (err) return res.status(400).json({ success: false, err });
-      return res.status(200).json({ success: true, like: likeInfo, postId });
+      return res
+        .status(200)
+        .json({ success: true, like: likeInfo, postId, type: req.body.type });
     });
 });
 

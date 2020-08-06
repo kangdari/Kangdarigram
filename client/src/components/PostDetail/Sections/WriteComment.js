@@ -5,7 +5,7 @@ import palette from "../../../utils/palette";
 
 import { saveComment } from "../../../_actions/comment_action";
 
-const WriteComment = ({ userId, postId }) => {
+const WriteComment = ({ userId, postId, type }) => {
   const dispatch = useDispatch();
   const [input, setInput] = useState("");
   const [btn, setBtn] = useState(true); // 버튼 활성화 여부
@@ -23,9 +23,12 @@ const WriteComment = ({ userId, postId }) => {
       contents: input,
       writer: userId,
       postId,
+      type,
     };
 
     dispatch(saveComment(commentBody));
+    // Homepage 사용
+    // if (getComment) getComment();
     setInput("");
   };
 
