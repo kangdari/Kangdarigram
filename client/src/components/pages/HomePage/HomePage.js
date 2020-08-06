@@ -1,19 +1,28 @@
 import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import UserList from "./Section/UserList";
 import PostList from "./Section/PostList";
 
+import { loadPostList } from "../../../_actions/post_action";
+
 const HomePage = () => {
+  const dispatch = useDispatch();
+  const { home_post_list } = useSelector((state) => state.posts);
   // 전체 포스트 불러오기
-  useEffect(() => {}, []);
+  // limit, skip 옵션 필요
+  useEffect(() => {
+    dispatch(loadPostList());
+  }, [dispatch]);
 
   return (
     <HomePageContainer>
       <ContentContainer>
         <ContentsBlock>
           <UserList />
-          <PostList />
-          <PostList />
+          {home_post_list.map((post) => (
+            <PostList key={post._id} post={post} />
+          ))}
         </ContentsBlock>
         <AsideContainer>asdie</AsideContainer>
       </ContentContainer>

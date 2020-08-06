@@ -1,5 +1,7 @@
 import { handleActions } from "redux-actions";
 import {
+  LOAD_POST_LIST_SUCCESS,
+  LOAD_POST_LIST_FAILURE,
   GET_PROFILE_POST_LIST_SUCCESS,
   GET_PROFILE_POST_LIST_FAILURE,
   GET_SAVED_POST_LIST_FAILURE,
@@ -19,6 +21,7 @@ import {
 } from "../_actions/types";
 
 const initialState = {
+  home_post_list: [],
   posts: [],
   savedPosts: [],
   error: "",
@@ -26,7 +29,15 @@ const initialState = {
 
 const posts = handleActions(
   {
-    // 포스트 조회
+    [LOAD_POST_LIST_SUCCESS]: (state, action) => ({
+      ...state,
+      home_post_list: action.payload.postInfo,
+    }),
+    [LOAD_POST_LIST_FAILURE]: (state, action) => ({
+      ...state,
+      error: action.payload,
+    }),
+    // 프로필 포스트 조회
     [GET_PROFILE_POST_LIST_SUCCESS]: (state, action) => ({
       ...state,
       posts: action.payload,
@@ -48,6 +59,8 @@ const posts = handleActions(
     [GET_LIKE_COUNT_SUCCESS]: (state, action) => ({
       ...state,
       posts: state.posts.map((post) => {
+        console.log("ggg");
+        // if ( flag && post._id === action.payload.postId) {
         if (post._id === action.payload.postId) {
           return Object.assign({}, post, {
             like: action.payload.like,

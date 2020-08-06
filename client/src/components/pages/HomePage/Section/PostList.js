@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import styled from "styled-components";
+import axios from "axios";
 import PostItemHeader from "./PostItemHeader";
 import ImageSlider from "../../../Common/ImageSlider";
 import Like from "../../../Common/Like";
@@ -12,31 +13,48 @@ import LikeCount from "../../../PostDetail/Sections/LikeCount";
 import Time from "../../../PostDetail/Sections/Time";
 import WriteComment from "../../../PostDetail/Sections/WriteComment";
 
-const PostList = () => {
-  const images = [
-    "upload/1596540420423_africa_1.jpg",
-    "upload/1596540420423_africa_1.jpg",
-  ];
+const PostList = ({ post }) => {
+  const { images, writer, _id, timeInterval } = post;
+  const [likeInfo, setLikeInfo] = useState([]);
+  const [commentInfo, setCommentInfo] = useState([]);
+
+  const getLikeCount = useCallback(() => {
+    axios
+      .post("/api/like/get-like-count", { postId: _id })
+      .then((res) => setLikeInfo(res.data.like));
+  }, [_id]);
+
+  const getComment = useCallback(() => {
+    // 최신 댓글 2개만 조회
+    axios
+      .post("/api/comment/load-comment", { postId: _id, limit: 2 })
+      .then((res) => setCommentInfo(res.data.comment));
+  }, [_id]);
+
+  useEffect(() => {
+    getLikeCount();
+    getComment();
+  }, [getLikeCount, getComment]);
 
   return (
     <PostListBlock>
       {/* <PostItem> */}
-      <PostItemHeader />
+      <PostItemHeader writer={writer} />
       <ImageSlider images={images} home={true} />
       <PostItemContents>
         {/* 좋아요, 댓글, 저장 버튼 */}
         <BtnBlock>
-          <Like _size={"large"} />
+          <Like getLikeCount={getLikeCount} postId={_id} _size={"large"} />
           <Comment _size={"large"} />
-          <Save _size={"large"} />
+          <Save postId={_id} _size={"large"} />
         </BtnBlock>
         {/* 좋아요 개수 */}
-        <LikeCount />
+        <LikeCount likeInfo={likeInfo} />
         {/* 본문, 댓글 */}
-        <PostComment />
+        <PostComment post={post} commentInfo={commentInfo} />
         {/* 시간 */}
         {/* <Time timeInterval={timeInterval} /> */}
-        <Time timeInterval={1} />
+        <Time timeInterval={timeInterval} />
         {/* 댓글 작성 */}
         <WriteComment />
       </PostItemContents>
@@ -50,6 +68,7 @@ const PostListBlock = styled.article`
   flex-direction: column;
   margin-bottom: 60px;
   border: 1px solid ${palette.gray[3]};
+  border-radius: 4px;
 
   @media screen and (max-width: 735px) {
     margin-bottom: 15px;

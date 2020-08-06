@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 
-const PostItemHeader = () => {
+const PostItemHeader = ({ writer }) => {
   return (
     <PostItemBlock>
       <div className="user_icon">
@@ -13,8 +13,7 @@ const PostItemHeader = () => {
       </div>
       <div className="user_id">
         <span>
-          {/* userId */}
-          <Link to="">id입력해</Link>
+          <Link to={`/${writer.id}`}>{writer.id}</Link>
         </span>
       </div>
     </PostItemBlock>

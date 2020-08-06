@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import palette from "../../../utils/palette";
 
 const Time = ({ timeInterval }) => {
   return (
@@ -15,8 +16,8 @@ const Time = ({ timeInterval }) => {
 const TimeBlock = styled.section`
   padding: 0 16px;
   font-size: 10px;
-  color: lightgrey;
-  margin-top: 4px;
+  color: ${palette.gray[6]};
+  margin: 4px 0;
 `;
 
 export default Time;

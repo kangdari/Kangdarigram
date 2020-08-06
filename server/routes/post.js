@@ -41,6 +41,24 @@ router.post("/upload", (req, res) => {
   });
 });
 
+// 전체 포스트 조회
+router.post("/load-post-list", (req, res) => {
+  Post.find()
+    .sort({ createdAt: -1 }) // 내림차순 정렬
+    .limit(4) // 4개만
+    .populate("writer")
+    .exec((err, postInfo) => {
+      if (err) return res.status(400).json({ success: false, err });
+
+      const newPostInfo = postInfo.map((post) => {
+        const duration = getTime(post.createdAt);
+        return { ...post._doc, ...{ timeInterval: duration } };
+      });
+
+      return res.status(200).json({ success: true, postInfo: newPostInfo });
+    });
+});
+
 // user profile의 post 조회
 router.post("/get-profile-post-list", (req, res) => {
   const { _id } = req.body;

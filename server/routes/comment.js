@@ -34,6 +34,7 @@ router.post("/load-comment", (req, res) => {
 
   Comment.find({ postId })
     .sort({ createdAt: -1 }) // 내림차순 정렬
+    .limit(req.body.limit ? 2 : 0)
     .populate("writer")
     .exec((err, comment) => {
       if (err) return res.status(400).json({ success: false, err });
