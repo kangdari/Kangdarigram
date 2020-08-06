@@ -13,6 +13,7 @@ import WriteComment from "./Sections/WriteComment";
 import ImageSlider from "../Common/ImageSlider";
 
 const PostDetail = ({ post, savedPost }) => {
+  const { contents, images, tags, _id, writer, timeInterval } = post;
   const user_Id = useSelector((state) => state.user.userData._id);
   const comment = useSelector((state) => {
     // posts
@@ -25,8 +26,13 @@ const PostDetail = ({ post, savedPost }) => {
         .comment;
     }
   });
-
-  const { contents, images, tags, _id, writer, timeInterval } = post;
+  const like = useSelector((state) => {
+    if (savedPost) {
+      return state.posts.savedPosts.find((post) => post._id === _id).like;
+    } else {
+      return state.posts.posts.find((post) => post._id === _id).like;
+    }
+  });
 
   return (
     <PostDetailBlock>
@@ -50,7 +56,7 @@ const PostDetail = ({ post, savedPost }) => {
           />
 
           <Btn postId={_id} />
-          <LikeCount postId={_id} savedPost={savedPost} />
+          <LikeCount likeInfo={like} />
           <Time timeInterval={timeInterval} />
           {/* 댓글 쓰기 */}
           <WriteComment userId={user_Id} postId={_id} />

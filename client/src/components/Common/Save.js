@@ -7,7 +7,7 @@ import { faBookmark } from "@fortawesome/free-solid-svg-icons";
 import { save, unSave, checkSave } from "../../api/save";
 import palette from "../../utils/palette";
 
-const Save = ({ postId }) => {
+const Save = ({ postId, _size }) => {
   const [saved, setSaved] = useState(false); // 저장 상태
   const { _id } = useSelector((state) => state.user.userData);
   const saveVariable = {
@@ -56,13 +56,20 @@ const Save = ({ postId }) => {
   };
 
   return (
-    <StyledIcon saved={saved ? 1 : 0} onClick={onSave} icon={faBookmark} />
+    <StyledIcon
+      saved={saved ? 1 : 0}
+      _size={_size}
+      onClick={onSave}
+      icon={faBookmark}
+    />
   );
 };
 
 const StyledIcon = styled(FontAwesomeIcon)`
   /* save state에 따라 색상 변화 */
   color: ${(props) => (props.saved ? "black" : palette.gray[5])};
+  font-size: ${(props) => (props._size === "large" ? "24px" : "10px")};
+
   margin: 8px 8px 8px auto;
   cursor: pointer;
 `;

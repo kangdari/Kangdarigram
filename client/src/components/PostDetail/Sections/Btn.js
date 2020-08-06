@@ -8,9 +8,9 @@ import Comment from "../../Common/Comment";
 const Btn = ({ postId }) => {
   return (
     <BtnBlock>
-      <Like postId={postId} />
-      <Comment />
-      <Save postId={postId} />
+      <Like postId={postId} _size={"large"} />
+      <Comment _size={"large"} />
+      <Save postId={postId} _size={"large"} />
     </BtnBlock>
   );
 };
@@ -20,10 +20,6 @@ const BtnBlock = styled.section`
   align-items: center;
   padding: 0 16px;
   margin-top: 4px;
-
-  svg {
-    font-size: 24px;
-  }
 `;
 
 export default Btn;

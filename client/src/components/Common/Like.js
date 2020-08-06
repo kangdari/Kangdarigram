@@ -8,7 +8,7 @@ import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import palette from "../../utils/palette";
 import { like, unLike } from "../../_actions/like_action";
 
-const Like = ({ postId, commentId }) => {
+const Like = ({ postId, commentId, _size }) => {
   const dispatch = useDispatch();
   const [liked, setLiked] = useState(false);
   const { _id } = useSelector((state) => state.user.userData);
@@ -43,13 +43,20 @@ const Like = ({ postId, commentId }) => {
   };
 
   return (
-    <StyledIcon liked={liked ? 1 : 0} onClick={onSaveLike} icon={faHeart} />
+    <StyledIcon
+      className="like_icon"
+      liked={liked ? 1 : 0}
+      _size={_size}
+      onClick={onSaveLike}
+      icon={faHeart}
+    />
   );
 };
 
 const StyledIcon = styled(FontAwesomeIcon)`
   color: ${(props) => (props.liked ? "red" : palette.gray[5])};
-  font-size: 10px;
+  /* small, large */
+  font-size: ${(props) => (props._size === "large" ? "24px" : "12px")};
   cursor: pointer;
 `;
 

@@ -7,7 +7,7 @@ import {
   faArrowCircleRight,
 } from "@fortawesome/free-solid-svg-icons";
 
-const ImageSlider = ({ images }) => {
+const ImageSlider = ({ images, home }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const slideRef = useRef(null);
   const preBtn = useRef(null);
@@ -44,7 +44,7 @@ const ImageSlider = ({ images }) => {
   };
 
   return (
-    <ImageSliderBlock>
+    <ImageSliderBlock home={home}>
       <div className="box">
         <div className="padding"></div>
         <div className="image_slider_box">
@@ -74,7 +74,9 @@ const ImageSliderBlock = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-right: 335px;
+  /* ImageSlider는 HomePage, PostDetailPage에서 사용.
+  HomePage에서는 margin 값 적용 x */
+  margin-right: ${(props) => (props.home ? 0 : "335px")};
   min-height: 450px;
   background: #000;
 

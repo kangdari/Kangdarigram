@@ -70,7 +70,7 @@ const Comment = ({ comment, postId, onOpenModal }) => {
             </div>
             {/* 좋아요 */}
             <div className="likeBtn">
-              <Like postId={postId} commentId={_id} />
+              <Like postId={postId} commentId={_id} _size={"small"} />
             </div>
           </div>
         </div>

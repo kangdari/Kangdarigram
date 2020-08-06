@@ -1,17 +1,9 @@
 import React, { useState, useCallback } from "react";
 import styled from "styled-components";
-import { useSelector } from "react-redux";
 import Modal from "../../Common/Modal";
 import LikeUserModal from "./LikeUserModal";
 
-const LikeCount = ({ postId, savedPost }) => {
-  const likeInfo = useSelector((state) => {
-    if (savedPost) {
-      return state.posts.savedPosts.find((post) => post._id === postId).like;
-    } else {
-      return state.posts.posts.find((post) => post._id === postId).like;
-    }
-  });
+const LikeCount = ({ likeInfo }) => {
   const [visible, setVisible] = useState(false); // Modal 렌더링
   const [likeUserList, setLikeUserList] = useState([]);
 
@@ -54,7 +46,7 @@ const LikeCount = ({ postId, savedPost }) => {
 
 const LikeBlock = styled.section`
   padding: 0 16px;
-  margin-top: 4px;
+  margin: 4px 0;
   .like_btn {
     font-weight: 600;
     border: none;
