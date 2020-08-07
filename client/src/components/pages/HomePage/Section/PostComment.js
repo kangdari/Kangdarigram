@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Like from "../../../Common/Like";
+import Tag from "../../../Common/Tag";
 
 const Comment = ({ comment }) => {
   return (
@@ -17,24 +18,33 @@ const Comment = ({ comment }) => {
 
 const Contents = ({ post }) => {
   const { contents, tags, writer } = post;
+  const [more, setMore] = useState(false);
+
+  // 더보기 버튼
+  const moreView = () => {
+    setMore(true);
+  };
 
   return (
     <ContentsBlock>
       <span className="id">
         <Link to={`/${writer.id}`}>{writer.id}</Link>
       </span>
-      <span>
-        {contents.length > 10 ? (
-          <>
-            <span>${contents.slice(0, 10)}...</span>
-            <button>더보기</button>
-          </>
-        ) : (
+      {contents.length > 10 && !more ? (
+        <>
+          <span>{contents.slice(0, 10)}...</span>
+          <button onClick={moreView}>더보기</button>
+        </>
+      ) : (
+        <>
           <span>{contents}</span>
-        )}
-        {/* 더보기 누르면 추가 내용 추가 */}
-        {/* <span>contents 내용</span>  */}
-      </span>
+          <div>
+            {tags.map((tag, index) => (
+              <Tag tag={tag} key={index} />
+            ))}
+          </div>
+        </>
+      )}
     </ContentsBlock>
   );
 };
@@ -44,8 +54,6 @@ const PostComment = ({ post, comment, onClickPost }) => {
     <PostCommentBlock>
       <div>
         <Contents post={post} />
-        {/* modal open 이벤트 추가 */}
-        {/* modal의 자식으로 postDetail 컴포넌트 호출 */}
         {comment && comment.length > 2 ? (
           <button
             className="more_comment_modal"
