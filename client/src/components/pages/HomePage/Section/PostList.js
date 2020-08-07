@@ -39,7 +39,9 @@ const PostList = ({ post, onClickPost }) => {
     let mounted = true;
 
     axios.post("/api/like/get-like-count", { postId: _id }).then((res) => {
-      if (mounted) setLikeInfo(res.data.like);
+      if (mounted) {
+        setLikeInfo(res.data.like);
+      }
     });
 
     return () => (mounted = false);
@@ -62,10 +64,8 @@ const PostList = ({ post, onClickPost }) => {
         {/* 본문, 댓글 */}
         <PostComment post={post} comment={comment} onClickPost={onClickPost} />
         {/* 시간 */}
-        {/* <Time timeInterval={timeInterval} /> */}
         <Time timeInterval={timeInterval} />
         {/* 댓글 작성 */}
-        {/* <WriteComment postId={_id} userId={userId} getComment={getComment} /> */}
         <WriteComment postId={_id} userId={userId} type={"home_post"} />
       </PostItemContents>
       {/* </PostItem> */}

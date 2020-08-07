@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
+import { useSelector } from "react-redux";
 import axios from "axios";
 import styled from "styled-components";
 import palette from "../../../utils/palette";
@@ -13,17 +14,19 @@ const Comment = ({ comment, postId, onOpenModal }) => {
   const [likeInfo, setLikeInfo] = useState([]);
   const [visible, setVisible] = useState(false); // Modal 렌더링 여부
   const [likeUserList, setLikeUserList] = useState([]);
+  const { loading } = useSelector((state) => state.loading);
 
   useEffect(() => {
     let mounted = true;
+
     axios.post("/api/like/get-comment-like", { commentId: _id }).then((res) => {
-      if (mounted) {
+      if (mounted && !loading) {
         setLikeInfo(res.data.like);
       }
     });
 
     return () => (mounted = false);
-  }, [_id]);
+  }, [_id, loading]);
 
   // 모달 off
   const onCloseModal = useCallback(() => {

@@ -12,6 +12,7 @@ import { loadComment } from "../../../../_actions/comment_action";
 
 const Post = ({ postId, images, onClickPost, index, type }) => {
   const dispatch = useDispatch();
+  const { loading } = useSelector((state) => state.loading);
   // 저장된 포스트의 경우
   const likeCount = useSelector((state) => {
     if (type === "saved_post") {
@@ -31,14 +32,12 @@ const Post = ({ postId, images, onClickPost, index, type }) => {
     }
   });
 
-  const { loading } = useSelector((state) => state.loading);
-
   useEffect(() => {
-    if (!loading && type === "saved_post") {
+    if (type === "saved_post") {
       dispatch(getLikeCount({ postId, type }));
       dispatch(loadComment({ postId, type }));
     }
-    if (!loading && type === "profile_post") {
+    if (type === "profile_post") {
       dispatch(getLikeCount({ postId, type }));
       dispatch(loadComment({ postId, type }));
     }

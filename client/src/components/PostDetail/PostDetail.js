@@ -32,6 +32,7 @@ const PostDetail = ({ post, type }) => {
       ).comment;
     }
   });
+
   // const like = useSelector((state) => {
   //   if (type === "saved_post") {
   //     return state.posts.savedPosts.find((post) => post._id === _id).like;

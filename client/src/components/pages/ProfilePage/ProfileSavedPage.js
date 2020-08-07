@@ -8,13 +8,12 @@ import ProfilePost from "./Section/ProfilePost";
 import Modal from "../../Common/Modal";
 import PostDetail from "../../PostDetail/PostDetail";
 import Loading from "../../Common/Loading";
-
-import { getProfilePostList } from "../../../_actions/post_action";
+import { getSavedPostList } from "../../../_actions/post_action";
 import axios from "axios";
 
-const ProfilePage = ({ location, match }) => {
+const ProfileSavedPage = ({ location, match }) => {
   const dispatch = useDispatch();
-  const { posts } = useSelector((state) => state.posts);
+  const { savedPosts } = useSelector((state) => state.posts);
   const { loading } = useSelector((state) => state.loading);
 
   const [clickedPost, setClickedPost] = useState(""); // 클릭한 포스트의 index
@@ -39,10 +38,10 @@ const ProfilePage = ({ location, match }) => {
   useEffect(() => {
     // 비동기 처리와 로딩 상태를 추가하여 전체 Post를 로드 한 뒤에
     // 다음 작업들이 이루어지도록 작성
-    const getPosts = () => {
-      dispatch(getProfilePostList({ _id: currentUser._id }));
+    const getSavedPosts = () => {
+      dispatch(getSavedPostList({ _id: currentUser._id }));
     };
-    getPosts();
+    getSavedPosts();
   }, [id, location.pathname, _id, dispatch, currentUser]);
 
   // 모달 on, clickedPost update
@@ -55,7 +54,6 @@ const ProfilePage = ({ location, match }) => {
   const onCloseModal = () => {
     setVisible(false);
   };
-
   // 존재하지 않는 유저의 프로필 접근 시
   if (error) {
     return (
@@ -73,16 +71,21 @@ const ProfilePage = ({ location, match }) => {
     );
   }
 
-  if (posts.length > 0 && !loading) {
+  if (savedPosts.length > 0 && !loading) {
     return (
       <ProfilePageBlock>
         <ProfileInfo user={currentUser} />
         <ProfileLink user={currentUser} />
-        <ProfilePost
-          posts={posts}
-          onClickPost={onClickPost}
-          type={"profile_post"}
-        />
+        {loading ? (
+          <Loading />
+        ) : (
+          <ProfilePost
+            currentUser={currentUser}
+            posts={savedPosts}
+            onClickPost={onClickPost}
+            type={"saved_post"}
+          />
+        )}
         {visible ? (
           <Modal
             visible={visible}
@@ -91,7 +94,7 @@ const ProfilePage = ({ location, match }) => {
             maskClosable={true} // 모달 배경 클릭 시 끄기 옵션
             type={"post_modal"}
           >
-            <PostDetail post={posts[clickedPost]} type={"profile_post"} />
+            <PostDetail post={savedPosts[clickedPost]} type={"saved_post"} />
           </Modal>
         ) : null}
       </ProfilePageBlock>
@@ -136,4 +139,4 @@ const ErrorDesc = styled.p`
   }
 `;
 
-export default ProfilePage;
+export default ProfileSavedPage;

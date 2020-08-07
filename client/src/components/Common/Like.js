@@ -12,6 +12,7 @@ const Like = ({ postId, commentId, _size, getLikeCount }) => {
   const dispatch = useDispatch();
   const [liked, setLiked] = useState(false);
   const { _id } = useSelector((state) => state.user.userData);
+  const { loading } = useSelector((state) => state.loading);
 
   useEffect(() => {
     let mounted = true;
@@ -22,14 +23,14 @@ const Like = ({ postId, commentId, _size, getLikeCount }) => {
     };
     // 좋아요 상태 가져오기
     axios.post("/api/like/get-like-state", variable).then((res) => {
-      if (res.data.success && res.data.liked && mounted) {
+      if (res.data.success && res.data.liked && mounted && !loading) {
         setLiked(res.data.liked);
       }
     });
 
     // clean-up
     return () => (mounted = false);
-  }, [_id, postId, commentId]);
+  }, [_id, postId, commentId, loading]);
 
   const onSaveLike = async () => {
     const variable = {

@@ -7,7 +7,6 @@ import { loadPost } from "../../../../api/post";
 const ProfileInfo = ({ user }) => {
   // 현재 조회 프로필의 유저
   const { id, name, _id } = user;
-  // const { posts } = useSelector((state) => state.posts);
   const [postCount, setPostCount] = useState(0);
 
   useEffect(() => {
@@ -17,10 +16,6 @@ const ProfileInfo = ({ user }) => {
     });
     return () => (mounted = false);
   }, [_id]);
-
-  // useEffect(() => {
-  //   loadPost({ _id }).then((res) => setPostCount(res.data.postInfo.length));
-  // }, [_id]);
 
   return (
     <ProfileInfoBlock>

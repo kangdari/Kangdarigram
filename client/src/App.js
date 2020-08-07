@@ -7,6 +7,7 @@ import LoginPage from "./components/pages/LoginPage/LoginPage";
 import RegisterPage from "./components/pages/RegisterPage/RegisterPage";
 import WirtePostPage from "./components/pages/WritePostPage/WirtePostPage";
 import ProfilePage from "./components/pages/ProfilePage/ProfilePage";
+import ProfileSavedPage from "./components/pages/ProfilePage/ProfileSavedPage";
 
 import Auth from "./hoc/auth";
 
@@ -20,7 +21,8 @@ function App() {
         <Route path="/login" component={Auth(LoginPage, false)} />
         <Route path="/register" component={Auth(RegisterPage, false)} />
         <Route path="/write" component={Auth(WirtePostPage, true)} />
-        <Route path="/:userId" component={Auth(ProfilePage, true)} />
+        <Route path="/:userId" component={Auth(ProfilePage, true)} exact />
+        <Route path="/:userId/saved" component={Auth(ProfileSavedPage, true)} />
       </Switch>
     </>
   );
