@@ -8,7 +8,7 @@ import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import palette from "../../utils/palette";
 import { like, unLike } from "../../_actions/like_action";
 
-const Like = ({ postId, commentId, _size, getLikeCount }) => {
+const Like = ({ postId, commentId, _size, type }) => {
   const dispatch = useDispatch();
   const [liked, setLiked] = useState(false);
   const { _id } = useSelector((state) => state.user.userData);
@@ -37,6 +37,7 @@ const Like = ({ postId, commentId, _size, getLikeCount }) => {
       userId: _id,
       postId: postId,
       commentId: commentId,
+      type,
     };
 
     if (!liked) {
@@ -46,8 +47,6 @@ const Like = ({ postId, commentId, _size, getLikeCount }) => {
       await dispatch(unLike(variable));
       setLiked(false);
     }
-    // HomePage에서 사용
-    if (getLikeCount) getLikeCount();
   };
 
   return (

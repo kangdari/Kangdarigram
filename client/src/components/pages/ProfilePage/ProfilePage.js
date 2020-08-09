@@ -73,7 +73,7 @@ const ProfilePage = ({ location, match }) => {
     );
   }
 
-  if (posts.length > 0 && !loading) {
+  if (!loading && currentUser) {
     return (
       <ProfilePageBlock>
         <ProfileInfo user={currentUser} />

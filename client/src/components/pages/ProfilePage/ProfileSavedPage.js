@@ -54,6 +54,7 @@ const ProfileSavedPage = ({ location, match }) => {
   const onCloseModal = () => {
     setVisible(false);
   };
+
   // 존재하지 않는 유저의 프로필 접근 시
   if (error) {
     return (
@@ -71,7 +72,7 @@ const ProfileSavedPage = ({ location, match }) => {
     );
   }
 
-  if (savedPosts.length > 0 && !loading) {
+  if (!loading && currentUser) {
     return (
       <ProfilePageBlock>
         <ProfileInfo user={currentUser} />

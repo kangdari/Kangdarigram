@@ -78,6 +78,15 @@ const posts = handleActions(
         }
         return post;
       }),
+      home_post_list: state.home_post_list.map((post) => {
+        const { type, postId } = action.payload;
+        if (type === "home_post" && post._id === postId) {
+          return Object.assign({}, post, {
+            like: action.payload.like,
+          });
+        }
+        return post;
+      }),
     }),
 
     [GET_LIKE_COUNT_FAILURE]: (state, action) => ({
@@ -92,24 +101,26 @@ const posts = handleActions(
       posts: state.posts.map((post) => {
         // postId가 있으면 post 좋아요
         // commentId가 있으면 comment 좋아요
-        if (post._id === action.payload.likeInfo.postId) {
-          console.log("2");
+        const { type, likeInfo } = action.payload;
+        if (type === "profile_post" && post._id === likeInfo.postId) {
           return Object.assign({}, post, {
             // 기존 like 배열과 합치기
-            like: [...post.like, action.payload.likeInfo],
+            like: [...post.like, likeInfo],
           });
         }
         return post;
       }),
       savedPosts: state.savedPosts.map((post) => {
-        // postId가 있으면 post 좋아요
-        // commentId가 있으면 comment 좋아요
-        if (post._id === action.payload.likeInfo.postId) {
-          console.log("3");
-          return Object.assign({}, post, {
-            // 기존 like 배열과 합치기
-            like: [...post.like, action.payload.likeInfo],
-          });
+        const { type, likeInfo } = action.payload;
+        if (type === "saved_post" && post._id === likeInfo.postId) {
+          return { ...post, like: [...post.like, likeInfo] };
+        }
+        return post;
+      }),
+      home_post_list: state.home_post_list.map((post) => {
+        const { type, likeInfo } = action.payload;
+        if (type === "home_post" && post._id === likeInfo.postId) {
+          return { ...post, like: [...post.like, likeInfo] };
         }
         return post;
       }),
@@ -138,6 +149,15 @@ const posts = handleActions(
         return post;
       }),
       savedPosts: state.savedPosts.map((post) => {
+        if (post._id === payload.likeInfo.postId) {
+          const filteredLike = post.like.filter(
+            (like) => like._id !== payload.likeInfo._id,
+          );
+          return { ...post, like: [...filteredLike] };
+        }
+        return post;
+      }),
+      home_post_list: state.home_post_list.map((post) => {
         if (post._id === payload.likeInfo.postId) {
           const filteredLike = post.like.filter(
             (like) => like._id !== payload.likeInfo._id,

@@ -49,7 +49,7 @@ router.post("/get-like-state", (req, res) => {
 
 // 좋아요 저장
 router.post("/like", (req, res) => {
-  const { userId, postId, commentId } = req.body;
+  const { userId, postId, commentId, type } = req.body;
   let variable = {};
   if (commentId) {
     variable = { userId, commentId };
@@ -61,13 +61,13 @@ router.post("/like", (req, res) => {
 
   like.save((err, likeInfo) => {
     if (err) return res.status(400).json({ success: false, err });
-    return res.status(200).json({ success: true, likeInfo });
+    return res.status(200).json({ success: true, likeInfo, type });
   });
 });
 
 // 좋아요 취소
 router.post("/unlike", (req, res) => {
-  const { userId, postId, commentId } = req.body;
+  const { userId, postId, commentId, type } = req.body;
   let variable = {};
   if (commentId) {
     variable = { userId, commentId };
@@ -77,7 +77,7 @@ router.post("/unlike", (req, res) => {
 
   Like.findOneAndDelete(variable).exec((err, likeInfo) => {
     if (err) return res.status(400).json({ success: false, err });
-    return res.status(200).json({ success: true, likeInfo });
+    return res.status(200).json({ success: true, likeInfo, type });
   });
 });
 

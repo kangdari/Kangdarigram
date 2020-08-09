@@ -33,14 +33,17 @@ const PostDetail = ({ post, type }) => {
     }
   });
 
-  // const like = useSelector((state) => {
-  //   if (type === "saved_post") {
-  //     return state.posts.savedPosts.find((post) => post._id === _id).like;
-  //   }
-  //   if (type === "profile_post") {
-  //     return state.posts.posts.find((post) => post._id === _id).like;
-  //   }
-  // });
+  const like = useSelector((state) => {
+    if (type === "saved_post") {
+      return state.posts.savedPosts.find((post) => post._id === _id).like;
+    }
+    if (type === "profile_post") {
+      return state.posts.posts.find((post) => post._id === _id).like;
+    }
+    if (type === "home_post") {
+      return state.posts.home_post_list.find((post) => post._id === _id).like;
+    }
+  });
 
   return (
     <PostDetailBlock>
@@ -63,8 +66,8 @@ const PostDetail = ({ post, type }) => {
             postId={_id}
           />
 
-          <Btn postId={_id} />
-          {/* <LikeCount likeInfo={like} /> */}
+          <Btn postId={_id} type={type} />
+          <LikeCount likeInfo={like} />
           <Time timeInterval={timeInterval} />
           {/* 댓글 쓰기 */}
           <WriteComment userId={user_Id} postId={_id} type={type} />

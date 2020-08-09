@@ -1,7 +1,6 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
-import axios from "axios";
 import PostItemHeader from "./PostItemHeader";
 import ImageSlider from "../../../Common/ImageSlider";
 import Like from "../../../Common/Like";
@@ -15,37 +14,23 @@ import Time from "../../../PostDetail/Sections/Time";
 import WriteComment from "../../../PostDetail/Sections/WriteComment";
 
 import { loadComment } from "../../../../_actions/comment_action";
+import { getLikeCount } from "../../../../_actions/like_action";
 
 const PostList = ({ post, onClickPost }) => {
   const dispatch = useDispatch();
   const { images, writer, _id, timeInterval, comment } = post;
-  const [likeInfo, setLikeInfo] = useState([]);
   const userId = useSelector((state) => state.user.userData._id); // 현재 사용자 _id
   const { loading } = useSelector((state) => state.loading);
-
-  const getLikeCount = useCallback(() => {
-    axios
-      .post("/api/like/get-like-count", { postId: _id })
-      .then((res) => setLikeInfo(res.data.like));
-  }, [_id]);
+  const likeInfo = useSelector(
+    (state) => state.posts.home_post_list.find((post) => post._id === _id).like,
+  ); // 각 post 좋아요 정보
 
   useEffect(() => {
     if (!loading) {
       dispatch(loadComment({ postId: _id, limit: 2, type: "home_post" }));
+      dispatch(getLikeCount({ postId: _id, type: "home_post" }));
     }
-  }, [getLikeCount, _id, loading, dispatch]);
-
-  useEffect(() => {
-    let mounted = true;
-
-    axios.post("/api/like/get-like-count", { postId: _id }).then((res) => {
-      if (mounted) {
-        setLikeInfo(res.data.like);
-      }
-    });
-
-    return () => (mounted = false);
-  }, [_id]);
+  }, [_id, loading, dispatch]);
 
   return (
     <PostListBlock>
@@ -55,7 +40,7 @@ const PostList = ({ post, onClickPost }) => {
       <PostItemContents>
         {/* 좋아요, 댓글, 저장 버튼 */}
         <BtnBlock>
-          <Like getLikeCount={getLikeCount} postId={_id} _size={"large"} />
+          <Like postId={_id} _size={"large"} type={"home_post"} />
           <Comment _size={"large"} />
           <Save postId={_id} _size={"large"} />
         </BtnBlock>
