@@ -54,7 +54,7 @@ const WriteComment = ({ userId, postId, type }) => {
           onChange={onChangeHandler}
           onKeyUp={onCheckHandler}
           onKeyDown={onCheckEnter}
-          className="textarea"
+          className="comment_textarea"
           placeholder="댓글 달기..."
         ></textarea>
         <button className="btn" type="submit" disabled={btn}>
@@ -75,7 +75,7 @@ const WriteCommentBlock = styled.div`
     align-items: center;
   }
 
-  .textarea {
+  .comment_textarea {
     overflow-y: auto;
     flex: 1;
     font-size: 14px;
