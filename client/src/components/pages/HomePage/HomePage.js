@@ -7,6 +7,7 @@ import Modal from "../../Common/Modal";
 import PostDetail from "../../PostDetail/PostDetail";
 
 import { loadPostList } from "../../../_actions/post_action";
+import { loadUserList } from "../../../_actions/user_action";
 
 const HomePage = () => {
   const dispatch = useDispatch();
@@ -18,6 +19,7 @@ const HomePage = () => {
   // limit, skip 옵션 필요
   useEffect(() => {
     dispatch(loadPostList());
+    dispatch(loadUserList()); // userList 가져오기
   }, [dispatch]);
 
   // 모달 on, clickedPost update

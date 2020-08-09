@@ -7,13 +7,16 @@ import {
   REGISTER_USER_FAILURE,
   LOGOUT,
   AUTH_CHECK,
+  LOAD_USER_LIST_FAILURE,
+  LOAD_USER_LIST_SUCCESS,
 } from "../_actions/types";
 
 const initialState = {
   userError: "", // 에러
   login: "",
   register: "",
-  userData: "",
+  userData: "", // 현재 로그인 유저
+  userList: [], // 전체 유저 정보
 };
 
 const user = handleActions(
@@ -46,6 +49,14 @@ const user = handleActions(
     [AUTH_CHECK]: (state, action) => ({
       ...state,
       userData: action.payload,
+    }),
+    [LOAD_USER_LIST_SUCCESS]: (state, action) => ({
+      ...state,
+      userList: action.payload,
+    }),
+    [LOAD_USER_LIST_FAILURE]: (state, action) => ({
+      ...state,
+      userError: action.payload,
     }),
   },
   initialState,

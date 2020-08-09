@@ -8,6 +8,8 @@ import {
   REGISTER_USER_FAILURE,
   AUTH_CHECK,
   LOGOUT,
+  LOAD_USER_LIST_SUCCESS,
+  LOAD_USER_LIST_FAILURE,
 } from "./types";
 
 export const loginUser = (dataToSubmit) => async (dispatch) => {
@@ -57,4 +59,19 @@ export const authCheck = () => {
     type: AUTH_CHECK,
     payload: request,
   };
+};
+
+export const loadUserList = () => async (dispatch) => {
+  try {
+    const result = await axios.get("/api/users/load-user-list");
+    dispatch({
+      type: LOAD_USER_LIST_SUCCESS,
+      payload: result.data.userList,
+    });
+  } catch (err) {
+    dispatch({
+      type: LOAD_USER_LIST_FAILURE,
+      payload: err,
+    });
+  }
 };

@@ -83,4 +83,11 @@ router.post("/get-user-id", auth, (req, res) => {
   });
 });
 
+router.get("/load-user-list", (req, res) => {
+  User.find().exec((err, userList) => {
+    if (err) return res.status(400).json({ success: false, err });
+    return res.status(200).json({ success: true, userList });
+  });
+});
+
 module.exports = router;
