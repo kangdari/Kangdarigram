@@ -4,15 +4,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import palette from "../../../utils/palette";
 
-const User = ({ userInfo }) => {
+const User = ({ likeInfo }) => {
+  const { id, name } = likeInfo.userId;
+
   return (
     <UserBlock>
       <div className="icon">
         <StyledIcon icon={faUserCircle} />
       </div>
       <div className="info">
-        <p className="user_id">{userInfo.id}</p>
-        <p className="user_name">{userInfo.name}</p>
+        <p className="user_id">{id}</p>
+        <p className="user_name">{name}</p>
       </div>
     </UserBlock>
   );
@@ -40,12 +42,12 @@ const StyledIcon = styled(FontAwesomeIcon)`
   cursor: pointer;
 `;
 
-const LikeUserModal = ({ likeUserList }) => {
+const LikeUserModal = ({ likeInfo }) => {
   return (
     <LikeUserModalBlock>
       <h1 className="title">좋아요</h1>
-      {likeUserList &&
-        likeUserList.map((user, index) => <User userInfo={user} key={index} />)}
+      {likeInfo &&
+        likeInfo.map((like, index) => <User likeInfo={like} key={index} />)}
     </LikeUserModalBlock>
   );
 };

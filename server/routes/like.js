@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Like = require("../model/Like");
+const { User } = require("../model/Users");
 
 // 댓글 좋아요 개수 체크
 router.post("/get-comment-like", (req, res) => {
@@ -22,6 +23,7 @@ router.post("/get-like-count", (req, res) => {
     .populate("userId")
     .exec((err, likeInfo) => {
       if (err) return res.status(400).json({ success: false, err });
+
       return res
         .status(200)
         .json({ success: true, like: likeInfo, postId, type: req.body.type });
@@ -59,9 +61,23 @@ router.post("/like", (req, res) => {
 
   const like = new Like(variable);
 
-  like.save((err, likeInfo) => {
+  User.find({ _id: userId }).exec((err, info) => {
     if (err) return res.status(400).json({ success: false, err });
-    return res.status(200).json({ success: true, likeInfo, type });
+
+    like.save((err, likeInfo) => {
+      if (err) return res.status(400).json({ success: false, err });
+      const { id, name } = info[0];
+      const userId = {
+        id,
+        name,
+      };
+
+      return res.status(200).json({
+        success: true,
+        likeInfo: { ...likeInfo._doc, userId }, // 좋아요를 누른 유저의 이름도 함께 응답 처리
+        type,
+      });
+    });
   });
 });
 
