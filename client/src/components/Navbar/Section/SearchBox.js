@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faSpinner } from "@fortawesome/free-solid-svg-icons";
@@ -7,13 +7,29 @@ import axios from "axios";
 
 import SearchResult from "./SearchResult";
 
-// ref 사용해서 input focus 관리
-// 엔터로 검색할 수 있도록 관리
-
 const SearchBox = () => {
+  const inputEl = useRef(null);
   const [keyword, setKeyWord] = useState("");
   const [loading, setLoading] = useState(false);
   const [searchResult, setSearchResult] = useState([]);
+  const [focusState, setFocusState] = useState(false);
+
+  const onFocusHandler = (e) => {
+    setFocusState(true);
+  };
+
+  useEffect(() => {
+    document.addEventListener("click", (e) => {
+      if (e.target !== inputEl.current) {
+        setFocusState(false);
+        setKeyWord("");
+      }
+    });
+  }, []);
+
+  const clearKeyword = useCallback(() => {
+    setKeyWord("");
+  }, []);
 
   // 검색 함수
   const onSearch = useCallback((keyword) => {
@@ -37,20 +53,24 @@ const SearchBox = () => {
   return (
     <SearchForm>
       <input
+        ref={inputEl}
         value={keyword}
         onChange={onChangeHanlder}
+        onFocus={onFocusHandler} // focus 상태
+        // onBlur={onBlurHandler} // focus 상태에서 벗어날 때
         className="search_input"
         type="text"
       />
       <div className="placeholder">
         <FontAwesomeIcon className="search_icon" icon={faSearch} />
-        {/* <span className="text">{keyword ? keyword : "검색"}</span> */}
+        <span className="text">검색</span>
       </div>
       {/* 로딩 이미지 */}
       {loading && <StyledIcon icon={faSpinner} />}
       {/* 로딩 종료, 결과가 있고, 검색어가 있을 때만 결과창 렌더링*/}
-      {/* {!loading && searchResult.length > 0 && keyword && ( */}
-      {!loading && keyword && <SearchResult searchResult={searchResult} />}
+      {!loading && keyword && focusState && (
+        <SearchResult searchResult={searchResult} clearKeyword={clearKeyword} />
+      )}
     </SearchForm>
   );
 };
@@ -63,7 +83,7 @@ const StyledIcon = styled(FontAwesomeIcon)`
   right: 10px;
 `;
 
-const SearchForm = styled.form`
+const SearchForm = styled.div`
   position: relative;
   width: 215px;
   height: 28px;
@@ -88,10 +108,15 @@ const SearchForm = styled.form`
     text-align: center;
   }
 
+  .placeholder .text {
+    margin-left: 5px;
+  }
+
   .search_input:focus ~ .placeholder {
     left: 10px;
     text-align: left;
   }
+
   .search_input:focus ~ .placeholder .text {
     display: none;
   }

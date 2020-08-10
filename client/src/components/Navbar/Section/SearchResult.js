@@ -5,10 +5,10 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 
-const UserItem = ({ user }) => {
+const UserItem = ({ user, clearKeyword }) => {
   const { id, name } = user;
   return (
-    <UserLink to={`/${id}`}>
+    <UserLink to={`/${id}`} tabIndex="0" onClick={clearKeyword}>
       <UserContainer>
         <StyledIcon icon={faUserCircle} />
         <UserInner>
@@ -20,7 +20,7 @@ const UserItem = ({ user }) => {
   );
 };
 
-const SearchResult = ({ searchResult }) => {
+const SearchResult = ({ searchResult, clearKeyword }) => {
   if (searchResult.length === 0) {
     return (
       <SearchResultBlock>
@@ -31,10 +31,10 @@ const SearchResult = ({ searchResult }) => {
     );
   }
   return (
-    <SearchResultBlock>
+    <SearchResultBlock className="result">
       <UserBlock>
         {searchResult.map((user) => (
-          <UserItem user={user} key={user._id} />
+          <UserItem user={user} key={user._id} clearKeyword={clearKeyword} />
         ))}
       </UserBlock>
     </SearchResultBlock>
