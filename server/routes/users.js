@@ -83,11 +83,26 @@ router.post("/get-user-id", auth, (req, res) => {
   });
 });
 
-router.get("/load-user-list", (req, res) => {
-  User.find().exec((err, userList) => {
-    if (err) return res.status(400).json({ success: false, err });
-    return res.status(200).json({ success: true, userList });
-  });
+// 전체 사용자 로드 및 검색
+router.post("/load-user-list", (req, res) => {
+  const { searchValue } = req.body;
+
+  // 검색 결과 유저 리스트
+  if (searchValue) {
+    User.find({
+      // id, name 둘 중 하나라도 일치하면 검색
+      $or: [{ id: { $regex: searchValue } }, { name: { $regex: searchValue } }],
+    }).exec((err, userList) => {
+      if (err) return res.status(400).json({ success: false, err });
+      return res.status(200).json({ success: true, userList });
+    });
+  } else {
+    // 전체 유저 리스트
+    User.find().exec((err, userList) => {
+      if (err) return res.status(400).json({ success: false, err });
+      return res.status(200).json({ success: true, userList });
+    });
+  }
 });
 
 module.exports = router;

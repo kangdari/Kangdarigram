@@ -63,7 +63,7 @@ export const authCheck = () => {
 
 export const loadUserList = () => async (dispatch) => {
   try {
-    const result = await axios.get("/api/users/load-user-list");
+    const result = await axios.post("/api/users/load-user-list");
     dispatch({
       type: LOAD_USER_LIST_SUCCESS,
       payload: result.data.userList,

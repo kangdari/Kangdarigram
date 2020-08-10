@@ -1,24 +1,53 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import palette from '../../../utils/palette';
+import React, { useState, useCallback } from "react";
+import styled from "styled-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import palette from "../../../utils/palette";
+import axios from "axios";
+
+import SearchResult from "./SearchResult";
 
 const SearchBox = () => {
-  const [Keyword, setKeyWord] = useState('');
+  const [keyword, setKeyWord] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [searchResult, setSearchResult] = useState([]);
 
-  // 자동 검색으로 변환 예정
+  // 검색 함수
+  const onSearch = useCallback((keyword) => {
+    const data = { searchValue: keyword };
+    setLoading(true);
+    axios.post("/api/users/load-user-list", data).then((res) => {
+      if (res.data.success) {
+        setSearchResult(res.data.userList);
+        setLoading(false);
+      }
+    });
+  }, []);
+
   const onChangeHanlder = (e) => {
-    setKeyWord(e.currentTarget.value);
+    const searchValue = e.currentTarget.value;
+    setKeyWord(searchValue);
+    // 검색어가 있을 때만 검색 수행
+    if (searchValue) onSearch(searchValue);
   };
 
   return (
     <SearchForm>
-      <input value={Keyword} onChange={onChangeHanlder} className='search_input' type='text' />
-      <div className='placeholder'>
-        <FontAwesomeIcon className='search_icon' icon={faSearch} />
-        {/* <span className='text'>{Keyword ? Keyword : '검색'}</span> */}
+      <input
+        value={keyword}
+        onChange={onChangeHanlder}
+        className="search_input"
+        type="text"
+      />
+      <div className="placeholder">
+        <FontAwesomeIcon className="search_icon" icon={faSearch} />
+        {/* <span className='text'>{keyword ? keyword : '검색'}</span> */}
+        {/* 로딩 이미지 추가  */}
+        {loading && <span>loading</span>}
       </div>
+      {/* 로딩 종료, 결과가 있고, 검색어가 있을 때만 결과창 렌더링*/}
+      {/* {!loading && searchResult.length > 0 && keyword && ( */}
+      {!loading && keyword && <SearchResult searchResult={searchResult} />}
     </SearchForm>
   );
 };
