@@ -1,11 +1,14 @@
 import React, { useState, useCallback } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import palette from "../../../utils/palette";
 import axios from "axios";
 
 import SearchResult from "./SearchResult";
+
+// ref 사용해서 input focus 관리
+// 엔터로 검색할 수 있도록 관리
 
 const SearchBox = () => {
   const [keyword, setKeyWord] = useState("");
@@ -41,16 +44,24 @@ const SearchBox = () => {
       />
       <div className="placeholder">
         <FontAwesomeIcon className="search_icon" icon={faSearch} />
-        {/* <span className='text'>{keyword ? keyword : '검색'}</span> */}
-        {/* 로딩 이미지 추가  */}
-        {loading && <span>loading</span>}
+        {/* <span className="text">{keyword ? keyword : "검색"}</span> */}
       </div>
+      {/* 로딩 이미지 */}
+      {loading && <StyledIcon icon={faSpinner} />}
       {/* 로딩 종료, 결과가 있고, 검색어가 있을 때만 결과창 렌더링*/}
       {/* {!loading && searchResult.length > 0 && keyword && ( */}
       {!loading && keyword && <SearchResult searchResult={searchResult} />}
     </SearchForm>
   );
 };
+
+const StyledIcon = styled(FontAwesomeIcon)`
+  color: ${palette.gray[5]};
+  font-size: 10px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+`;
 
 const SearchForm = styled.form`
   position: relative;
@@ -78,10 +89,14 @@ const SearchForm = styled.form`
   }
 
   .search_input:focus ~ .placeholder {
-    /* left: 0; */
-    /* text-align: left; */
+    left: 10px;
+    text-align: left;
   }
   .search_input:focus ~ .placeholder .text {
+    display: none;
+  }
+
+  @media screen and (max-width: 650px) {
     display: none;
   }
 `;
