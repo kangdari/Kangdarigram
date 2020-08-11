@@ -22,17 +22,14 @@ const UserItem = ({ user, clearKeyword }) => {
 
 const TagList = ({ tag }) => {
   return (
-    <>
-      {/* link 설정 */}
-      <LinkItem to={`/${tag}`}>
-        <ContentsBlock>
-          <StyledIcon icon={faHashtag} small={1} />
-          <ContentsInner>
-            <Title>{tag}</Title>
-          </ContentsInner>
-        </ContentsBlock>
-      </LinkItem>
-    </>
+    <LinkItem to={`/explore/tags/${tag}`}>
+      <ContentsBlock>
+        <StyledIcon icon={faHashtag} small={1} />
+        <ContentsInner>
+          <Title>{tag}</Title>
+        </ContentsInner>
+      </ContentsBlock>
+    </LinkItem>
   );
 };
 

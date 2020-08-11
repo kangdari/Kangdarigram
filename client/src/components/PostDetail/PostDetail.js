@@ -31,6 +31,11 @@ const PostDetail = ({ post, type }) => {
         (postItem) => postItem._id === post._id,
       ).comment;
     }
+    if (type === "tag_post") {
+      return state.posts.tag_post_list.find(
+        (postItem) => postItem._id === post._id,
+      ).comment;
+    }
   });
 
   const like = useSelector((state) => {
@@ -42,6 +47,11 @@ const PostDetail = ({ post, type }) => {
     }
     if (type === "home_post") {
       return state.posts.home_post_list.find((post) => post._id === _id).like;
+    }
+    if (type === "tag_post") {
+      return state.posts.tag_post_list.find(
+        (postItem) => postItem._id === post._id,
+      ).like;
     }
   });
 

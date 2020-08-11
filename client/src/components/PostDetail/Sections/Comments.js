@@ -12,7 +12,7 @@ import Comment from "./Comment";
 // Tag 클릭시 /expolore/tag/{이름}으로 이동하고
 // 해당 페이지에서 검색 수행하여 결과물 렌더링 ???
 const Tag = ({ tag }) => {
-  return <TagLink to={`/explore/tag/${tag}`}>#{tag}</TagLink>;
+  return <TagLink to={`/explore/tags/${tag}`}>#{tag}</TagLink>;
 };
 
 const Comments = ({ comment, postContents, tags, writer, postId }) => {

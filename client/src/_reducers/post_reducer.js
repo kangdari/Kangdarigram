@@ -18,12 +18,15 @@ import {
   LOAD_COMMENT_SUCCESS,
   DELETE_COMMENT_SUCCESS,
   DELETE_COMMENT_FAILURE,
+  LOAD_TAG_POST_LIST_FAILURE,
+  LOAD_TAG_POST_LIST_SUCCESS,
 } from "../_actions/types";
 
 const initialState = {
   home_post_list: [],
   posts: [],
   savedPosts: [],
+  tag_post_list: [],
   error: "",
 };
 
@@ -55,13 +58,20 @@ const posts = handleActions(
       ...state,
       error: action.payload,
     }),
+    // Tag 검색 결과 포스트 조회
+    [LOAD_TAG_POST_LIST_SUCCESS]: (state, action) => ({
+      ...state,
+      tag_post_list: action.payload,
+    }),
+    [LOAD_TAG_POST_LIST_FAILURE]: (state, action) => ({
+      ...state,
+      error: action.payload,
+    }),
     // 각 포스트의 좋아요 개수 조회
     [GET_LIKE_COUNT_SUCCESS]: (state, action) => ({
       ...state,
       posts: state.posts.map((post) => {
         const { type, postId } = action.payload;
-        // console.log(action.payload.type);
-        // if ( flag && post._id === action.payload.postId) {
         if (type === "profile_post" && post._id === postId) {
           return Object.assign({}, post, {
             like: action.payload.like,
@@ -81,6 +91,15 @@ const posts = handleActions(
       home_post_list: state.home_post_list.map((post) => {
         const { type, postId } = action.payload;
         if (type === "home_post" && post._id === postId) {
+          return Object.assign({}, post, {
+            like: action.payload.like,
+          });
+        }
+        return post;
+      }),
+      tag_post_list: state.tag_post_list.map((post) => {
+        const { type, postId } = action.payload;
+        if (type === "tag_post" && post._id === postId) {
           return Object.assign({}, post, {
             like: action.payload.like,
           });
@@ -120,6 +139,13 @@ const posts = handleActions(
       home_post_list: state.home_post_list.map((post) => {
         const { type, likeInfo } = action.payload;
         if (type === "home_post" && post._id === likeInfo.postId) {
+          return { ...post, like: [...post.like, likeInfo] };
+        }
+        return post;
+      }),
+      tag_post_list: state.tag_post_list.map((post) => {
+        const { type, likeInfo } = action.payload;
+        if (type === "tag_post" && post._id === likeInfo.postId) {
           return { ...post, like: [...post.like, likeInfo] };
         }
         return post;
@@ -166,6 +192,15 @@ const posts = handleActions(
         }
         return post;
       }),
+      tag_post_list: state.tag_post_list.map((post) => {
+        if (post._id === payload.likeInfo.postId) {
+          const filteredLike = post.like.filter(
+            (like) => like._id !== payload.likeInfo._id,
+          );
+          return { ...post, like: [...filteredLike] };
+        }
+        return post;
+      }),
     }),
     [UNLIKE_FAILURE]: (state, { payload }) => ({
       ...state,
@@ -200,6 +235,15 @@ const posts = handleActions(
         }
         return post;
       }),
+      tag_post_list: state.tag_post_list.map((post) => {
+        const { type, commentInfo } = action.payload;
+        if (type === "tag_post" && post._id === commentInfo[0].postId) {
+          return Object.assign({}, post, {
+            comment: [action.payload.commentInfo[0], ...post.comment],
+          });
+        }
+        return post;
+      }),
     }),
 
     [SAVE_COMMENT_FAILURE]: (state, action) => ({
@@ -228,6 +272,13 @@ const posts = handleActions(
       home_post_list: state.home_post_list.map((post) => {
         const { type, postId, comment } = action.payload;
         if (type === "home_post" && post._id === postId) {
+          return { ...post, ...{ comment } };
+        }
+        return post;
+      }),
+      tag_post_list: state.tag_post_list.map((post) => {
+        const { type, postId, comment } = action.payload;
+        if (type === "tag_post" && post._id === postId) {
           return { ...post, ...{ comment } };
         }
         return post;

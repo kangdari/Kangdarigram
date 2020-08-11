@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 const Tag = ({ tag }) => {
-  return <TagLink to={`/explore/tag/${tag}`}>#{tag}</TagLink>;
+  return <TagLink to={`/explore/tags/${tag}`}>#{tag}</TagLink>;
 };
 
 const TagLink = styled(Link)`

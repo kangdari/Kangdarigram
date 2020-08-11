@@ -103,4 +103,21 @@ router.post("/loadSavedPosts", (req, res) => {
   });
 });
 
+router.get("/load-tag-post-list", (req, res) => {
+  const { tag } = req.query;
+
+  Post.find({ tags: `${tag}` })
+    .populate("writer")
+    .exec((err, tagPostInfo) => {
+      if (err) return res.status(400).json({ success: false, err });
+
+      const newPostInfo = tagPostInfo.map((post) => {
+        const duration = getTime(post.createdAt);
+        return { ...post._doc, ...{ timeInterval: duration } };
+      });
+
+      return res.status(200).json({ success: true, tagPostInfo: newPostInfo });
+    });
+});
+
 module.exports = router;

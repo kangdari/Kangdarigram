@@ -21,6 +21,9 @@ const Post = ({ postId, images, onClickPost, index, type }) => {
     if (type === "profile_post") {
       return state.posts.posts.find((post) => post._id === postId).like;
     }
+    if (type === "tag_post") {
+      return state.posts.tag_post_list.find((post) => post._id === postId).like;
+    }
   });
 
   const comment = useSelector((state) => {
@@ -30,17 +33,28 @@ const Post = ({ postId, images, onClickPost, index, type }) => {
     if (type === "profile_post") {
       return state.posts.posts.find((post) => post._id === postId).comment;
     }
+    if (type === "tag_post") {
+      return state.posts.tag_post_list.find((post) => post._id === postId)
+        .comment;
+    }
   });
 
   useEffect(() => {
-    if (type === "saved_post") {
-      dispatch(getLikeCount({ postId, type }));
-      dispatch(loadComment({ postId, type }));
-    }
-    if (type === "profile_post") {
-      dispatch(getLikeCount({ postId, type }));
-      dispatch(loadComment({ postId, type }));
-    }
+    dispatch(getLikeCount({ postId, type }));
+    dispatch(loadComment({ postId, type }));
+
+    // if (type === "saved_post") {
+    //   dispatch(getLikeCount({ postId, type }));
+    //   dispatch(loadComment({ postId, type }));
+    // }
+    // if (type === "profile_post") {
+    //   dispatch(getLikeCount({ postId, type }));
+    //   dispatch(loadComment({ postId, type }));
+    // }
+    // if (type === "tag_post") {
+    //   dispatch(getLikeCount({ postId, type }));
+    //   dispatch(loadComment({ postId, type }));
+    // }
   }, [dispatch, postId, loading, type]);
 
   return (

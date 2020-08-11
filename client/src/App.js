@@ -8,6 +8,7 @@ import RegisterPage from "./components/pages/RegisterPage/RegisterPage";
 import WirtePostPage from "./components/pages/WritePostPage/WirtePostPage";
 import ProfilePage from "./components/pages/ProfilePage/ProfilePage";
 import ProfileSavedPage from "./components/pages/ProfilePage/ProfileSavedPage";
+import TagListPage from "./components/pages/TagListPage/TagListPage";
 
 import Auth from "./hoc/auth";
 
@@ -23,6 +24,7 @@ function App() {
         <Route path="/write" component={Auth(WirtePostPage, true)} />
         <Route path="/:userId" component={Auth(ProfilePage, true)} exact />
         <Route path="/:userId/saved" component={Auth(ProfileSavedPage, true)} />
+        <Route path="/explore/tags/:tag" component={Auth(TagListPage, null)} />
       </Switch>
     </>
   );

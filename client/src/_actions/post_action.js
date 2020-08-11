@@ -6,6 +6,8 @@ import {
   GET_SAVED_POST_LIST_SUCCESS,
   LOAD_POST_LIST_SUCCESS,
   LOAD_POST_LIST_FAILURE,
+  LOAD_TAG_POST_LIST_FAILURE,
+  LOAD_TAG_POST_LIST_SUCCESS,
 } from "./types";
 
 import { startLoading, finishLoading } from "./loading_action";
@@ -59,4 +61,21 @@ export const getSavedPostList = (data) => async (dispatch) => {
     });
   }
   dispatch(finishLoading("GET_SAVED_POST_LIST"));
+};
+
+export const loadTagPostList = (tag) => async (dispatch) => {
+  dispatch(startLoading(LOAD_TAG_POST_LIST_SUCCESS));
+  try {
+    const result = await axios.get(`/api/post/load-tag-post-list?tag=${tag}`);
+    dispatch({
+      type: LOAD_TAG_POST_LIST_SUCCESS,
+      payload: result.data.tagPostInfo,
+    });
+  } catch (err) {
+    dispatch({
+      type: LOAD_TAG_POST_LIST_FAILURE,
+      payload: err,
+    });
+  }
+  dispatch(finishLoading(LOAD_TAG_POST_LIST_FAILURE));
 };
