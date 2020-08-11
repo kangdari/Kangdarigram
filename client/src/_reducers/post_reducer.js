@@ -309,6 +309,24 @@ const posts = handleActions(
         }
         return post;
       }),
+      home_post_list: state.home_post_list.map((post) => {
+        if (post._id === action.payload.postId) {
+          const filteredComment = post.comment.filter(
+            (comment) => comment._id !== action.payload.commentId,
+          );
+          return { ...post, comment: [...filteredComment] };
+        }
+        return post;
+      }),
+      tag_post_list: state.tag_post_list.map((post) => {
+        if (post._id === action.payload.postId) {
+          const filteredComment = post.comment.filter(
+            (comment) => comment._id !== action.payload.commentId,
+          );
+          return { ...post, comment: [...filteredComment] };
+        }
+        return post;
+      }),
     }),
     [DELETE_COMMENT_FAILURE]: (state, action) => ({
       ...state,

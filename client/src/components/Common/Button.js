@@ -1,13 +1,14 @@
-import React from 'react';
-import styled, { css } from 'styled-components';
-import { Link } from 'react-router-dom';
-import palette from '../../utils/palette';
+import React from "react";
+import styled, { css } from "styled-components";
+import { Link } from "react-router-dom";
+import palette from "../../utils/palette";
 
 const buttonStyle = css`
   border: none;
   outline: none;
   text-decoration: none;
   color: ${palette.blue[3]};
+  font-family: "Apple SD Gothic Neo", Arial, sans-serif;
   font-size: 14px;
   font-weight: 800;
   padding: 5px 9px;

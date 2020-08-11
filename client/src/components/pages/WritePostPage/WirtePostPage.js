@@ -44,7 +44,7 @@ const WirtePostPage = ({ user, history }) => {
 
   return (
     <WirtePostPageBlock>
-      <h1 className="title">POST 작성</h1>
+      {/* <h1 className="title">POST 작성</h1> */}
       <form onSubmit={onSubmitHandler}>
         <FileUplaod updateImages={updateImages} />
         <TextArea
@@ -67,14 +67,14 @@ const WirtePostPage = ({ user, history }) => {
 const WirtePostPageBlock = styled.div`
   width: 100%;
   max-width: 800px;
-  margin: 80px auto 0 auto;
+  margin: 150px auto 0 auto;
   padding: 0 20px;
 
   .title {
     text-align: center;
-    font-size: 3rem;
+    font-size: 30px;
     font-weight: 500;
-    margin-bottom: 30px;
+    margin: 30px 0;
   }
 
   button {
