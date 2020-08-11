@@ -31,6 +31,7 @@ app.use("/api/post", require("./routes/post"));
 app.use("/api/save", require("./routes/save"));
 app.use("/api/comment", require("./routes/comment"));
 app.use("/api/like", require("./routes/like"));
+app.use("/api/search", require("./routes/search"));
 
 if (process.env.NODE_ENV === "production") {
   // Set static folder

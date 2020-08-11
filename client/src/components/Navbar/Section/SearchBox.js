@@ -13,6 +13,7 @@ const SearchBox = () => {
   const [loading, setLoading] = useState(false);
   const [searchResult, setSearchResult] = useState([]);
   const [focusState, setFocusState] = useState(false);
+  const [searchType, setSearchType] = useState("");
 
   const onFocusHandler = (e) => {
     setFocusState(true);
@@ -31,16 +32,22 @@ const SearchBox = () => {
     setKeyWord("");
   }, []);
 
-  // 검색 함수
+  // user, tag 검색 함수
   const onSearch = useCallback((keyword) => {
-    const data = { searchValue: keyword };
     setLoading(true);
-    axios.post("/api/users/load-user-list", data).then((res) => {
-      if (res.data.success) {
-        setSearchResult(res.data.userList);
-        setLoading(false);
-      }
-    });
+    axios
+      .get("/api/search/nav-search/context", {
+        params: {
+          keyword,
+        },
+      })
+      .then((res) => {
+        if (res.data.success) {
+          setSearchType(res.data.type);
+          setSearchResult(res.data.searchResult);
+          setLoading(false);
+        }
+      });
   }, []);
 
   const onChangeHanlder = (e) => {
@@ -69,7 +76,11 @@ const SearchBox = () => {
       {loading && <StyledIcon icon={faSpinner} />}
       {/* 로딩 종료, 결과가 있고, 검색어가 있을 때만 결과창 렌더링*/}
       {!loading && keyword && focusState && (
-        <SearchResult searchResult={searchResult} clearKeyword={clearKeyword} />
+        <SearchResult
+          searchResult={searchResult}
+          searchType={searchType}
+          clearKeyword={clearKeyword}
+        />
       )}
     </SearchForm>
   );

@@ -41,19 +41,19 @@ const RightMenu = () => {
   } else {
     return (
       <RightMenuBlock>
-        <Link className="link_icon" to="/">
+        <Link className="link_icon" to="/" tabIndex="0">
           <FontAwesomeIcon icon={faHome} color="white" />
         </Link>
-        <Link className="link_icon" to="/write">
+        <Link className="link_icon" to="/write" tabIndex="0">
           <FontAwesomeIcon icon={faPen} color="white" />
         </Link>
-        <Link className="link_icon" to="">
+        <Link className="link_icon" to="" tabIndex="0">
           <FontAwesomeIcon icon={faCompass} color="white" />
         </Link>
-        <Link className="link_icon" to="">
+        <Link className="link_icon" to="" tabIndex="0">
           <FontAwesomeIcon icon={faHeart} color="white" />
         </Link>
-        <div className="profile">
+        <div className="profile" tabIndex="0">
           <FontAwesomeIcon icon={faUserCircle} color="white" onClick={onShow} />
           {show ? (
             <div className="profile_modal">

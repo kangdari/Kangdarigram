@@ -3,24 +3,45 @@ import styled from "styled-components";
 import palette from "../../../utils/palette";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
+import { faUserCircle, faHashtag } from "@fortawesome/free-solid-svg-icons";
 
 const UserItem = ({ user, clearKeyword }) => {
   const { id, name } = user;
   return (
-    <UserLink to={`/${id}`} tabIndex="0" onClick={clearKeyword}>
-      <UserContainer>
+    <LinkItem to={`/${id}`} tabIndex="0" onClick={clearKeyword}>
+      <ContentsBlock>
         <StyledIcon icon={faUserCircle} />
-        <UserInner>
-          <UserId>{id}</UserId>
-          <UserName>{name}</UserName>
-        </UserInner>
-      </UserContainer>
-    </UserLink>
+        <ContentsInner>
+          <Title>{id}</Title>
+          <Contents>{name}</Contents>
+        </ContentsInner>
+      </ContentsBlock>
+    </LinkItem>
   );
 };
 
-const SearchResult = ({ searchResult, clearKeyword }) => {
+const TagList = ({ tag }) => {
+  return (
+    <>
+      {/* link 설정 */}
+      <LinkItem to={`/${tag}`}>
+        <ContentsBlock>
+          <StyledIcon icon={faHashtag} small={1} />
+          <ContentsInner>
+            <Title>{tag}</Title>
+          </ContentsInner>
+        </ContentsBlock>
+      </LinkItem>
+    </>
+  );
+};
+
+const SearchResult = ({ searchResult, searchType, clearKeyword }) => {
+  // #만 입력 했을 때
+  if (searchType === "none") {
+    return null;
+  }
+  // 검색 결과 없을 때
   if (searchResult.length === 0) {
     return (
       <SearchResultBlock>
@@ -30,12 +51,18 @@ const SearchResult = ({ searchResult, clearKeyword }) => {
       </SearchResultBlock>
     );
   }
+
   return (
     <SearchResultBlock className="result">
       <UserBlock>
-        {searchResult.map((user) => (
-          <UserItem user={user} key={user._id} clearKeyword={clearKeyword} />
-        ))}
+        {/* user 검색 */}
+        {searchType === "user" &&
+          searchResult.map((user) => (
+            <UserItem user={user} key={user._id} clearKeyword={clearKeyword} />
+          ))}
+        {/* # 태그 검색 */}
+        {searchType === "tag" &&
+          searchResult.map((tag, index) => <TagList tag={tag} key={index} />)}
       </UserBlock>
     </SearchResultBlock>
   );
@@ -47,7 +74,7 @@ const Message = styled.div`
   color: ${palette.gray[6]};
 `;
 
-const UserName = styled.span`
+const Contents = styled.span`
   width: 100%;
   color: ${palette.gray[6]};
   font-weight: 300;
@@ -57,14 +84,14 @@ const UserName = styled.span`
   white-space: nowrap;
 `;
 
-const UserId = styled.span`
+const Title = styled.span`
   font-weight: 600;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 `;
 
-const UserInner = styled.div`
+const ContentsInner = styled.div`
   display: flex;
   flex-direction: column;
   margin-left: 10px;
@@ -73,19 +100,20 @@ const UserInner = styled.div`
   white-space: nowrap;
 `;
 
-const UserContainer = styled.div`
+const ContentsBlock = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
 `;
 
-const UserLink = styled(Link)`
+const LinkItem = styled(Link)`
   width: 100%;
   height: 60px;
   padding: 8px 14px;
   border-bottom: 1px solid ${palette.gray[4]};
   display: flex;
   align-items: center;
+  /* outline: none; */
 
   &:hover {
     background: ${palette.gray[1]};
@@ -129,7 +157,7 @@ const SearchResultBlock = styled.div`
 
 const StyledIcon = styled(FontAwesomeIcon)`
   color: ${palette.gray[5]};
-  font-size: 32px;
+  font-size: ${(props) => (props.small ? "20px" : "32px")};
   cursor: pointer;
 `;
 
