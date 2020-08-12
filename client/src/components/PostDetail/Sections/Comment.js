@@ -13,12 +13,12 @@ const Comment = ({ comment, postId, onOpenModal }) => {
   const { contents, writer, _id, timeInterval } = comment;
   const [likeInfo, setLikeInfo] = useState([]);
   const [visible, setVisible] = useState(false); // Modal 렌더링 여부
-  const [likeUserList, setLikeUserList] = useState([]);
+  const [commentLikeInfo, setCommentLikeInfo] = useState([]);
   const { loading } = useSelector((state) => state.loading);
 
   useEffect(() => {
     let mounted = true;
-
+    // comment 좋아요 정보 확인
     axios.post("/api/like/get-comment-like", { commentId: _id }).then((res) => {
       if (mounted && !loading) {
         setLikeInfo(res.data.like);
@@ -40,13 +40,15 @@ const Comment = ({ comment, postId, onOpenModal }) => {
       name: like.userId.name,
       // 프로필 사진
     }));
-    setLikeUserList(userList);
+    setCommentLikeInfo(userList);
     setVisible(true);
   }, [likeInfo]);
 
-  const onFocus = () => {
-    document.querySelector(".textarea").focus();
-    // userToId 전달???
+  const onFocus = (e) => {
+    const commentIcon = e.currentTarget; // 이벤트 생성 위치
+    // closest: explore 지원 x
+    // commentIcon에서 가장 가까운 article 요소로부터 검색
+    commentIcon.closest("article").querySelector(".comment_textarea").focus();
   };
 
   return (
@@ -96,7 +98,7 @@ const Comment = ({ comment, postId, onOpenModal }) => {
           type={"show_like_user_modal"}
         >
           {/* 모달 안에 넣을 박 스 내용 컴포넌트 제작 */}
-          <LikeUserModal likeUserList={likeUserList} />
+          <LikeUserModal commentLikeInfo={commentLikeInfo} />
         </Modal>
       ) : null}
     </CommentItem>

@@ -4,8 +4,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import palette from "../../../utils/palette";
 
-const User = ({ likeInfo }) => {
-  const { id, name } = likeInfo.userId;
+const User = ({ likeInfo, commentLikeInfo }) => {
+  const { id, name } = likeInfo ? likeInfo.userId : commentLikeInfo;
 
   return (
     <UserBlock>
@@ -42,12 +42,18 @@ const StyledIcon = styled(FontAwesomeIcon)`
   cursor: pointer;
 `;
 
-const LikeUserModal = ({ likeInfo }) => {
+const LikeUserModal = ({ likeInfo, commentLikeInfo }) => {
   return (
     <LikeUserModalBlock>
       <h1 className="title">좋아요</h1>
+      {/* post like  */}
       {likeInfo &&
         likeInfo.map((like, index) => <User likeInfo={like} key={index} />)}
+      {/* comment like */}
+      {commentLikeInfo &&
+        commentLikeInfo.map((like, index) => (
+          <User commentLikeInfo={like} key={index} />
+        ))}
     </LikeUserModalBlock>
   );
 };
