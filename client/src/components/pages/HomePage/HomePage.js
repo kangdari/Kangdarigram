@@ -5,6 +5,7 @@ import UserList from "./Section/UserList";
 import PostList from "./Section/PostList";
 import Modal from "../../Common/Modal";
 import PostDetail from "../../PostDetail/PostDetail";
+import PostOptionModal from "./Section/PostOptionModal";
 
 import { loadPostList } from "../../../_actions/post_action";
 import { loadUserList } from "../../../_actions/user_action";
@@ -13,7 +14,8 @@ const HomePage = () => {
   const dispatch = useDispatch();
   const { home_post_list } = useSelector((state) => state.posts);
   const [visible, setVisible] = useState(false); // Modal 렌더링 여부
-  const [post, setPost] = useState([]); // 선택한 post
+  const [post, setPost] = useState([]); // 선택한 post 상세 보기
+  const [postOptionInfo, setPostOptionInfo] = useState({}); // postOptionButton 클릭 시
 
   // 전체 포스트 불러오기
   // limit, skip 옵션 필요
@@ -27,12 +29,22 @@ const HomePage = () => {
   const onClickPost = (postId) => {
     const post = home_post_list.find((post) => post._id === postId);
     setPost(post);
+    onOpenModal();
+  };
+
+  const onClickPostOption = (info) => {
+    setPostOptionInfo(info);
+    onOpenModal();
+  };
+
+  const onOpenModal = () => {
     setVisible(true);
   };
 
   // 모달 off
   const onCloseModal = () => {
     setVisible(false);
+    setPost([]);
   };
 
   return (
@@ -41,7 +53,12 @@ const HomePage = () => {
         <ContentsBlock>
           <UserList />
           {home_post_list.map((post) => (
-            <PostList key={post._id} post={post} onClickPost={onClickPost} />
+            <PostList
+              key={post._id}
+              post={post}
+              onClickPost={onClickPost}
+              onClickPostOption={onClickPostOption}
+            />
           ))}
         </ContentsBlock>
         <AsideContainer>asdie</AsideContainer>
@@ -55,7 +72,16 @@ const HomePage = () => {
           maskClosable={true} // 모달 배경 클릭 시 끄기 옵션
           type={"post_modal"}
         >
-          <PostDetail post={post} type={"home_post"} />
+          {/* 조건 분기 // 글 수정 or 글 상세 보기 */}
+          {post.length !== 0 ? (
+            <PostDetail post={post} type={"home_post"} />
+          ) : (
+            <PostOptionModal
+              onCloseModal={onCloseModal}
+              postOptionInfo={postOptionInfo}
+            />
+          )}
+          {/* <PostDetail post={post} type={"home_post"} /> */}
         </Modal>
       ) : null}
     </HomePageContainer>

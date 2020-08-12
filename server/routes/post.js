@@ -120,4 +120,14 @@ router.get("/load-tag-post-list", (req, res) => {
     });
 });
 
+// post 삭제
+router.delete("/delete-post", (req, res) => {
+  const { postId } = req.query;
+
+  Post.findOneAndDelete({ _id: postId }).exec((err) => {
+    if (err) return res.status(400).json({ success: false, err });
+    return res.status(200).json({ success: true, postId });
+  });
+});
+
 module.exports = router;

@@ -20,6 +20,8 @@ import {
   DELETE_COMMENT_FAILURE,
   LOAD_TAG_POST_LIST_FAILURE,
   LOAD_TAG_POST_LIST_SUCCESS,
+  DELETE_POST_SUCCESS,
+  DELETE_POST_FAILURE,
 } from "../_actions/types";
 
 const initialState = {
@@ -64,6 +66,18 @@ const posts = handleActions(
       tag_post_list: action.payload,
     }),
     [LOAD_TAG_POST_LIST_FAILURE]: (state, action) => ({
+      ...state,
+      error: action.payload,
+    }),
+    // Post 삭제
+    [DELETE_POST_SUCCESS]: (state, action) => ({
+      ...state,
+      home_post_list: state.home_post_list.filter(
+        // action.payload: postId
+        (post) => post._id !== action.payload,
+      ),
+    }),
+    [DELETE_POST_FAILURE]: (state, action) => ({
       ...state,
       error: action.payload,
     }),

@@ -8,6 +8,8 @@ import Save from "../../../Common/Save";
 import Comment from "../../../Common/Comment";
 import PostComment from "./PostComment";
 import palette from "../../../../utils/palette";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEllipsisH } from "@fortawesome/free-solid-svg-icons";
 
 import LikeCount from "../../../PostDetail/Sections/LikeCount";
 import Time from "../../../PostDetail/Sections/Time";
@@ -16,7 +18,7 @@ import WriteComment from "../../../PostDetail/Sections/WriteComment";
 import { loadComment } from "../../../../_actions/comment_action";
 import { getLikeCount } from "../../../../_actions/like_action";
 
-const PostList = ({ post, onClickPost }) => {
+const PostList = ({ post, onClickPost, onClickPostOption }) => {
   const dispatch = useDispatch();
   const { images, writer, _id, timeInterval, comment } = post;
   const userId = useSelector((state) => state.user.userData._id); // 현재 사용자 _id
@@ -36,6 +38,11 @@ const PostList = ({ post, onClickPost }) => {
     <PostListBlock>
       {/* <PostItem> */}
       <PostItemHeader writer={writer} />
+      <PostButton
+        onClick={() => onClickPostOption({ writerId: writer.id, postId: _id })}
+      >
+        <StyledIcon icon={faEllipsisH} />
+      </PostButton>
       <ImageSlider images={images} home={true} />
       <PostItemContents>
         {/* 좋아요, 댓글, 저장 버튼 */}
@@ -59,6 +66,7 @@ const PostList = ({ post, onClickPost }) => {
 };
 
 const PostListBlock = styled.article`
+  position: relative;
   display: flex;
   flex-direction: column;
   margin-bottom: 60px;
@@ -68,6 +76,20 @@ const PostListBlock = styled.article`
   @media screen and (max-width: 735px) {
     margin-bottom: 15px;
   }
+`;
+
+const PostButton = styled.button`
+  position: absolute;
+  height: 50px;
+  padding: 8px;
+  top: 5px;
+  right: 5px;
+`;
+
+const StyledIcon = styled(FontAwesomeIcon)`
+  color: #000;
+  font-size: 13px;
+  cursor: pointer;
 `;
 
 const PostItemContents = styled.div`

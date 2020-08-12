@@ -8,6 +8,8 @@ import {
   LOAD_POST_LIST_FAILURE,
   LOAD_TAG_POST_LIST_FAILURE,
   LOAD_TAG_POST_LIST_SUCCESS,
+  DELETE_POST_SUCCESS,
+  DELETE_POST_FAILURE,
 } from "./types";
 
 import { startLoading, finishLoading } from "./loading_action";
@@ -78,4 +80,19 @@ export const loadTagPostList = (tag) => async (dispatch) => {
     });
   }
   dispatch(finishLoading(LOAD_TAG_POST_LIST_FAILURE));
+};
+
+export const deletePost = (postId) => async (dispatch) => {
+  const result = await axios.delete(`/api/post/delete-post?postId=${postId}`);
+  try {
+    dispatch({
+      type: DELETE_POST_SUCCESS,
+      payload: result.data.postId,
+    });
+  } catch (err) {
+    dispatch({
+      type: DELETE_POST_FAILURE,
+      payload: err,
+    });
+  }
 };
