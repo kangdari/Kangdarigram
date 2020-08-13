@@ -6,7 +6,7 @@ import UserIcon from "../../../Common/UserIcon";
 
 const ProfileInfo = ({ user }) => {
   // 현재 조회 프로필의 유저
-  const { id, name, _id, image } = user;
+  const { id, name, _id, image, intro } = user;
   const [postCount, setPostCount] = useState(0);
 
   useEffect(() => {
@@ -20,9 +20,6 @@ const ProfileInfo = ({ user }) => {
   return (
     <ProfileInfoBlock>
       <div className="profile_img">
-        {/* <div className="img_box">
-          <FontAwesomeIcon className="img" icon={faUserCircle} />
-        </div> */}
         <UserIcon id={id} image={image} size={"large"} />
       </div>
 
@@ -41,7 +38,7 @@ const ProfileInfo = ({ user }) => {
 
         <div className="profile_contents">
           <p className="name">{name}</p>
-          <p className="contents">내용</p>
+          <p className="contents">{intro}</p>
         </div>
       </div>
     </ProfileInfoBlock>

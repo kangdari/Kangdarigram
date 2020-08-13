@@ -1,13 +1,58 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import FileUploader from "./FileUploader";
-
 import Button from "../../Common/Button";
 import UserIcon from "../../Common/UserIcon";
+import axios from "axios";
 
-const ProfileEditPage = () => {
-  const { id, image, _id } = useSelector((state) => state.user.userData);
+const ProfileEditPage = ({ history }) => {
+  const { id, image, _id, name, intro } = useSelector(
+    (state) => state.user.userData,
+  );
+  const [values, setValues] = useState({
+    id,
+    name,
+    intro,
+  });
+  const [message, setMessage] = useState("");
+  const [visible, setVisible] = useState(false); // Message 가시성 설정
+  const [disabled, setDisabled] = useState(true); // 제출 버튼 활성호 설정
+
+  const handleChange = (e) => {
+    setValues({
+      ...values,
+      [e.target.id]: e.target.value,
+    });
+    setDisabled(false);
+  };
+
+  // profile 수정
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    axios
+      .post("/api/users/edit-profile", { ...values, _id })
+      .then((res) => {
+        history.push(`/${values.id}`);
+      })
+      .catch((err) => {
+        setMessage("이미 존재하는 아이디입니다.");
+        showMessage();
+        // 이미 존재하는 id
+      });
+  };
+
+  const updateMessage = (message) => {
+    setMessage(message);
+    showMessage();
+  };
+
+  const showMessage = () => {
+    setVisible(true);
+    setTimeout(() => {
+      setVisible(false);
+    }, 3000);
+  };
 
   return (
     <ProfileEditPageBlock>
@@ -15,44 +60,85 @@ const ProfileEditPage = () => {
         <IconBlock>
           <UserIcon id={id} image={image} />
         </IconBlock>
-
         <ProfileInfo>
           <UserId>{id}</UserId>
-          <FileUploader userId={_id} />
+          <FileUploader userId={_id} updateMessage={updateMessage} />
         </ProfileInfo>
       </ProfileInfoBlock>
-      <form>
+      <form onSubmit={handleSubmit}>
         <InputBlock>
           <LabelBlock>
-            <Label htmlFor="name">이름</Label>
+            {/* 중복 불가 */}
+            <Label htmlFor="id">아이디</Label>
           </LabelBlock>
-          <StyledInput id="name" type="text" />
+          <StyledInput
+            id="id"
+            type="text"
+            onChange={handleChange}
+            value={values.id}
+          />
         </InputBlock>
 
         <InputBlock>
           <LabelBlock>
-            <Label htmlFor="userName">사용자 이름</Label>
+            <Label htmlFor="name">사용자 이름</Label>
           </LabelBlock>
-          <StyledInput id="userName" type="text" />
+          <StyledInput
+            id="name"
+            type="text"
+            onChange={handleChange}
+            value={values.name}
+          />
         </InputBlock>
 
         <InputBlock>
           <LabelBlock>
             <Label htmlFor="">소개</Label>
           </LabelBlock>
-          <TextArea></TextArea>
+          <TextArea
+            id="intro"
+            onChange={handleChange}
+            value={values.intro}
+          ></TextArea>
         </InputBlock>
 
         <InputBlock>
           <LabelBlock />
-          <Button type="submit" blue>
+          <Button type="submit" blue disabled={disabled}>
             제출
           </Button>
         </InputBlock>
       </form>
+      <MessageContainer>
+        <MessageBlock visible={visible}>
+          <Message>{message}</Message>
+        </MessageBlock>
+      </MessageContainer>
     </ProfileEditPageBlock>
   );
 };
+
+const MessageContainer = styled.div`
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+`;
+
+const MessageBlock = styled.div`
+  background: #000;
+  transform: ${({ visible }) =>
+    visible ? "translateY(0px)" : "translateY(60px)"};
+  transition: transform 0.4s ease-out;
+`;
+
+const Message = styled.p`
+  min-height: 60px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  padding: 12px;
+`;
 
 const LabelBlock = styled.div`
   width: 190px;
@@ -142,6 +228,7 @@ const ProfileInfo = styled.div``;
 const ProfileEditPageBlock = styled.div`
   max-width: 700px;
   width: 100%;
+  height: 100%;
   margin: 200px auto 0 auto;
   padding: 20px 20px 0;
 

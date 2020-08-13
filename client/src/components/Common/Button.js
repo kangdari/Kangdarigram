@@ -17,6 +17,15 @@ const buttonStyle = css`
   background: white;
 
   ${(props) =>
+    props.disabled &&
+    css`
+      pointer-events: none;
+      user-select: none;
+      background: ${palette.blue[1]};
+      color: #fff;
+    `}
+
+  ${(props) =>
     props.fullWidth &&
     css`
       width: 100%;
@@ -24,12 +33,10 @@ const buttonStyle = css`
 
   ${(props) =>
     props.blue &&
+    !props.disabled &&
     css`
       background: ${palette.blue[5]};
       color: #fff;
-      /* &:hover: {
-        background: ${palette.blue[4]};
-      } */
     `}
 `;
 

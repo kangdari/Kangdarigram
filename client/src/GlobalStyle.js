@@ -22,6 +22,9 @@ const GlobalStyle = createGlobalStyle`
     font-family: "Apple SD Gothic Neo", Arial, sans-serif;
     font-size: 14px;
   }
+  #root{
+    height: 100vh;
+  }
 
 `;
 

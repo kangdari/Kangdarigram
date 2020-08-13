@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { uploadUserImg } from "../../../_actions/user_action";
 
-const FileUploader = ({ userId }) => {
+const FileUploader = ({ userId, updateMessage }) => {
   const dispatch = useDispatch();
   const inputRef = useRef(null);
 
@@ -21,6 +21,7 @@ const FileUploader = ({ userId }) => {
 
     // 이미지 저장
     dispatch(uploadUserImg(formData, userId, config));
+    updateMessage("프로필 사진이 추가되었습니다.");
   };
 
   return (

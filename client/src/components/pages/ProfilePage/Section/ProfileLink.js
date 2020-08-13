@@ -13,19 +13,11 @@ const ProfileLink = ({ user }) => {
       <NavLink className="link" activeClassName="active" to={`/${id}`} exact>
         게시물
       </NavLink>
-      {/* {loginUserId === _id && (
-        <NavLink className="link" activeClassName="active" to={`/${id}/video`}>
-          동영상
-        </NavLink>
-      )} */}
       {loginUserId === _id && (
         <NavLink className="link" activeClassName="active" to={`/${id}/saved`}>
           저장됨
         </NavLink>
       )}
-      <NavLink className="link" activeClassName="active" to={`/${id}/tagged`}>
-        태그됨
-      </NavLink>
     </ProfileLinkBlock>
   );
 };

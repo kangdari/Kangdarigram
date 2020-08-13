@@ -9,8 +9,12 @@ const UserItem = ({ user }) => {
   return (
     <UserItemBlock>
       <div className="link_inner">
-        <UserIcon id={user.id} image={user.image} />
-        <span className="id">{user.id}</span>
+        {user && (
+          <>
+            <UserIcon id={user.id} image={user.image} />
+            <span className="id">{user.id}</span>
+          </>
+        )}
       </div>
     </UserItemBlock>
   );

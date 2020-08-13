@@ -78,6 +78,7 @@ router.get("/auth", auth, (req, res) => {
     isAuth: true,
     role: req.user.role,
     image: req.user.image,
+    intro: req.user.intro,
   });
 });
 
@@ -120,6 +121,21 @@ router.post("/upload/user-image", (req, res) => {
       },
     );
   });
+});
+// 프로필 수정
+router.post("/edit-profile", (req, res) => {
+  const { id, name, intro, _id } = req.body;
+
+  User.findOneAndUpdate(
+    { _id },
+    { name, id, intro },
+    { new: true },
+    (err, userInfo) => {
+      // id 중복 시 에러 발생
+      if (err) return res.status(400).json({ success: false, err });
+      return res.status(200).json({ success: true, userInfo });
+    },
+  );
 });
 
 module.exports = router;
