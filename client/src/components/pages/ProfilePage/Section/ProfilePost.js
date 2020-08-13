@@ -42,19 +42,6 @@ const Post = ({ postId, images, onClickPost, index, type }) => {
   useEffect(() => {
     dispatch(getLikeCount({ postId, type }));
     dispatch(loadComment({ postId, type }));
-
-    // if (type === "saved_post") {
-    //   dispatch(getLikeCount({ postId, type }));
-    //   dispatch(loadComment({ postId, type }));
-    // }
-    // if (type === "profile_post") {
-    //   dispatch(getLikeCount({ postId, type }));
-    //   dispatch(loadComment({ postId, type }));
-    // }
-    // if (type === "tag_post") {
-    //   dispatch(getLikeCount({ postId, type }));
-    //   dispatch(loadComment({ postId, type }));
-    // }
   }, [dispatch, postId, loading, type]);
 
   return (

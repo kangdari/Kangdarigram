@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
+import { faUserCircle, faEllipsisH } from "@fortawesome/free-solid-svg-icons";
 import palette from "../../utils/palette";
 
 import Comments from "./Sections/Comments";
@@ -11,8 +11,13 @@ import Time from "./Sections/Time";
 import LikeCount from "./Sections/LikeCount";
 import WriteComment from "./Sections/WriteComment";
 import ImageSlider from "../Common/ImageSlider";
+import Modal from "../Common/Modal";
+import PostOptionModal from "../pages/HomePage/Section/PostOptionModal";
 
-const PostDetail = ({ post, type }) => {
+const PostDetail = ({ post, type, postDetailModalClose }) => {
+  const [visible, setVisible] = useState(false); // Modal 렌더링 여부
+  const [postOptionInfo, setPostOptionInfo] = useState({}); // postOptionButton 클릭 시
+
   const { contents, images, tags, _id, writer, timeInterval } = post;
   const user_Id = useSelector((state) => state.user.userData._id);
   const comment = useSelector((state) => {
@@ -55,6 +60,18 @@ const PostDetail = ({ post, type }) => {
     }
   });
 
+  const onOpenModal = (info) => {
+    setPostOptionInfo(info);
+    setVisible(true);
+  };
+
+  // 모달 off
+  const onCloseModal = () => {
+    setVisible(false);
+    postDetailModalClose();
+    document.body.style.cssText = `overflow: auto`;
+  };
+
   return (
     <PostDetailBlock>
       <Post>
@@ -65,6 +82,11 @@ const PostDetail = ({ post, type }) => {
           {/* userid */}
           <div className="name">{writer.id}</div>
         </PostHeader>
+        <PostButton
+          onClick={() => onOpenModal({ writerId: writer.id, postId: _id })}
+        >
+          <StyledIcon icon={faEllipsisH} />
+        </PostButton>
         <ImageSlider images={images} />
         <PostContents>
           {/* 댓글 보기 창  mobile에선 사라짐*/}
@@ -83,6 +105,22 @@ const PostDetail = ({ post, type }) => {
           <WriteComment userId={user_Id} postId={_id} type={type} />
         </PostContents>
       </Post>
+
+      {visible ? (
+        <Modal
+          visible={visible}
+          onCloseModal={onCloseModal}
+          closable={true} // 모달 종료 버튼 클릭 시 끄기 옵션
+          maskClosable={true} // 모달 배경 클릭 시 끄기 옵션
+          type={"post_option_modal"}
+        >
+          <PostOptionModal
+            onCloseModal={onCloseModal}
+            postOptionInfo={postOptionInfo}
+            type={type}
+          />
+        </Modal>
+      ) : null}
     </PostDetailBlock>
   );
 };
@@ -134,6 +172,20 @@ const PostHeader = styled.header`
     width: 100%;
     border: none;
   }
+`;
+
+const PostButton = styled.button`
+  position: absolute;
+  height: 50px;
+  padding: 8px;
+  top: 5px;
+  right: 5px;
+`;
+
+const StyledIcon = styled(FontAwesomeIcon)`
+  color: #000;
+  font-size: 13px;
+  cursor: pointer;
 `;
 
 const PostContents = styled.div`

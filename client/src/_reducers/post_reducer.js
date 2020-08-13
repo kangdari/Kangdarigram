@@ -72,8 +72,15 @@ const posts = handleActions(
     // Post 삭제
     [DELETE_POST_SUCCESS]: (state, action) => ({
       ...state,
+      // action.payload: postId
+      posts: state.posts.filter((post) => post._id !== action.payload),
+      savedPosts: state.savedPosts.filter(
+        (post) => post._id !== action.payload,
+      ),
       home_post_list: state.home_post_list.filter(
-        // action.payload: postId
+        (post) => post._id !== action.payload,
+      ),
+      tag_post_list: state.tag_post_list.filter(
         (post) => post._id !== action.payload,
       ),
     }),

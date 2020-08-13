@@ -4,17 +4,16 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 import { deletePost } from "../../../../_actions/post_action";
-// import axios from "axios";
 
-const PostOptionModal = ({ onCloseModal, postOptionInfo }) => {
+const PostOptionModal = ({ onCloseModal, postOptionInfo, type }) => {
   const dispatch = useDispatch();
-  const { id } = useSelector((state) => state.user.userData); // 현재 사용자 id
-  const { writerId, postId } = postOptionInfo;
+  const { id } = useSelector((state) => state.user.userData); // 현재 로그인 사용자 id
+  const { writerId, postId } = postOptionInfo; // 포스트 작성자 id, post id
 
   const onDeletePost = () => {
     dispatch(deletePost(postId));
-    // post 삭제
-    // axios.delete(`/api/post/delete-post?postId=${postId}`);
+
+    onCloseModal();
   };
 
   return (
@@ -25,9 +24,10 @@ const PostOptionModal = ({ onCloseModal, postOptionInfo }) => {
           삭제
         </OptionButton>
       )}
-
       <OptionButton>링크 복사</OptionButton>
-      <OptionLink to={`/${writerId}`}>프로필로 이동</OptionLink>
+      {type !== "profile_post" && id !== writerId && (
+        <OptionLink to={`/${writerId}`}>프로필로 이동</OptionLink>
+      )}
       <OptionButton onClick={onCloseModal}>취소</OptionButton>
     </PostOptionModalBlock>
   );

@@ -25,7 +25,6 @@ const HomePage = () => {
   }, [dispatch]);
 
   // 모달 on, clickedPost update
-  //usecallback?
   const onClickPost = (postId) => {
     const post = home_post_list.find((post) => post._id === postId);
     setPost(post);
@@ -45,6 +44,7 @@ const HomePage = () => {
   const onCloseModal = () => {
     setVisible(false);
     setPost([]);
+    document.body.style.cssText = `overflow: auto`;
   };
 
   return (
@@ -72,7 +72,7 @@ const HomePage = () => {
           maskClosable={true} // 모달 배경 클릭 시 끄기 옵션
           type={"post_modal"}
         >
-          {/* 조건 분기 // 글 수정 or 글 상세 보기 */}
+          {/* 조건 분기 // 글 상세 보기 or 옵션 모달 */}
           {post.length !== 0 ? (
             <PostDetail post={post} type={"home_post"} />
           ) : (
@@ -81,7 +81,6 @@ const HomePage = () => {
               postOptionInfo={postOptionInfo}
             />
           )}
-          {/* <PostDetail post={post} type={"home_post"} /> */}
         </Modal>
       ) : null}
     </HomePageContainer>
@@ -90,7 +89,7 @@ const HomePage = () => {
 
 const HomePageContainer = styled.main`
   width: 100%;
-  height: 200vh;
+  height: 100vh;
   margin-top: 90px;
 `;
 

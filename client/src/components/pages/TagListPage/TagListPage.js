@@ -68,7 +68,11 @@ const TagListPage = ({ match }) => {
             maskClosable={true} // 모달 배경 클릭 시 끄기 옵션
             type={"post_modal"}
           >
-            <PostDetail post={postList[clickedPost]} type={"tag_post"} />
+            <PostDetail
+              post={postList[clickedPost]}
+              postDetailModalClose={onCloseModal}
+              type={"tag_post"}
+            />
           </Modal>
         ) : null}
       </TagListPageBlock>
