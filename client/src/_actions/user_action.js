@@ -10,6 +10,8 @@ import {
   LOGOUT,
   LOAD_USER_LIST_SUCCESS,
   LOAD_USER_LIST_FAILURE,
+  UPLOAD_USER_IMAGE_SUCCESS,
+  UPLOAD_USER_IMAGE_FAILURE,
 } from "./types";
 
 export const loginUser = (dataToSubmit) => async (dispatch) => {
@@ -71,6 +73,24 @@ export const loadUserList = () => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: LOAD_USER_LIST_FAILURE,
+      payload: err,
+    });
+  }
+};
+
+export const uploadUserImg = (data, userId) => async (dispatch) => {
+  try {
+    const result = await axios.post(
+      `/api/users/upload/user-image?userId=${userId}`,
+      data,
+    );
+    dispatch({
+      type: UPLOAD_USER_IMAGE_SUCCESS,
+      payload: result.data.userInfo.image,
+    });
+  } catch (err) {
+    dispatch({
+      type: UPLOAD_USER_IMAGE_FAILURE,
       payload: err,
     });
   }

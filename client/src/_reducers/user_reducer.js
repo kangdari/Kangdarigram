@@ -9,6 +9,8 @@ import {
   AUTH_CHECK,
   LOAD_USER_LIST_FAILURE,
   LOAD_USER_LIST_SUCCESS,
+  UPLOAD_USER_IMAGE_SUCCESS,
+  UPLOAD_USER_IMAGE_FAILURE,
 } from "../_actions/types";
 
 const initialState = {
@@ -55,6 +57,17 @@ const user = handleActions(
       userList: action.payload,
     }),
     [LOAD_USER_LIST_FAILURE]: (state, action) => ({
+      ...state,
+      userError: action.payload,
+    }),
+    [UPLOAD_USER_IMAGE_SUCCESS]: (state, action) => ({
+      ...state,
+      userData: {
+        ...state.userData,
+        image: action.payload,
+      },
+    }),
+    [UPLOAD_USER_IMAGE_FAILURE]: (state, action) => ({
       ...state,
       userError: action.payload,
     }),

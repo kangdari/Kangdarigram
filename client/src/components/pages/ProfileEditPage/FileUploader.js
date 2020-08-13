@@ -1,7 +1,10 @@
 import React, { useRef } from "react";
 import styled from "styled-components";
+import { useDispatch } from "react-redux";
+import { uploadUserImg } from "../../../_actions/user_action";
 
-const FileUploader = () => {
+const FileUploader = ({ userId }) => {
+  const dispatch = useDispatch();
   const inputRef = useRef(null);
 
   const handleClick = () => {
@@ -10,8 +13,14 @@ const FileUploader = () => {
 
   const handleChange = (e) => {
     const imgFile = e.target.files[0];
-    console.log(imgFile);
+    const formData = new FormData();
+    const config = {
+      headers: { "Content-Type": "multipart/form-data" },
+    };
+    formData.append("file", imgFile);
+
     // 이미지 저장
+    dispatch(uploadUserImg(formData, userId, config));
   };
 
   return (
@@ -27,8 +36,6 @@ const FileUploader = () => {
     </>
   );
 };
-
-const FileUploaderBlock = styled.div``;
 
 const Button = styled.button`
   color: #0095f6;

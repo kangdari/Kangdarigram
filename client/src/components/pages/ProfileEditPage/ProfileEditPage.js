@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 
 const ProfileEditPage = () => {
-  const { id } = useSelector((state) => state.user.userData);
+  const { id, image, _id } = useSelector((state) => state.user.userData);
 
   return (
     <ProfileEditPageBlock>
@@ -17,7 +17,7 @@ const ProfileEditPage = () => {
         <StyledIcon icon={faUserCircle} />
         <ProfileInfo>
           <UserId>{id}</UserId>
-          <FileUploader />
+          <FileUploader userId={_id} />
         </ProfileInfo>
       </ProfileInfoBlock>
       <form>

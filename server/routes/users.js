@@ -1,7 +1,21 @@
 const express = require("express");
 const router = express.Router();
+const multer = require("multer");
 const { User } = require("../model/Users");
 const { auth } = require("../middleware/auth");
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    // 파일 저장 위치
+    cb(null, "upload/");
+  },
+  filename: function (req, file, cb) {
+    // 파일 저장 이름
+    cb(null, `${Date.now()}_${file.originalname}`);
+  },
+});
+
+const upload = multer({ storage: storage }).single("file");
 
 // 회원 가입
 router.post("/register", async (req, res) => {
@@ -88,6 +102,23 @@ router.post("/load-user-list", (req, res) => {
   User.find().exec((err, userList) => {
     if (err) return res.status(400).json({ success: false, err });
     return res.status(200).json({ success: true, userList });
+  });
+});
+
+// 유저 프로필 이미지
+router.post("/upload/user-image", (req, res) => {
+  const { userId } = req.query;
+  upload(req, res, (err) => {
+    if (err) return res.status(400).json({ uploadSuccess: false, err });
+    User.findOneAndUpdate(
+      { _id: userId },
+      { image: res.req.file.path },
+      { new: true }, // 이미지 파일 업데이트 된 정보 반환
+      (err, userInfo) => {
+        if (err) return res.status(400).json({ success: false, err });
+        return res.status(200).json({ success: true, userInfo });
+      },
+    );
   });
 });
 

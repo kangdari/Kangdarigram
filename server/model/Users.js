@@ -21,7 +21,10 @@ const userSchema = mongoose.Schema({
     type: Number,
     default: 0, // 기본 값
   },
-  image: String,
+  image: {
+    type: String,
+    default: "",
+  },
   token: String, // 토근
   tokenExp: Number, // 토근 유효  기간
 });
