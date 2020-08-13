@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import { loadPost } from "../../../../api/post";
@@ -28,18 +29,14 @@ const ProfileInfo = ({ user }) => {
       <div className="profile_info">
         <div className="info_header">
           <h1 className="id">{id}</h1>
-          <button className="profile_btn">프로필 편집</button>
+          <Link to="/profile/edit" className="profile_btn">
+            프로필 편집
+          </Link>
         </div>
         <ul className="profile_list">
           <li>
             게시물 <span className="count">{postCount}</span>
           </li>
-          {/* <li>
-            팔로우 <span className="count">10</span>
-          </li>
-          <li>
-            팔로워 <span className="count">5</span>
-          </li> */}
         </ul>
 
         <div className="profile_contents">

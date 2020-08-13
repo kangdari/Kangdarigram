@@ -12,7 +12,6 @@ const PostOptionModal = ({ onCloseModal, postOptionInfo, type }) => {
 
   const onDeletePost = () => {
     dispatch(deletePost(postId));
-
     onCloseModal();
   };
 
@@ -24,7 +23,6 @@ const PostOptionModal = ({ onCloseModal, postOptionInfo, type }) => {
           삭제
         </OptionButton>
       )}
-      <OptionButton>링크 복사</OptionButton>
       {type !== "profile_post" && id !== writerId && (
         <OptionLink to={`/${writerId}`}>프로필로 이동</OptionLink>
       )}
