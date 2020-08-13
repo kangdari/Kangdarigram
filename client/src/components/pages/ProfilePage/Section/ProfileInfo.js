@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import { loadPost } from "../../../../api/post";
+import UserIcon from "../../../Common/UserIcon";
 
 const ProfileInfo = ({ user }) => {
   // 현재 조회 프로필의 유저
-  const { id, name, _id } = user;
+  const { id, name, _id, image } = user;
   const [postCount, setPostCount] = useState(0);
 
   useEffect(() => {
@@ -21,9 +20,10 @@ const ProfileInfo = ({ user }) => {
   return (
     <ProfileInfoBlock>
       <div className="profile_img">
-        <div className="img_box">
+        {/* <div className="img_box">
           <FontAwesomeIcon className="img" icon={faUserCircle} />
-        </div>
+        </div> */}
+        <UserIcon id={id} image={image} size={"large"} />
       </div>
 
       <div className="profile_info">
@@ -53,17 +53,8 @@ const ProfileInfoBlock = styled.div`
   margin-bottom: 40px;
   .profile_img {
     flex: 35%;
-
-    .img_box {
-      width: 150px;
-      height: 150px;
-      margin: 0 auto;
-    }
-    .img {
-      width: 100%;
-      height: 100%;
-      color: lightgrey;
-    }
+    display: flex;
+    justify-content: center;
   }
 
   .profile_info {

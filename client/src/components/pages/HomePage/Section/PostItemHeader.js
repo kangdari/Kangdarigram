@@ -1,16 +1,13 @@
 import React from "react";
 import styled from "styled-components";
-import palette from "../../../../utils/palette";
 import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
+
+import UserIcon from "../../../Common/UserIcon";
 
 const PostItemHeader = ({ writer }) => {
   return (
     <PostItemBlock>
-      <div className="user_icon">
-        <StyledIcon icon={faUserCircle} />
-      </div>
+      <UserIcon id={writer.id} image={writer.image} size={"small"} />
       <div className="user_id">
         <span>
           <Link to={`/${writer.id}`}>{writer.id}</Link>
@@ -32,12 +29,6 @@ const PostItemBlock = styled.header`
     font-size: 14px;
     font-weight: 500;
   }
-`;
-
-const StyledIcon = styled(FontAwesomeIcon)`
-  color: ${palette.gray[5]};
-  font-size: 32px;
-  cursor: pointer;
 `;
 
 export default PostItemHeader;

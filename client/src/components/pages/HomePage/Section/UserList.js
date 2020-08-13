@@ -2,19 +2,16 @@ import React from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import palette from "../../../../utils/palette";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
+
+import UserIcon from "../../../Common/UserIcon";
 
 const UserItem = ({ user }) => {
   return (
     <UserItemBlock>
-      <Link to={`/${user.id}`} className="link">
-        <div className="link_inner">
-          <StyledIcon icon={faUserCircle} />
-          <span className="id">{user.id}</span>
-        </div>
-      </Link>
+      <div className="link_inner">
+        <UserIcon id={user.id} image={user.image} />
+        <span className="id">{user.id}</span>
+      </div>
     </UserItemBlock>
   );
 };
@@ -65,11 +62,6 @@ const UserItemBlock = styled.li`
   padding: 0 15px;
   height: 100px;
 
-  .link {
-    width: 64px;
-    height: 80%;
-  }
-
   .link_inner {
     display: flex;
     flex-direction: column;
@@ -79,13 +71,6 @@ const UserItemBlock = styled.li`
   .id {
     font-size: 12px;
   }
-`;
-
-const StyledIcon = styled(FontAwesomeIcon)`
-  color: ${palette.gray[5]};
-  font-size: 55px;
-  cursor: pointer;
-  margin-bottom: 5px;
 `;
 
 export default UserList;

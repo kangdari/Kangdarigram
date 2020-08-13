@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserCircle, faEllipsisH } from "@fortawesome/free-solid-svg-icons";
+import { faEllipsisH } from "@fortawesome/free-solid-svg-icons";
 import palette from "../../utils/palette";
 
 import Comments from "./Sections/Comments";
@@ -13,6 +13,7 @@ import WriteComment from "./Sections/WriteComment";
 import ImageSlider from "../Common/ImageSlider";
 import Modal from "../Common/Modal";
 import PostOptionModal from "../pages/HomePage/Section/PostOptionModal";
+import UserIcon from "../Common/UserIcon";
 
 const PostDetail = ({ post, type, postDetailModalClose }) => {
   const [visible, setVisible] = useState(false); // Modal 렌더링 여부
@@ -76,9 +77,7 @@ const PostDetail = ({ post, type, postDetailModalClose }) => {
     <PostDetailBlock>
       <Post>
         <PostHeader>
-          <div className="icon">
-            <FontAwesomeIcon icon={faUserCircle} />
-          </div>
+          <UserIcon id={writer.id} image={writer.image} size={"small"} />
           {/* userid */}
           <div className="name">{writer.id}</div>
         </PostHeader>
@@ -157,11 +156,6 @@ const PostHeader = styled.header`
   border-bottom: 1px solid lightgrey;
   display: flex;
   align-items: center;
-
-  .icon {
-    font-size: 35px;
-    color: lightgrey;
-  }
 
   .name {
     margin-left: 1rem;

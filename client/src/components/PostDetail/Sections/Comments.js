@@ -1,16 +1,13 @@
 import React, { useState, useCallback } from "react";
 import styled from "styled-components";
 import palette from "../../../utils/palette";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 
 import Modal from "../../Common/Modal";
+import UserIcon from "../../Common/UserIcon";
 import CommentModal from "./CommentModal";
 import Comment from "./Comment";
 
-// Tag 클릭시 /expolore/tag/{이름}으로 이동하고
-// 해당 페이지에서 검색 수행하여 결과물 렌더링 ???
 const Tag = ({ tag }) => {
   return <TagLink to={`/explore/tags/${tag}`}>#{tag}</TagLink>;
 };
@@ -35,7 +32,9 @@ const Comments = ({ comment, postContents, tags, writer, postId }) => {
       <CommentItem>
         <li>
           <div className="user">
-            <StyledIcon icon={faUserCircle} />
+            <div>
+              <UserIcon id={writer.id} image={writer.image} size={"small"} />
+            </div>
             <div className="info">
               <h3>{writer.id}</h3>
               <span>{postContents}</span>
@@ -97,6 +96,7 @@ const CommentItem = styled.ul`
     position: relative;
     width: 100%;
     padding-right: 35px;
+    margin-left: 16px;
 
     .user_name {
       display: inline-flex;
@@ -142,13 +142,6 @@ const CommentsBlock = styled.div`
 const TagLink = styled(Link)`
   color: #00376b;
   padding: 2px;
-`;
-
-const StyledIcon = styled(FontAwesomeIcon)`
-  margin-right: 10px;
-  font-size: 35px;
-  color: lightgrey;
-  cursor: pointer;
 `;
 
 export default Comments;

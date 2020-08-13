@@ -4,9 +4,7 @@ import styled from "styled-components";
 import FileUploader from "./FileUploader";
 
 import Button from "../../Common/Button";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
+import UserIcon from "../../Common/UserIcon";
 
 const ProfileEditPage = () => {
   const { id, image, _id } = useSelector((state) => state.user.userData);
@@ -14,7 +12,10 @@ const ProfileEditPage = () => {
   return (
     <ProfileEditPageBlock>
       <ProfileInfoBlock>
-        <StyledIcon icon={faUserCircle} />
+        <IconBlock>
+          <UserIcon id={id} image={image} />
+        </IconBlock>
+
         <ProfileInfo>
           <UserId>{id}</UserId>
           <FileUploader userId={_id} />
@@ -112,13 +113,11 @@ const TextArea = styled.textarea`
   }
 `;
 
-// 삭제 예정
-const StyledIcon = styled(FontAwesomeIcon)`
-  color: lightgrey;
-  font-size: 35px;
-  cursor: pointer;
+const IconBlock = styled.div`
   margin-right: 32px;
   margin-left: 155px;
+  border-radius: 50%;
+  overflow: hidden;
 
   @media screen and (max-width: 736px) {
     margin-left: 0;
@@ -127,7 +126,9 @@ const StyledIcon = styled(FontAwesomeIcon)`
 
 const ProfileInfoBlock = styled.div`
   display: flex;
+  align-items: center;
   margin-bottom: 16px;
+
   @media screen and (max-width: 736px) {
     width: 90%;
     max-width: 355px;

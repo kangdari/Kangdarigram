@@ -4,9 +4,10 @@ import axios from "axios";
 import styled from "styled-components";
 import palette from "../../../utils/palette";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserCircle, faEllipsisH } from "@fortawesome/free-solid-svg-icons";
+import { faEllipsisH } from "@fortawesome/free-solid-svg-icons";
 import Like from "../../Common/Like";
 import Modal from "../../Common/Modal";
+import UserIcon from "../../Common/UserIcon";
 import LikeUserModal from "./LikeUserModal";
 
 const Comment = ({ comment, postId, onOpenModal }) => {
@@ -55,7 +56,11 @@ const Comment = ({ comment, postId, onOpenModal }) => {
     <CommentItem>
       <li className="comment_box">
         <div className="user">
-          <StyledIcon icon={faUserCircle} />
+          {/* <StyledIcon icon={faUserCircle} /> */}
+          <div>
+            <UserIcon id={writer.id} image={writer.image} size={"small"} />
+          </div>
+
           <div className="info">
             <h3 className="user_name">{writer.id}</h3>
             <span>{contents}</span>
@@ -116,13 +121,6 @@ const HoverBox = styled.div`
   }
 `;
 
-const StyledIcon = styled(FontAwesomeIcon)`
-  margin-right: 10px;
-  font-size: 35px;
-  color: lightgrey;
-  cursor: pointer;
-`;
-
 const CommentItem = styled.ul`
   line-height: 20px;
   margin-bottom: 16px;
@@ -143,8 +141,10 @@ const CommentItem = styled.ul`
 
   .info {
     position: relative;
-    width: 100%;
+    width: 90%;
+
     padding-right: 35px;
+    margin-left: 16px;
 
     .user_name {
       display: inline-flex;
