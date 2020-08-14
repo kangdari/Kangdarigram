@@ -9,7 +9,15 @@ import CommentModal from "./CommentModal";
 import Comment from "./Comment";
 
 const Tag = ({ tag }) => {
-  return <TagLink to={`/explore/tags/${tag}`}>#{tag}</TagLink>;
+  const clickHandler = () => {
+    document.body.style.cssText = `overflow: auto`;
+  };
+
+  return (
+    <TagLink to={`/explore/tags/${tag}`} onClick={clickHandler}>
+      #{tag}
+    </TagLink>
+  );
 };
 
 const Comments = ({ comment, postContents, tags, writer, postId }) => {

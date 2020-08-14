@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -17,8 +17,17 @@ import { logout } from "../../../_actions/user_action";
 
 const RightMenu = () => {
   const dispatch = useDispatch();
+  const modalEl = useRef(null);
   const { userData } = useSelector((state) => state.user);
   const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    document.addEventListener("click", (e) => {
+      if (e.target.closest("div") !== modalEl.current) {
+        setShow(false);
+      }
+    });
+  }, []);
 
   const onShow = () => {
     show ? setShow(false) : setShow(true);
@@ -53,8 +62,8 @@ const RightMenu = () => {
         <Link className="link_icon" to="" tabIndex="0">
           <FontAwesomeIcon icon={faHeart} color="white" />
         </Link>
-        <div className="profile" tabIndex="0">
-          <FontAwesomeIcon icon={faUserCircle} color="white" onClick={onShow} />
+        <div className="profile" tabIndex="0" ref={modalEl} onClick={onShow}>
+          <FontAwesomeIcon icon={faUserCircle} color="white" />
           {show ? (
             <div className="profile_modal">
               <Link to={`/${userData.id}`} onClick={onShow}>
@@ -94,9 +103,14 @@ const RightMenuBlock = styled.div`
     stroke-width: 25;
   }
 
+  .link_icon {
+    outline: none;
+  }
+
   .profile {
     cursor: pointer;
     position: relative;
+    outline: none;
 
     .profile_modal {
       position: absolute;
@@ -105,7 +119,21 @@ const RightMenuBlock = styled.div`
       width: 150px;
       background: #fff;
       border-radius: 4px;
-      box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, 0.1);
+      border: 1px solid ${palette.gray[4]};
+
+      &:after {
+        content: "";
+        position: absolute;
+        top: -9px;
+        right: 12px;
+        width: 15px;
+        height: 15px;
+        background: #fff;
+        border: 1px solid ${palette.gray[4]};
+        border-right: none;
+        border-bottom: none;
+        transform: rotate(45deg);
+      }
 
       svg {
         font-size: 16px;
@@ -120,7 +148,7 @@ const RightMenuBlock = styled.div`
       }
 
       .item:hover {
-        background: ${palette.gray[1]};
+        background: ${palette.gray[0]};
       }
     }
   }

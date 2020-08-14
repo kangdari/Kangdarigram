@@ -110,10 +110,11 @@ const LinkItem = styled(Link)`
   border-bottom: 1px solid ${palette.gray[4]};
   display: flex;
   align-items: center;
-  /* outline: none; */
+  outline: none;
+  z-index: 5;
 
   &:hover {
-    background: ${palette.gray[1]};
+    background: ${palette.gray[0]};
   }
 `;
 
@@ -137,18 +138,18 @@ const SearchResultBlock = styled.div`
   background: #fff;
   z-index: 4;
 
-  &::after {
-    border-color: transparent transparent rgba(var(--d87, 255, 255, 255), 1)
-      transparent;
-    border-style: solid;
-    border-width: 0 10px 10px 10px;
-    content: " ";
-    height: 0;
-    left: 110px;
+  &:after {
+    content: "";
     position: absolute;
-    top: -10px;
-    width: 0;
-    z-index: 3;
+    top: -9px;
+    left: 50%;
+    width: 15px;
+    height: 15px;
+    border: 1px solid ${palette.gray[4]};
+    border-right: none;
+    border-bottom: none;
+    background: #fff;
+    transform: translateX(-50%) rotate(45deg);
   }
 `;
 
