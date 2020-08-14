@@ -26,6 +26,7 @@ import {
 
 const initialState = {
   home_post_list: [],
+  end: "", // 모든 데이터를 불러오면 true로 변환
   posts: [],
   savedPosts: [],
   tag_post_list: [],
@@ -36,7 +37,8 @@ const posts = handleActions(
   {
     [LOAD_POST_LIST_SUCCESS]: (state, action) => ({
       ...state,
-      home_post_list: action.payload.postInfo,
+      home_post_list: [...state.home_post_list, ...action.payload.postInfo],
+      end: action.payload.end,
     }),
     [LOAD_POST_LIST_FAILURE]: (state, action) => ({
       ...state,

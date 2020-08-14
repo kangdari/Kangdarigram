@@ -43,19 +43,29 @@ router.post("/upload", (req, res) => {
 
 // 전체 포스트 조회
 router.post("/load-post-list", (req, res) => {
+  const { skip, limit } = req.body;
+
   Post.find()
     .sort({ createdAt: -1 }) // 내림차순 정렬
-    .limit(4) // 4개만
+    .limit(limit) // 4개만
+    .skip(skip)
     .populate("writer")
     .exec((err, postInfo) => {
       if (err) return res.status(400).json({ success: false, err });
+
+      // 모든 post들을 load했다면 end true 설정
+      if (postInfo.length === 0) {
+        return res.status(200).json({ success: true, postInfo, end: true });
+      }
 
       const newPostInfo = postInfo.map((post) => {
         const duration = getTime(post.createdAt);
         return { ...post._doc, ...{ timeInterval: duration } };
       });
 
-      return res.status(200).json({ success: true, postInfo: newPostInfo });
+      return res
+        .status(200)
+        .json({ success: true, postInfo: newPostInfo, end: false });
     });
 });
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import UserList from "./Section/UserList";
@@ -12,15 +12,24 @@ import { loadUserList } from "../../../_actions/user_action";
 
 const HomePage = () => {
   const dispatch = useDispatch();
-  const { home_post_list } = useSelector((state) => state.posts);
+  const { home_post_list, end } = useSelector((state) => state.posts);
+  const { loading } = useSelector((state) => state.loading); // loadPostList() 로딩 여부
   const [visible, setVisible] = useState(false); // Modal 렌더링 여부
   const [post, setPost] = useState([]); // 선택한 post 상세 보기
   const [postOptionInfo, setPostOptionInfo] = useState({}); // postOptionButton 클릭 시
+  // db option
+  const [state, setState] = useState({
+    skip: 0,
+    limit: 3,
+  });
+  //
+  const [observLoading, setObservLoading] = useState(false);
+  const [target, setTarget] = useState(null);
 
   // 전체 포스트 불러오기
   // limit, skip 옵션 필요
   useEffect(() => {
-    dispatch(loadPostList());
+    dispatch(loadPostList(state));
     dispatch(loadUserList()); // userList 가져오기
   }, [dispatch]);
 
@@ -47,6 +56,42 @@ const HomePage = () => {
     document.body.style.cssText = `overflow: auto`;
   };
 
+  const loadMorePost = useCallback(async () => {
+    const newSkip = state.skip + state.limit;
+    const body = { skip: newSkip, limit: state.limit };
+    setObservLoading(true);
+    await dispatch(loadPostList(body));
+    setObservLoading(false);
+    setState({
+      ...state,
+      skip: newSkip,
+    });
+  }, [dispatch, state]);
+
+  const handleIntersection = useCallback(
+    async ([entry], observer) => {
+      if (entry.isIntersecting) {
+        observer.unobserve(entry.target);
+        // 추가 데이터
+        await loadMorePost();
+        observer.observe(entry.target);
+      }
+    },
+    [loadMorePost],
+  );
+
+  // observer
+  useEffect(() => {
+    let observer;
+    if (target) {
+      observer = new IntersectionObserver(handleIntersection, {
+        threshold: 0.01,
+      });
+      observer.observe(target);
+    }
+    return () => observer && observer.disconnect();
+  }, [target, handleIntersection]);
+
   return (
     <HomePageContainer>
       <ContentContainer>
@@ -63,6 +108,8 @@ const HomePage = () => {
         </ContentsBlock>
         <AsideContainer>asdie</AsideContainer>
       </ContentContainer>
+      {/* 전체 post 로딩이 끝나고 아직 데이터가 남았을 때 */}
+      {!loading && !end && <IntersectionObserverLoadingBlock ref={setTarget} />}
       {/* post_modal */}
       {visible ? (
         <Modal
@@ -86,6 +133,12 @@ const HomePage = () => {
     </HomePageContainer>
   );
 };
+
+const IntersectionObserverLoadingBlock = styled.div`
+  height: 500px;
+  margin: 0 auto;
+  background: transparent;
+`;
 
 const HomePageContainer = styled.main`
   width: 100%;

@@ -14,10 +14,10 @@ import {
 
 import { startLoading, finishLoading } from "./loading_action";
 
-export const loadPostList = () => async (dispatch) => {
+export const loadPostList = (data) => async (dispatch) => {
   dispatch(startLoading("LOAD_POST_LIST"));
   try {
-    const result = await axios.post("/api/post/load-post-list");
+    const result = await axios.post("/api/post/load-post-list", data);
     dispatch({
       type: LOAD_POST_LIST_SUCCESS,
       payload: result.data,
