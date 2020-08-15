@@ -1,6 +1,5 @@
 import axios from "axios";
 import {
-  INITIALIZE_PROFILE_POST,
   GET_PROFILE_POST_LIST_SUCCESS,
   GET_PROFILE_POST_LIST_FAILURE,
   GET_SAVED_POST_LIST_FAILURE,
@@ -44,7 +43,6 @@ export const getProfilePostList = (data) => async (dispatch) => {
   dispatch(startLoading("GET_PROFILE_POST_LIST"));
   try {
     const result = await axios.post("/api/post/get-profile-post-list", data);
-    console.log(result.data);
     dispatch({
       type: GET_PROFILE_POST_LIST_SUCCESS,
       payload: result.data,
@@ -105,8 +103,4 @@ export const deletePost = (postId) => async (dispatch) => {
       payload: err,
     });
   }
-};
-
-export const initializeProflePost = () => async (dispatch) => {
-  dispatch({ type: INITIALIZE_PROFILE_POST });
 };

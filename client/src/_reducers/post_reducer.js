@@ -22,7 +22,6 @@ import {
   LOAD_TAG_POST_LIST_SUCCESS,
   DELETE_POST_SUCCESS,
   DELETE_POST_FAILURE,
-  INITIALIZE_PROFILE_POST,
   WRITE_POST,
 } from "../_actions/types";
 
@@ -30,7 +29,6 @@ const initialState = {
   home_post_list: [],
   home_post_end: "", // 모든 데이터를 불러오면 true로 변환
   posts: [],
-  posts_end: "",
   savedPosts: [],
   tag_post_list: [],
   error: "",
@@ -55,9 +53,7 @@ const posts = handleActions(
     // 프로필 포스트 조회
     [GET_PROFILE_POST_LIST_SUCCESS]: (state, action) => ({
       ...state,
-      // posts: action.payload,
-      posts: [...state.posts, ...action.payload.postInfo],
-      posts_end: action.payload.end,
+      posts: action.payload.postInfo,
     }),
     [GET_PROFILE_POST_LIST_FAILURE]: (state, action) => ({
       ...state,
@@ -364,11 +360,6 @@ const posts = handleActions(
     [DELETE_COMMENT_FAILURE]: (state, action) => ({
       ...state,
       error: action.payload,
-    }),
-    [INITIALIZE_PROFILE_POST]: (state) => ({
-      ...state,
-      posts: [],
-      posts_end: false,
     }),
   },
   initialState,

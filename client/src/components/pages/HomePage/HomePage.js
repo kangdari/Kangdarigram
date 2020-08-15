@@ -143,7 +143,6 @@ const IntersectionObserverLoadingBlock = styled.div`
 
 const HomePageContainer = styled.main`
   width: 100%;
-  height: 100vh;
   margin-top: 90px;
 `;
 
