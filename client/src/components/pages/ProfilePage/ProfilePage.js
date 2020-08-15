@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -9,19 +9,26 @@ import Modal from "../../Common/Modal";
 import PostDetail from "../../PostDetail/PostDetail";
 import Loading from "../../Common/Loading";
 
-import { getProfilePostList } from "../../../_actions/post_action";
+import {
+  getProfilePostList,
+  initializeProflePost,
+} from "../../../_actions/post_action";
 import axios from "axios";
 
-const ProfilePage = ({ location, match }) => {
+const ProfilePage = ({ match }) => {
   const dispatch = useDispatch();
-  const { posts } = useSelector((state) => state.posts);
+  const { posts, posts_end } = useSelector((state) => state.posts);
   const { loading } = useSelector((state) => state.loading);
-
   const [clickedPost, setClickedPost] = useState(""); // 클릭한 포스트의 index
   const [visible, setVisible] = useState(false); // Modal 렌더링 여부
-  const { _id, id } = useSelector((state) => state.user.userData); // 현재 사용자 정보
   const [currentUser, setCurrentUser] = useState(""); // 현재 조회 중인 프로필의 user의 정보
   const [error, setError] = useState(false);
+  const [state, setState] = useState({
+    skip: 0,
+    limit: 9,
+  });
+  // IO target
+  const [target, setTarget] = useState(null);
 
   useEffect(() => {
     const userId = match.params.userId;
@@ -36,14 +43,11 @@ const ProfilePage = ({ location, match }) => {
     });
   }, [match.params.userId]);
 
+  // 최초 포스트 로딩
   useEffect(() => {
-    // 비동기 처리와 로딩 상태를 추가하여 전체 Post를 로드 한 뒤에
-    // 다음 작업들이 이루어지도록 작성
-    const getPosts = () => {
-      dispatch(getProfilePostList({ _id: currentUser._id }));
-    };
-    getPosts();
-  }, [id, location.pathname, _id, dispatch, currentUser]);
+    dispatch(initializeProflePost());
+    dispatch(getProfilePostList({ _id: currentUser._id, ...state }));
+  }, [dispatch, currentUser._id]);
 
   // 모달 on, clickedPost update
   const onClickPost = (index) => {
@@ -55,6 +59,39 @@ const ProfilePage = ({ location, match }) => {
   const onCloseModal = () => {
     setVisible(false);
   };
+
+  const loadMorePost = useCallback(async () => {
+    const newSkip = state.skip + state.limit;
+    const body = { skip: newSkip, limit: state.limit };
+    await dispatch(getProfilePostList({ _id: currentUser._id, ...body }));
+    setState({
+      ...state,
+      skip: newSkip,
+    });
+  }, [dispatch, state, currentUser._id]);
+
+  const handleIntersection = useCallback(
+    async ([entry], observer) => {
+      if (entry.isIntersecting) {
+        observer.unobserve(entry.target);
+        // 추가 데이터
+        await loadMorePost();
+        observer.observe(entry.target);
+      }
+    },
+    [loadMorePost],
+  );
+  // observer
+  useEffect(() => {
+    let observer;
+    if (target) {
+      observer = new IntersectionObserver(handleIntersection, {
+        threshold: 0.01,
+      });
+      observer.observe(target);
+    }
+    return () => observer && observer.disconnect();
+  }, [target, handleIntersection]);
 
   // 존재하지 않는 유저의 프로필 접근 시
   if (error) {
@@ -83,6 +120,11 @@ const ProfilePage = ({ location, match }) => {
           onClickPost={onClickPost}
           type={"profile_post"}
         />
+        {/* IO */}
+        {!loading && !posts_end && (
+          <IntersectionObserverLoadingBlock ref={setTarget} />
+        )}
+
         {visible ? (
           <Modal
             visible={visible}
@@ -101,9 +143,16 @@ const ProfilePage = ({ location, match }) => {
       </ProfilePageBlock>
     );
   } else {
-    return <Loading />;
+    return null;
+    // return <Loading />;
   }
 };
+
+const IntersectionObserverLoadingBlock = styled.div`
+  height: 100px;
+  margin: 0 auto;
+  background: transparent;
+`;
 
 const ProfilePageBlock = styled.main`
   max-width: 935px;

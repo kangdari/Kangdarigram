@@ -68,7 +68,7 @@ const Post = ({ postId, images, onClickPost, index, type }) => {
 // 클릭 이벤트를 부모에서 주고 클릭한 post의 index 값을 인지 값으로 전달
 const ProfilePost = ({ posts, onClickPost, type }) => {
   return (
-    <ProfilePostBlock>
+    <ProfilePostBlock className="here">
       {posts.map((post, index) => (
         <Post
           key={post._id}

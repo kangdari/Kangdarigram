@@ -1,5 +1,6 @@
 import axios from "axios";
 import {
+  INITIALIZE_PROFILE_POST,
   GET_PROFILE_POST_LIST_SUCCESS,
   GET_PROFILE_POST_LIST_FAILURE,
   GET_SAVED_POST_LIST_FAILURE,
@@ -10,9 +11,17 @@ import {
   LOAD_TAG_POST_LIST_SUCCESS,
   DELETE_POST_SUCCESS,
   DELETE_POST_FAILURE,
+  WRITE_POST,
 } from "./types";
 
 import { startLoading, finishLoading } from "./loading_action";
+
+export const writePost = (data) => async (dispatch) => {
+  await axios.post("/api/post/upload", data);
+  dispatch({
+    type: WRITE_POST,
+  });
+};
 
 export const loadPostList = (data) => async (dispatch) => {
   dispatch(startLoading("LOAD_POST_LIST"));
@@ -35,9 +44,10 @@ export const getProfilePostList = (data) => async (dispatch) => {
   dispatch(startLoading("GET_PROFILE_POST_LIST"));
   try {
     const result = await axios.post("/api/post/get-profile-post-list", data);
+    console.log(result.data);
     dispatch({
       type: GET_PROFILE_POST_LIST_SUCCESS,
-      payload: result.data.postInfo,
+      payload: result.data,
     });
   } catch (err) {
     dispatch({
@@ -95,4 +105,8 @@ export const deletePost = (postId) => async (dispatch) => {
       payload: err,
     });
   }
+};
+
+export const initializeProflePost = () => async (dispatch) => {
+  dispatch({ type: INITIALIZE_PROFILE_POST });
 };

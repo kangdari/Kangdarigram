@@ -12,7 +12,7 @@ import { loadUserList } from "../../../_actions/user_action";
 
 const HomePage = () => {
   const dispatch = useDispatch();
-  const { home_post_list, end } = useSelector((state) => state.posts);
+  const { home_post_list, home_post_end } = useSelector((state) => state.posts);
   const { loading } = useSelector((state) => state.loading); // loadPostList() 로딩 여부
   const [visible, setVisible] = useState(false); // Modal 렌더링 여부
   const [post, setPost] = useState([]); // 선택한 post 상세 보기
@@ -20,16 +20,17 @@ const HomePage = () => {
   // db option
   const [state, setState] = useState({
     skip: 0,
-    limit: 3,
+    limit: 6,
   });
-  //
-  const [observLoading, setObservLoading] = useState(false);
+  // IO target
   const [target, setTarget] = useState(null);
 
   // 전체 포스트 불러오기
   // limit, skip 옵션 필요
   useEffect(() => {
-    dispatch(loadPostList(state));
+    if (home_post_list.length === 0) {
+      dispatch(loadPostList(state));
+    }
     dispatch(loadUserList()); // userList 가져오기
   }, [dispatch]);
 
@@ -59,9 +60,7 @@ const HomePage = () => {
   const loadMorePost = useCallback(async () => {
     const newSkip = state.skip + state.limit;
     const body = { skip: newSkip, limit: state.limit };
-    setObservLoading(true);
     await dispatch(loadPostList(body));
-    setObservLoading(false);
     setState({
       ...state,
       skip: newSkip,
@@ -109,7 +108,9 @@ const HomePage = () => {
         <AsideContainer>asdie</AsideContainer>
       </ContentContainer>
       {/* 전체 post 로딩이 끝나고 아직 데이터가 남았을 때 */}
-      {!loading && !end && <IntersectionObserverLoadingBlock ref={setTarget} />}
+      {!loading && !home_post_end && (
+        <IntersectionObserverLoadingBlock ref={setTarget} />
+      )}
       {/* post_modal */}
       {visible ? (
         <Modal
@@ -135,7 +136,7 @@ const HomePage = () => {
 };
 
 const IntersectionObserverLoadingBlock = styled.div`
-  height: 500px;
+  height: 100px;
   margin: 0 auto;
   background: transparent;
 `;

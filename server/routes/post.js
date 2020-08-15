@@ -53,16 +53,16 @@ router.post("/load-post-list", (req, res) => {
     .exec((err, postInfo) => {
       if (err) return res.status(400).json({ success: false, err });
 
-      // 모든 post들을 load했다면 end true 설정
-      if (postInfo.length === 0) {
-        return res.status(200).json({ success: true, postInfo, end: true });
-      }
-
       const newPostInfo = postInfo.map((post) => {
         const duration = getTime(post.createdAt);
         return { ...post._doc, ...{ timeInterval: duration } };
       });
-
+      // 더 이상 불러올 post가 없는 경우
+      if (postInfo.length < limit) {
+        return res
+          .status(200)
+          .json({ success: true, postInfo: newPostInfo, end: true });
+      }
       return res
         .status(200)
         .json({ success: true, postInfo: newPostInfo, end: false });
@@ -71,9 +71,10 @@ router.post("/load-post-list", (req, res) => {
 
 // user profile의 post 조회
 router.post("/get-profile-post-list", (req, res) => {
-  const { _id } = req.body;
-
+  const { _id, skip, limit } = req.body;
   Post.find({ writer: _id })
+    .skip(skip)
+    .limit(limit)
     .populate("writer")
     .exec((err, postInfo) => {
       if (err) return res.status(400).json({ success: false, err });
@@ -83,7 +84,16 @@ router.post("/get-profile-post-list", (req, res) => {
         return { ...post._doc, ...{ timeInterval: duration } };
       });
 
-      return res.status(200).json({ success: true, postInfo: newPostInfo });
+      // 더 이상 불러올 post가 없는 경우
+      if (postInfo.length < limit) {
+        return res
+          .status(200)
+          .json({ success: true, postInfo: newPostInfo, end: true });
+      }
+
+      return res
+        .status(200)
+        .json({ success: true, postInfo: newPostInfo, end: false });
     });
 });
 

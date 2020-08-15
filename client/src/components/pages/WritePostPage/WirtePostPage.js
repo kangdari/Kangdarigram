@@ -1,23 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import styled from "styled-components";
 
 import FileUplaod from "./Sections/FileUplaod";
 import TagBox from "./Sections/TagBox";
 import Button from "../../Common/Button";
-import { uploadPost } from "../../../api/post";
+
+import { writePost } from "../../../_actions/post_action";
+import { useDispatch } from "react-redux";
 
 const WirtePostPage = ({ user, history }) => {
+  const dispatch = useDispatch();
   const [contents, setContents] = useState("");
   const [images, setImages] = useState("");
   const [tags, setTags] = useState([]);
 
   const onChangeHandler = (e) => setContents(e.currentTarget.value);
 
-  const updateImages = (images) => setImages(images);
+  const updateImages = useCallback((images) => setImages(images), []);
 
-  const upadateTags = (tags) => setTags(tags);
+  const upadateTags = useCallback((tags) => setTags(tags), []);
 
-  const onSubmitHandler = (e) => {
+  const onSubmitHandler = async (e) => {
     e.preventDefault();
 
     // 예외 처리
@@ -32,19 +35,21 @@ const WirtePostPage = ({ user, history }) => {
       tags,
     };
 
+    await dispatch(writePost(body));
+    history.push(`/${user.userData.id}`);
+
     // 서버에 post 업로드 요청
-    uploadPost(body).then((res) => {
-      if (res.data.uploadSuccess) {
-        history.push(`/${user.userData.id}`);
-      } else {
-        alert("포스트 업로드 실패");
-      }
-    });
+    // uploadPost(body).then((res) => {
+    //   if (res.data.uploadSuccess) {
+    //     history.push(`/${user.userData.id}`);
+    //   } else {
+    //     alert("포스트 업로드 실패");
+    //   }
+    // });
   };
 
   return (
     <WirtePostPageBlock>
-      {/* <h1 className="title">POST 작성</h1> */}
       <form onSubmit={onSubmitHandler}>
         <FileUplaod updateImages={updateImages} />
         <TextArea
