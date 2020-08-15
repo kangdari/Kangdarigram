@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
+import { Helmet } from "react-helmet";
 import styled from "styled-components";
 import FileUploader from "./FileUploader";
 import Button from "../../Common/Button";
@@ -56,6 +57,10 @@ const ProfileEditPage = ({ history }) => {
 
   return (
     <ProfileEditPageBlock>
+      <Helmet>
+        <title>프로필 편집</title>
+      </Helmet>
+
       <ProfileInfoBlock>
         <IconBlock>
           <UserIcon id={id} image={image} />

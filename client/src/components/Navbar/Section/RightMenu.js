@@ -4,8 +4,6 @@ import { withRouter, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHome,
-  faCompass,
-  faHeart,
   faUserCircle,
   faBookmark,
   faPen,
@@ -56,12 +54,6 @@ const RightMenu = ({ history }) => {
         </Link>
         <Link className="link_icon" to="/write" tabIndex="0">
           <FontAwesomeIcon icon={faPen} color="white" />
-        </Link>
-        <Link className="link_icon" to="" tabIndex="0">
-          <FontAwesomeIcon icon={faCompass} color="white" />
-        </Link>
-        <Link className="link_icon" to="" tabIndex="0">
-          <FontAwesomeIcon icon={faHeart} color="white" />
         </Link>
         <div className="profile" tabIndex="0" ref={modalEl} onClick={onShow}>
           <FontAwesomeIcon icon={faUserCircle} color="white" />

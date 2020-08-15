@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import styled from "styled-components";
 import ProfileInfo from "./Section/ProfileInfo";
 import ProfileLink from "./Section/ProfileLink";
@@ -70,6 +71,9 @@ const ProfilePage = ({ match }) => {
   if (!loading && currentUser) {
     return (
       <ProfilePageBlock>
+        <Helmet>
+          <title>{`${currentUser.name}(@${currentUser.id})`}</title>
+        </Helmet>
         <ProfileInfo user={currentUser} />
         <ProfileLink user={currentUser} />
         <ProfilePost

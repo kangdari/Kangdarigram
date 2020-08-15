@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+import { Helmet } from "react-helmet";
 import UserList from "./Section/UserList";
 import PostList from "./Section/PostList";
 import Modal from "../../Common/Modal";
@@ -118,6 +119,9 @@ const HomePage = () => {
 
   return (
     <HomePageContainer>
+      <Helmet>
+        <title>Kangdarigram</title>
+      </Helmet>
       <ContentContainer>
         <ContentsBlock ref={blockRef}>
           <UserList />

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { loadPost } from "../../../../api/post";
@@ -7,6 +8,7 @@ import UserIcon from "../../../Common/UserIcon";
 const ProfileInfo = ({ user }) => {
   // 현재 조회 프로필의 유저
   const { id, name, _id, image, intro } = user;
+  const loginUserId = useSelector((state) => state.user.userData._id);
   const [postCount, setPostCount] = useState(0);
 
   useEffect(() => {
@@ -26,9 +28,11 @@ const ProfileInfo = ({ user }) => {
       <div className="profile_info">
         <div className="info_header">
           <h1 className="id">{id}</h1>
-          <Link to="/profile/edit" className="profile_btn">
-            프로필 편집
-          </Link>
+          {loginUserId === _id && (
+            <Link to="/profile/edit" className="profile_btn">
+              프로필 편집
+            </Link>
+          )}
         </div>
         <ul className="profile_list">
           <li>

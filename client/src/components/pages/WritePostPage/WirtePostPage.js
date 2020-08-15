@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from "react";
 import styled from "styled-components";
-
+import { Helmet } from "react-helmet";
 import FileUplaod from "./Sections/FileUplaod";
 import TagBox from "./Sections/TagBox";
 import Button from "../../Common/Button";
@@ -50,6 +50,10 @@ const WirtePostPage = ({ user, history }) => {
 
   return (
     <WirtePostPageBlock>
+      <Helmet>
+        <title>글 작성하기</title>
+      </Helmet>
+
       <form onSubmit={onSubmitHandler}>
         <FileUplaod updateImages={updateImages} />
         <TextArea
