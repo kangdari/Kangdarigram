@@ -1,4 +1,10 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, {
+  useEffect,
+  useState,
+  useCallback,
+  useRef,
+  useLayoutEffect,
+} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import UserList from "./Section/UserList";
@@ -6,6 +12,7 @@ import PostList from "./Section/PostList";
 import Modal from "../../Common/Modal";
 import PostDetail from "../../PostDetail/PostDetail";
 import PostOptionModal from "./Section/PostOptionModal";
+import Aside from "./Section/Aside";
 
 import { loadPostList } from "../../../_actions/post_action";
 import { loadUserList } from "../../../_actions/user_action";
@@ -24,6 +31,24 @@ const HomePage = () => {
   });
   // IO target
   const [target, setTarget] = useState(null);
+  const blockRef = useRef(null);
+  const asideRef = useRef(null);
+  const [right, setRight] = useState();
+
+  // ContentsBlock right 좌표값 구하기
+  useLayoutEffect(() => {
+    const getRightLocation = () => {
+      const target = blockRef.current;
+      const rightLocation = target.getBoundingClientRect().right;
+      setRight(rightLocation);
+    };
+
+    window.addEventListener("resize", getRightLocation);
+    getRightLocation();
+    // 자식 컴포넌트인 Aside의 left 위치 값 설정
+    asideRef.current.style.left = `${right + 40}px`;
+    return () => window.removeEventListener("resize", getRightLocation);
+  }, [right]);
 
   // 전체 포스트 불러오기
   // limit, skip 옵션 필요
@@ -94,7 +119,7 @@ const HomePage = () => {
   return (
     <HomePageContainer>
       <ContentContainer>
-        <ContentsBlock>
+        <ContentsBlock ref={blockRef}>
           <UserList />
           {home_post_list.map((post) => (
             <PostList
@@ -105,7 +130,7 @@ const HomePage = () => {
             />
           ))}
         </ContentsBlock>
-        <AsideContainer>asdie</AsideContainer>
+        <Aside ref={asideRef} />
       </ContentContainer>
       {/* 전체 post 로딩이 끝나고 아직 데이터가 남았을 때 */}
       {!loading && !home_post_end && (
@@ -156,21 +181,8 @@ const ContentContainer = styled.section`
 const ContentsBlock = styled.div`
   max-width: 614px;
   width: 100%;
-
   @media screen and (max-width: 1000px) {
     margin: 0 auto;
-  }
-`;
-
-const AsideContainer = styled.div`
-  position: fixed;
-  height: 100vh;
-  /*  조정 필요 */
-  top: 88px;
-  right: 400px;
-
-  @media screen and (max-width: 1000px) {
-    display: none;
   }
 `;
 

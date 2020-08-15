@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHome,
@@ -15,7 +15,7 @@ import Button from "../../Common/Button";
 import palette from "../../../utils/palette";
 import { logout } from "../../../_actions/user_action";
 
-const RightMenu = () => {
+const RightMenu = ({ history }) => {
   const dispatch = useDispatch();
   const modalEl = useRef(null);
   const { userData } = useSelector((state) => state.user);
@@ -33,8 +33,9 @@ const RightMenu = () => {
     show ? setShow(false) : setShow(true);
   };
 
-  const onLogout = () => {
-    dispatch(logout());
+  const onLogout = async () => {
+    await dispatch(logout());
+    history.push("/login");
     setShow(false);
   };
 
@@ -82,9 +83,9 @@ const RightMenu = () => {
                   저장됨
                 </div>
               </Link>
-              <Link to="/" onClick={onLogout}>
+              <div onClick={onLogout}>
                 <div className="item">로그아웃</div>
-              </Link>
+              </div>
             </div>
           ) : null}
         </div>
@@ -154,4 +155,4 @@ const RightMenuBlock = styled.div`
   }
 `;
 
-export default RightMenu;
+export default withRouter(RightMenu);

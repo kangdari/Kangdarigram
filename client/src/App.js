@@ -25,7 +25,7 @@ function App() {
         <Route path="/write" component={Auth(WirtePostPage, true)} />
         <Route path="/:userId" component={Auth(ProfilePage, true)} exact />
         <Route path="/:userId/saved" component={Auth(ProfileSavedPage, true)} />
-        <Route path="/explore/tags/:tag" component={Auth(TagListPage, null)} />
+        <Route path="/explore/tags/:tag" component={Auth(TagListPage, true)} />
         <Route path="/profile/edit" component={Auth(ProfileEditPage, true)} />
       </Switch>
     </>
