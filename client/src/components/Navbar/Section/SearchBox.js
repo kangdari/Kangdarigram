@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import palette from "../../../utils/palette";
-import axios from "axios";
+import api from "../../../utils/apiUtils";
 
 import SearchResult from "./SearchResult";
 
@@ -35,7 +35,7 @@ const SearchBox = () => {
   // user, tag 검색 함수
   const onSearch = useCallback((keyword) => {
     setLoading(true);
-    axios
+    api
       .get("/api/search/nav-search/context", {
         params: {
           keyword,

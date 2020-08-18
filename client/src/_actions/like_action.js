@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "../utils/apiUtils";
 import {
   GET_LIKE_COUNT_SUCCESS,
   GET_LIKE_COUNT_FAILURE,
@@ -11,7 +11,7 @@ import {
 // post 좋아요 개수 체크
 export const getLikeCount = (data) => async (dispatch) => {
   try {
-    const result = await axios.post("/api/like/get-like-count", data);
+    const result = await api.post("/api/like/get-like-count", data);
     dispatch({
       type: GET_LIKE_COUNT_SUCCESS,
       payload: result.data,
@@ -26,7 +26,7 @@ export const getLikeCount = (data) => async (dispatch) => {
 
 export const like = (data) => async (dispatch) => {
   try {
-    const result = await axios.post("/api/like/like", data);
+    const result = await api.post("/api/like/like", data);
     dispatch({
       type: LIKE_SUCCESS,
       payload: result.data,
@@ -41,7 +41,7 @@ export const like = (data) => async (dispatch) => {
 
 export const unLike = (data) => async (dispatch) => {
   try {
-    const result = await axios.post("/api/like/unlike", data);
+    const result = await api.post("/api/like/unlike", data);
     dispatch({
       type: UNLIKE_SUCCESS,
       payload: result.data,

@@ -11,7 +11,7 @@ const Aside = React.forwardRef((props, ref) => {
   return (
     <AsideBlock ref={ref}>
       <User>
-        {image && <UserIcon id={id} image={image} />}
+        <UserIcon id={id} image={image ? image : ""} />
         <Info>
           <Link to={`/${id}`} className="id">
             {id}

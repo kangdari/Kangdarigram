@@ -51,14 +51,18 @@ const HomePage = () => {
     return () => window.removeEventListener("resize", getRightLocation);
   }, [right]);
 
-  // 전체 포스트 불러오기
-  // limit, skip 옵션 필요
-  useEffect(() => {
+  const load = useCallback(() => {
     if (home_post_list.length === 0) {
       dispatch(loadPostList(state));
     }
     dispatch(loadUserList()); // userList 가져오기
-  }, [dispatch]);
+  }, [dispatch, home_post_list.length, state]);
+
+  // 전체 포스트 불러오기
+  // limit, skip 옵션 필요
+  useEffect(() => {
+    load();
+  }, [load]);
 
   // 모달 on, clickedPost update
   const onClickPost = (postId) => {

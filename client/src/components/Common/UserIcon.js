@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import ec2 from "../../utils/ec2";
 
 const UserIcon = ({ id, image, size }) => {
   const clickHandler = () => {
@@ -11,10 +12,12 @@ const UserIcon = ({ id, image, size }) => {
     <UserIconBlock size={size} onClick={clickHandler}>
       <UserIconLink to={`/${id}`}>
         {image.length !== 0 ? (
-          <UserImg src={`http://localhost:5050/${image}`} alt="user_img" />
+          //<UserImg src={`http://localhost:5050/${image}`} alt="user_img" />
+          <UserImg src={`${ec2}/${image}`} alt="user_img" />
         ) : (
           <UserImg
-            src={`http://localhost:5050/upload/default_user_icon.jpg`}
+            // src={`http://localhost:5050/upload/default_user_icon.jpg`}
+            src={`${ec2}/upload/default_user_icon.jpg`}
             alt="default_img"
           />
         )}

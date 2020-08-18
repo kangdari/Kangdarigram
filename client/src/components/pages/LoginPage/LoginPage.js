@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { withRouter, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser, authCheck } from "../../../_actions/user_action";
+import { loginUser } from "../../../_actions/user_action";
 import palette from "../../../utils/palette";
 
 const LoginPage = ({ history }) => {
@@ -37,9 +37,16 @@ const LoginPage = ({ history }) => {
   // 로그인 성공 처리
   useEffect(() => {
     if (login.loginSuccess) {
+      // token localStorage에 저장
+      localStorage.setItem(
+        "auth",
+        JSON.stringify({
+          token: login.token,
+        }),
+      );
       history.push("/");
     }
-  }, [history, login.loginSuccess, userData.isAuth]);
+  }, [history, login.loginSuccess, userData.isAuth, login.token]);
 
   const onIdHandler = (e) => {
     setId(e.target.value);
@@ -56,7 +63,6 @@ const LoginPage = ({ history }) => {
       return;
     }
     dispatch(loginUser({ id, password }));
-    dispatch(authCheck());
   };
 
   // 비밀번호 표기 / 숨기기

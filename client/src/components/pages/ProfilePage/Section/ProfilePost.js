@@ -9,6 +9,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { getLikeCount } from "../../../../_actions/like_action";
 import { loadComment } from "../../../../_actions/comment_action";
+import ec2 from "../../../../utils/ec2";
 
 const Post = ({ postId, images, onClickPost, index, type }) => {
   const dispatch = useDispatch();
@@ -46,7 +47,8 @@ const Post = ({ postId, images, onClickPost, index, type }) => {
 
   return (
     <div className="post" onClick={() => onClickPost(index)}>
-      <img src={`http://localhost:5050/${images[0]}`} alt="img" />
+      {/* <img src={`http://localhost:5050/${images[0]}`} alt="img" /> */}
+      <img src={`${ec2}/${images[0]}`} alt="img" />
       <div className="post_hover">
         <div className="items">
           <div className="item">

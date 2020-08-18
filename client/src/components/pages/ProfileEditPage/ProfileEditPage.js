@@ -5,7 +5,7 @@ import styled from "styled-components";
 import FileUploader from "./FileUploader";
 import Button from "../../Common/Button";
 import UserIcon from "../../Common/UserIcon";
-import axios from "axios";
+import api from "../../../utils/apiUtils";
 
 const ProfileEditPage = ({ history }) => {
   const { id, image, _id, name, intro } = useSelector(
@@ -31,7 +31,7 @@ const ProfileEditPage = ({ history }) => {
   // profile 수정
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios
+    api
       .post("/api/users/edit-profile", { ...values, _id })
       .then((res) => {
         history.push(`/${values.id}`);

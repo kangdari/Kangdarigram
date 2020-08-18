@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useSelector } from "react-redux";
-import axios from "axios";
+import api from "../../../utils/apiUtils";
 import styled from "styled-components";
 import palette from "../../../utils/palette";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -20,7 +20,7 @@ const Comment = ({ comment, postId, onOpenModal }) => {
   useEffect(() => {
     let mounted = true;
     // comment 좋아요 정보 확인
-    axios.post("/api/like/get-comment-like", { commentId: _id }).then((res) => {
+    api.post("/api/like/get-comment-like", { commentId: _id }).then((res) => {
       if (mounted && !loading) {
         setLikeInfo(res.data.like);
       }

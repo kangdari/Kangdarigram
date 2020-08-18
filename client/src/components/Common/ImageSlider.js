@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowCircleLeft,
   faArrowCircleRight,
 } from "@fortawesome/free-solid-svg-icons";
+import ec2 from "../../utils/ec2";
 
 const ImageSlider = ({ images, home }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -52,7 +52,8 @@ const ImageSlider = ({ images, home }) => {
             {images.map((image, index) => (
               <img
                 key={index}
-                src={`http://localhost:5050/${image}`}
+                // src={`http://localhost:5050/${image}`}
+                src={`${ec2}/${image}`}
                 alt="img"
               />
             ))}

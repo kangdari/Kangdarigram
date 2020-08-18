@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "../utils/apiUtils";
 import {
   SAVE_COMMENT_FAILURE,
   SAVE_COMMENT_SUCCESS,
@@ -11,7 +11,7 @@ import {
 // 댓글 작성
 export const saveComment = (data) => async (dispatch) => {
   try {
-    const result = await axios.post("/api/comment/save-comment", data);
+    const result = await api.post("/api/comment/save-comment", data);
     dispatch({
       type: SAVE_COMMENT_SUCCESS,
       payload: result.data,
@@ -26,7 +26,7 @@ export const saveComment = (data) => async (dispatch) => {
 // 댓글 조회
 export const loadComment = (data) => async (dispatch) => {
   try {
-    const result = await axios.post("/api/comment/load-comment", data);
+    const result = await api.post("/api/comment/load-comment", data);
     dispatch({
       type: LOAD_COMMENT_SUCCESS,
       payload: result.data,
@@ -41,7 +41,7 @@ export const loadComment = (data) => async (dispatch) => {
 // 댓글 삭제, commentId 전달
 export const deleteComment = (data) => async (dispatch) => {
   try {
-    const result = await axios.delete("/api/comment/delete-comment", {
+    const result = await api.delete("/api/comment/delete-comment", {
       data: {
         data,
       },

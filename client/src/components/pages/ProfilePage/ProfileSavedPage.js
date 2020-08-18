@@ -9,7 +9,7 @@ import Modal from "../../Common/Modal";
 import PostDetail from "../../PostDetail/PostDetail";
 import Loading from "../../Common/Loading";
 import { getSavedPostList } from "../../../_actions/post_action";
-import axios from "axios";
+import api from "../../../utils/apiUtils";
 
 const ProfileSavedPage = ({ location, match }) => {
   const dispatch = useDispatch();
@@ -25,7 +25,7 @@ const ProfileSavedPage = ({ location, match }) => {
   useEffect(() => {
     const userId = match.params.userId;
     // 조회 중인 프로필의 유저 정보 가져오기
-    axios.post("/api/users/get-user-id", { userId }).then((res) => {
+    api.post("/api/users/get-user-id", { userId }).then((res) => {
       const userInfo = res.data.userInfo[0];
       if (!userInfo) {
         setError(true);

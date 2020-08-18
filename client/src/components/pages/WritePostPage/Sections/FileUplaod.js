@@ -3,8 +3,8 @@ import styled from "styled-components";
 import Dropzone from "react-dropzone";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-// import axios from 'axios';
 import { uploadImage } from "../../../../api/post";
+import ec2 from "../../../../utils/ec2";
 
 const FileUplaod = ({ updateImages }) => {
   const [images, setImages] = useState([]);
@@ -51,7 +51,8 @@ const FileUplaod = ({ updateImages }) => {
         {images.map((image, index) => (
           <img
             key={index}
-            src={`http://localhost:5050/${image}`}
+            // src={`http://localhost:5050/${image}`}
+            src={`${ec2}/${image}`}
             alt="img"
             onClick={() => onDeleteHandler(image)}
           />

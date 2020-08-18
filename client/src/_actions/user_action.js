@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "../utils/apiUtils";
 import {
   LOGIN_USER,
   LOGIN_USER_SUCCESS,
@@ -16,9 +16,10 @@ import {
 
 export const loginUser = (dataToSubmit) => async (dispatch) => {
   dispatch({ type: LOGIN_USER });
-
   try {
-    const res = await axios.post("/api/users/login", dataToSubmit);
+    const res = await api.post("/api/users/login", dataToSubmit, {
+      withCredentials: true,
+    });
     dispatch({
       type: LOGIN_USER_SUCCESS,
       payload: res.data,
@@ -34,7 +35,7 @@ export const loginUser = (dataToSubmit) => async (dispatch) => {
 export const registerUser = (dataToSubmit) => async (dispatch) => {
   dispatch({ type: REGISTER_USER });
   try {
-    const res = await axios.post("/api/users/register", dataToSubmit);
+    const res = await api.post("/api/users/register", dataToSubmit);
     dispatch({
       type: REGISTER_USER_SUCCESS,
       payload: res.data,
@@ -51,11 +52,18 @@ export const registerUser = (dataToSubmit) => async (dispatch) => {
 // auth, user state 초기화
 export const logout = () => async (dispatch) => {
   dispatch({ type: LOGOUT });
-  await axios.get(`api/users/logout`);
+  localStorage.removeItem("auth");
+  await api.get(`api/users/logout`);
 };
 
-export const authCheck = () => {
-  const request = axios.get(`/api/users/auth`).then((res) => res.data);
+export const authCheck = async (token) => {
+  const request = await api
+    .get(`/api/users/auth`, {
+      params: {
+        token,
+      },
+    })
+    .then((res) => res.data);
   return {
     type: AUTH_CHECK,
     payload: request,
@@ -64,7 +72,7 @@ export const authCheck = () => {
 
 export const loadUserList = () => async (dispatch) => {
   try {
-    const result = await axios.post("/api/users/load-user-list");
+    const result = await api.post("/api/users/load-user-list");
     dispatch({
       type: LOAD_USER_LIST_SUCCESS,
       payload: result.data.userList,
@@ -79,7 +87,7 @@ export const loadUserList = () => async (dispatch) => {
 
 export const uploadUserImg = (data, userId) => async (dispatch) => {
   try {
-    const result = await axios.post(
+    const result = await api.post(
       `/api/users/upload/user-image?userId=${userId}`,
       data,
     );

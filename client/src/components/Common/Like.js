@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
-import axios from "axios";
+import api from "../../utils/apiUtils";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
@@ -22,7 +22,7 @@ const Like = ({ postId, commentId, _size, type }) => {
       commentId: commentId,
     };
     // 좋아요 상태 가져오기
-    axios.post("/api/like/get-like-state", variable).then((res) => {
+    api.post("/api/like/get-like-state", variable).then((res) => {
       if (res.data.success && res.data.liked && mounted && !loading) {
         setLiked(res.data.liked);
       }

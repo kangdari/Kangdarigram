@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "../utils/apiUtils";
 import {
   GET_PROFILE_POST_LIST_SUCCESS,
   GET_PROFILE_POST_LIST_FAILURE,
@@ -16,7 +16,7 @@ import {
 import { startLoading, finishLoading } from "./loading_action";
 
 export const writePost = (data) => async (dispatch) => {
-  await axios.post("/api/post/upload", data);
+  await api.post("/api/post/upload", data);
   dispatch({
     type: WRITE_POST,
   });
@@ -25,7 +25,7 @@ export const writePost = (data) => async (dispatch) => {
 export const loadPostList = (data) => async (dispatch) => {
   dispatch(startLoading("LOAD_POST_LIST"));
   try {
-    const result = await axios.post("/api/post/load-post-list", data);
+    const result = await api.post("/api/post/load-post-list", data);
     dispatch({
       type: LOAD_POST_LIST_SUCCESS,
       payload: result.data,
@@ -42,7 +42,7 @@ export const loadPostList = (data) => async (dispatch) => {
 export const getProfilePostList = (data) => async (dispatch) => {
   dispatch(startLoading("GET_PROFILE_POST_LIST"));
   try {
-    const result = await axios.post("/api/post/get-profile-post-list", data);
+    const result = await api.post("/api/post/get-profile-post-list", data);
     dispatch({
       type: GET_PROFILE_POST_LIST_SUCCESS,
       payload: result.data,
@@ -59,7 +59,7 @@ export const getProfilePostList = (data) => async (dispatch) => {
 export const getSavedPostList = (data) => async (dispatch) => {
   dispatch(startLoading("GET_SAVED_POST_LIST"));
   try {
-    const result = await axios.post("/api/post/loadSavedPosts", data);
+    const result = await api.post("/api/post/loadSavedPosts", data);
     dispatch({
       type: GET_SAVED_POST_LIST_SUCCESS,
       payload: result.data.savedPostInfo,
@@ -76,7 +76,7 @@ export const getSavedPostList = (data) => async (dispatch) => {
 export const loadTagPostList = (tag) => async (dispatch) => {
   dispatch(startLoading(LOAD_TAG_POST_LIST_SUCCESS));
   try {
-    const result = await axios.get(`/api/post/load-tag-post-list?tag=${tag}`);
+    const result = await api.get(`/api/post/load-tag-post-list?tag=${tag}`);
     dispatch({
       type: LOAD_TAG_POST_LIST_SUCCESS,
       payload: result.data.tagPostInfo,
@@ -91,7 +91,7 @@ export const loadTagPostList = (tag) => async (dispatch) => {
 };
 
 export const deletePost = (postId) => async (dispatch) => {
-  const result = await axios.delete(`/api/post/delete-post?postId=${postId}`);
+  const result = await api.delete(`/api/post/delete-post?postId=${postId}`);
   try {
     dispatch({
       type: DELETE_POST_SUCCESS,
