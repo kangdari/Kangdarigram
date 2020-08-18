@@ -1,8 +1,9 @@
-const { User } = require('../model/Users');
+const { User } = require("../model/Users");
 
 let auth = (req, res, next) => {
-  // 클라이언트의 쿠키에서 토큰 가져오기
-  let token = req.cookies.auth;
+  // 쿠키로 진행했으나 크롬 신버전에서 쿠키 정책이 까다로워서
+  // loclaStorage에 저장했음
+  const token = req.query.token;
   // 토큰 복호화 > 유저 찾기
   User.findByToken(token, (err, user) => {
     if (err) throw err;
@@ -15,7 +16,5 @@ let auth = (req, res, next) => {
     next();
   });
 };
-
-
 
 module.exports = { auth };

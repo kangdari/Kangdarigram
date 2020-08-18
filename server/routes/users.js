@@ -58,11 +58,21 @@ router.post("/login", async (req, res) => {
     // 비밀번호가 맞은 경우 토큰 생성
     user.createToken((err, user) => {
       if (err) return res.status(400).send(err);
+      // user token > localStorage에 저장
+
       // 토큰 저장 => 쿠키
-      res.cookie("auth", user.token).status(200).json({
-        loginSuccess: true,
-        userId: user._id,
-      });
+      res
+        // .cookie("auth", user.token, {
+        //   //httpOnly: true,
+        //   // secure: true,
+        //   // sameSite: "none",
+        // })
+        .status(200)
+        .json({
+          loginSuccess: true,
+          userId: user._id,
+          token: user.token,
+        });
     });
   });
 });
@@ -91,7 +101,7 @@ router.get("/logout", auth, (req, res) => {
   });
 });
 
-router.post("/get-user-id", auth, (req, res) => {
+router.post("/get-user-id", (req, res) => {
   User.find({ id: req.body.userId }).exec((err, userInfo) => {
     if (err) return res.json({ success: false, err });
     return res.status(200).json({ success: true, userInfo });
