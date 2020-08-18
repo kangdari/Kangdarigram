@@ -8,7 +8,7 @@ const config = require("./config/key.js");
 
 const corsOptions = {
   // origin: "http://localhost:3000", // local
-  origin: "http://kangdarigram.s3-website.ap-northeast-2.amazonaws.com", // s3
+  origin: "http://kangdari.shop.s3-website.ap-northeast-2.amazonaws.com", // s3
   credentials: true, // true로 하면 설정한 내용을 response 헤더에 추가 해줍니다.
 };
 
